@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import Lotus from '../Lotus/Lotus'
+import { whatsappLink } from '../../data/contact'
 import styles from './ServiceModal.module.css'
 
 export default function ServiceModal({ service, onClose }) {
@@ -76,7 +77,7 @@ export default function ServiceModal({ service, onClose }) {
         </div>
 
         <a
-          href={`https://wa.me/521234567890?text=${encodeURIComponent(`Hola Rocío, me interesa saber más sobre ${service.title}`)}`}
+          href={whatsappLink(`Hola Rocío, me interesa saber más sobre ${service.title}`)}
           className={styles.cta}
           target="_blank"
           rel="noopener noreferrer"

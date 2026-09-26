@@ -1,5 +1,6 @@
 import styles from './Hero.module.css'
 import shared from '../../shared.module.css'
+import { whatsappLink } from '../../data/contact'
 
 export default function Hero() {
   return (
@@ -10,7 +11,7 @@ export default function Hero() {
         <p className={styles.subtitle}>Rocío — Terapeuta Holística</p>
         <p className={styles.tagline}>Amor, acompañamiento y confidencialidad</p>
         <a
-          href="https://wa.me/521234567890"
+          href={whatsappLink()}
           className={shared.btnWhatsapp}
           target="_blank"
           rel="noopener noreferrer"

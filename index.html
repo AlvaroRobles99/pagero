@@ -72,10 +72,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
     <!--
-      Structured data. Deliberately omits telephone, address, geo, areaServed,
-      priceCurrency, offers and openingHours: those facts are not known yet and
-      publishing invented ones would be worse than publishing nothing.
-      src/tests/seo.test.jsx locks that omission in place.
+      Structured data. Declares the practitioner's telephone in the
+      international form schema.org expects. Deliberately omits address, geo,
+      areaServed, priceCurrency, offers and openingHours: those facts are not
+      known yet and publishing invented ones would be worse than publishing
+      nothing. src/tests/seo.test.jsx locks that omission in place.
     -->
     <script type="application/ld+json">
       {
@@ -113,6 +114,7 @@
             "@id": "/#person",
             "name": "Rocío Durazno",
             "jobTitle": "Terapeuta holística",
+            "telephone": "+54 297 421 6017",
             "description": "Terapeuta holística con más de 8 años de experiencia en tarot y limpieza energética.",
             "worksFor": { "@id": "/#organization" },
             "knowsAbout": [

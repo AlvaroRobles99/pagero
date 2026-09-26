@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import Contact from '../components/Contact/Contact'
+import { WHATSAPP_NUMBER } from '../data/contact'
 
 describe('Contact', () => {
   it('renderiza el título', () => {
@@ -16,6 +17,12 @@ describe('Contact', () => {
     render(<Contact />)
     const btn = screen.getByText(/Escribir por WhatsApp/)
     expect(btn).toBeInTheDocument()
-    expect(btn.closest('a')).toHaveAttribute('href', 'https://wa.me/521234567890')
+    expect(btn.closest('a')).toHaveAttribute('href', `https://wa.me/${WHATSAPP_NUMBER}`)
+  })
+
+  it('renderiza un href de wa.me solo con dígitos', () => {
+    render(<Contact />)
+    const href = screen.getByText(/Escribir por WhatsApp/).closest('a').getAttribute('href')
+    expect(href).toMatch(/^https:\/\/wa\.me\/\d+$/)
   })
 })

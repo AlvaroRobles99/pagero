@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import Hero from '../components/Hero/Hero'
+import { WHATSAPP_NUMBER } from '../data/contact'
 
 describe('Hero', () => {
   it('renderiza el título principal', () => {
@@ -21,6 +22,12 @@ describe('Hero', () => {
     render(<Hero />)
     const btn = screen.getByText('Agenda tu sesión')
     expect(btn).toBeInTheDocument()
-    expect(btn.closest('a')).toHaveAttribute('href', 'https://wa.me/521234567890')
+    expect(btn.closest('a')).toHaveAttribute('href', `https://wa.me/${WHATSAPP_NUMBER}`)
+  })
+
+  it('renderiza un href de wa.me solo con dígitos', () => {
+    render(<Hero />)
+    const href = screen.getByText('Agenda tu sesión').closest('a').getAttribute('href')
+    expect(href).toMatch(/^https:\/\/wa\.me\/\d+$/)
   })
 })

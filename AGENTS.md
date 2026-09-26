@@ -35,7 +35,8 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `src/components/Reviews/` | Reviews section + module CSS |
 | `src/components/Contact/` | Contact section + module CSS |
 | `src/components/Footer/` | Footer with year + module CSS |
-| `src/tests/` | Vitest suites, one per component + `seo.test.jsx` for the `index.html` meta |
+| `src/data/contact.js` | WhatsApp number constants + `whatsappLink()` helper (single source of truth) |
+| `src/tests/` | Vitest suites, one per component + `seo.test.jsx` for the `index.html` meta and `whatsapp.test.jsx` for the link format |
 | `scripts/generate-og.mjs` | Builds the 1200×630 share image (inline SVG → PNG via resvg) |
 | `scripts/fonts/` | Brand TTFs, used only by the OG generator |
 | `public/images/` | Static assets (`banner.svg`, generated `og-image.png`) |
@@ -67,6 +68,18 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | Text on light | `#3a1f28` |
 | Warm white | `#fffafc` |
 
-## Placeholder
+## WhatsApp number
 
-- WhatsApp number `521234567890` in `Hero.jsx`, `Contact.jsx`, `ServiceModal.jsx` **and** in the assertions of `Hero.test.jsx` / `Contact.test.jsx` — update all five before publish. It is deliberately absent from `index.html`; `seo.test.jsx` fails if it ever appears there.
+- `src/data/contact.js` is the **single source of truth**. `Hero.jsx`, `Contact.jsx` and `ServiceModal.jsx` all build their href with `whatsappLink()`. Never hardcode the number anywhere else.
+- The same number has three correct forms. Using the wrong one breaks the CTA:
+
+| Destination | Form | Why |
+|---|---|---|
+| `wa.me` href | `542974216017` | Digits only. A `+`, space or dash makes the link dead. |
+| Visible UI text | `+54 297 421 6017` | Human-readable. |
+| JSON-LD `telephone` | `+54 297 421 6017` | schema.org wants the international form with `+`. |
+
+- `src/tests/whatsapp.test.jsx` locks that format, so a bad edit fails loudly. `Hero.test.jsx` / `Contact.test.jsx` assert against the constant, never against literal digits.
+- **Unconfirmed:** Argentine mobile numbers are often written `+54 9 297 421 6017`, where the `9` marks a mobile line. `wa.me` convention drops the `9`, which is what the constant does. This must be confirmed by opening the link on a real phone. If the `9` turns out to be required, it is a one-character fix in `src/data/contact.js`.
+- The test file is named `whatsapp.test.jsx`, not `contact.test.jsx`: the filesystem is case-insensitive on Windows, so a name differing from `Contact.test.jsx` only by case would resolve to it and overwrite that suite.
+

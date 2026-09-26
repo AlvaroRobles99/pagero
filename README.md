@@ -19,7 +19,8 @@ bun run test     # Tests
 
 ```
 src/components/   → 7 componentes (Hero, About, Lotus, Services, Reviews, Contact, Footer)
-src/tests/        → 8 archivos de test (23 tests)
+src/data/contact.js → número de WhatsApp + helper whatsappLink()
+src/tests/        → 10 archivos de test (67 tests)
 docs/project.md   → Documentación completa del proyecto
 ```
 
@@ -27,4 +28,5 @@ docs/project.md   → Documentación completa del proyecto
 
 ## Antes de publicar
 
-Actualizar el número de WhatsApp (`521234567890`) en `Hero.jsx` y `Contact.jsx`.
+- Confirmar el número de WhatsApp en un teléfono real: la constante vive en `src/data/contact.js`. Ver la ambigüedad del `9` en `AGENTS.md`.
+- Completar el dominio de deploy y volver absolutas las URLs de `index.html` (ver `docs/project.md`).

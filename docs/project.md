@@ -38,7 +38,8 @@ pageRo/
 │   ├── shared.module.css       ← .btnWhatsapp (botón reutilizable)
 │   ├── data/
 │   │   ├── services.js          ← Array de servicios con datos extendidos (id, fullDescription, includes, duration)
-│   │   └── reviews.js           ← Array de reseñas (id, text, author)
+│   │   ├── reviews.js           ← Array de reseñas (id, text, author)
+│   │   └── contact.js           ← Constantes del número de WhatsApp + helper `whatsappLink()`
 │   ├── components/
 │   │   ├── Hero/                ← Header full-viewport con banner SVG + CTA
 │   │   ├── About/               ← Sección "Sobre mí" con texto de presentación
@@ -58,7 +59,8 @@ pageRo/
 │       ├── Reviews.test.jsx
 │       ├── Contact.test.jsx
 │       ├── Footer.test.jsx
-│       └── Lotus.test.jsx
+│       ├── Lotus.test.jsx
+│       └── whatsapp.test.jsx    ← Guard del formato del link de WhatsApp
 ├── .opencode/
 │   ├── commands/
 │   │   ├── dev.md               ← @dev: inicia servidor de desarrollo
@@ -131,7 +133,7 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - Overlay oscuro con `backdrop-filter: blur` + animación `fadeIn`
 - Modal centrado con animación `scaleIn` (cubic-bezier spring)
 - Cierre con ✕, Escape, o click fuera del modal
-- Muestra: icono grande, título (display font), descripción completa, lista "Qué incluye", duración, precio, CTA "Consultar vía WhatsApp"
+- Muestra: icono grande, título (display font), descripción completa, lista "Qué incluye", duración, precio, CTA "Consultar vía WhatsApp" (el href lo arma `whatsappLink()` con el título del servicio como mensaje)
 - Lotus decorativo entre descripción y lista de includes
 - `prefers-reduced-motion` respetado
 
@@ -148,7 +150,7 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 ### Contact
 - Sección con fondo `--color-warm-white`
 - Loto semi-transparente como marca de agua de fondo (vía `::before`)
-- Texto de invitación cálido + botón WhatsApp con ícono 📱 que abre `wa.me`
+- Texto de invitación cálido + botón WhatsApp con ícono 📱 que abre `wa.me` vía `whatsappLink()`
 
 ### Footer
 - Copyright dinámico con `new Date().getFullYear()`
@@ -167,7 +169,7 @@ Toda la metadata vive en `index.html`. React nunca la toca, y por eso el contrat
 | Open Graph | `og:type=website`, `og:locale=es_MX`, `og:site_name`, `og:title`, `og:description`, `og:url`, `og:image`, `og:image:width=1200`, `og:image:height=630`, `og:image:alt` |
 | Twitter | `twitter:card=summary_large_image`, `twitter:title`, `twitter:description`, `twitter:image`, `twitter:image:alt` |
 | Iconos | `link[rel=icon]` (SVG) y `link[rel=apple-touch-icon]` (PNG 180×180) |
-| Datos estructurados | JSON-LD `@graph` con `Organization`, `LocalBusiness`, `Person` (Rocío Durazno) y `WebSite` |
+| Datos estructurados | JSON-LD `@graph` con `Organization`, `LocalBusiness`, `Person` (Rocío Durazno, con `telephone`) y `WebSite` |
 
 Los textos de `og:*` y del JSON-LD están en español, igual que el resto del contenido del sitio. Las URLs de los nodos son referencias relativas (`/#organization`), y el `@context` es el IRI que exige schema.org.
 
@@ -227,16 +229,27 @@ window.IntersectionObserver = MockIntersectionObserver
 | `@testRo` | Ejecuta `bun run test` |
 | `bun run generate:og` | Regenera `public/images/og-image.png` desde `scripts/generate-og.mjs` |
 
-## Placeholders
+## Número de WhatsApp
 
-| Dónde | Qué actualizar | Antes de publicar |
+`src/data/contact.js` es la **única fuente de verdad**. `Hero.jsx`, `Contact.jsx` y `ServiceModal.jsx` arman su href con `whatsappLink()`; el número no se hardcodea en ningún otro lado.
+
+El mismo número tiene tres representaciones correctas, y confundirlas rompe el CTA:
+
+| Destino | Forma | Por qué |
 |---|---|---|
-| `Hero.jsx:13`, `Contact.jsx:12`, `ServiceModal.jsx:79` | Número WhatsApp | `521234567890` → número real |
-| `Hero.test.jsx:24`, `Contact.test.jsx:19` | El mismo número, en las aserciones de los tests | `521234567890` → número real |
+| href de `wa.me` | `542974216017` | Solo dígitos. Un `+`, un espacio o un guion matan el link. |
+| Texto visible en la UI | `+54 297 421 6017` | Legible para una persona. |
+| `telephone` del JSON-LD | `+54 297 421 6017` | schema.org quiere la forma internacional con `+`. |
+
+`whatsappLink(message)` devuelve `https://wa.me/<número>` o, si se le pasa un mensaje, `https://wa.me/<número>?text=<codificado>`. Cuando no hay mensaje, omite el `?text=` por completo: un `?text=` vacío abre el chat con un compositor en blanco que la clienta tiene que borrar a mano.
+
+`src/tests/whatsapp.test.jsx` bloquea ese formato, así que una edición mal hecha falla ruidosamente. `Hero.test.jsx` y `Contact.test.jsx` assertan contra la constante, nunca contra dígitos literales.
+
+> **Sin confirmar:** los móviles argentinos suelen escribirse `+54 9 297 421 6017`, donde el `9` marca la línea móvil. La convención de `wa.me` es **omitir** el `9`, que es lo que hace la constante. Hay que confirmar esto abriendo el link en un teléfono real. Si el `9` turns out necesario, es un cambio de un solo carácter en `src/data/contact.js`.
 
 ## Known gaps
 
-- Número real de WhatsApp → reemplazar `521234567890` en los cinco lugares de la tabla anterior.
+- **Confirmar el `9` del número argentino** en un teléfono real (ver "Número de WhatsApp").
 - Ciudad o zona de servicio → `address`, `geo` y `areaServed` en el JSON-LD.
 - Moneda de los precios (`$500`, `$700`, `$1000`) → `offers.priceCurrency`.
 - Dominio de deploy → volver absolutas `canonical`, `og:url` y `og:image` (ver "Paso de deploy").

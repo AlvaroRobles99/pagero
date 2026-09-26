@@ -192,9 +192,14 @@ describe('index.html — no fabricated business data', () => {
     expect(html).not.toContain('521234567890')
   })
 
-  it('declares no telephone property in the structured data', () => {
+  it('publishes the real telephone on the Person node, in international form', () => {
     expect(jsonLdRaw, 'script[type="application/ld+json"] not found').toBeTruthy()
-    expect(jsonLdRaw).not.toMatch(/"telephone"/)
+    const nodes = JSON.parse(jsonLdRaw)['@graph']
+    const person = nodes.find((node) => node['@type'] === 'Person')
+    expect(person.telephone, 'Person node needs a telephone').toBeTruthy()
+    expect(person.telephone).toBe('+54 297 421 6017')
+    // schema.org wants the full international form here, unlike wa.me hrefs.
+    expect(person.telephone.startsWith('+')).toBe(true)
   })
 
   it('omits business facts that are still unknown', () => {
