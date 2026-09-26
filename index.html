@@ -23,10 +23,13 @@
       card resolves the same way from outside the site.
     -->
     <!--
-      vite-ignore is required, not decorative: Vite's HTML plugin resolves every
-      link[href] as a build asset, and href="/" resolves to a directory, which
-      fails the build with EISDIR. The attribute tells Vite to leave this URL
-      alone. Do not remove it.
+      vite-ignore is required WHILE THIS href IS RELATIVE. Vite's HTML plugin
+      resolves every link[href] as a build asset, and href="/" resolves to a
+      directory, which fails the build with EISDIR. Verified: removing this
+      attribute while href is relative breaks `bun run build`.
+
+      Once href becomes absolute at deploy time, Vite leaves external URLs
+      alone and this attribute is no longer required. It is harmless to keep.
     -->
     <link rel="canonical" href="/" vite-ignore />
 
