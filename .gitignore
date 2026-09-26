@@ -1,0 +1,40 @@
+# dependencies (bun install)
+node_modules
+
+# output
+out
+dist
+*.tgz
+
+# code coverage
+coverage
+*.lcov
+
+# logs
+logs
+_.log
+report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# opencode MCP config — contains a live CONTEXT7_API_KEY.
+# Never commit it: the key would be permanent in git history, and would
+# have to be rotated after any push to a remote. To share the MCP setup,
+# move the key to an environment variable and commit a key-free template.
+opencode.json
+
+# caches
+.eslintcache
+.cache
+*.tsbuildinfo
+
+# IntelliJ based IDEs
+.idea
+
+# Finder (MacOS) folder config
+.DS_Store

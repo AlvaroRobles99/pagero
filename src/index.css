@@ -1,0 +1,48 @@
+:root {
+  --color-deep: #1f0f14;
+  --color-primary: #c73a5a;
+  --color-light: #fef0f5;
+  --color-accent: #c99a4a;
+  --color-text: #3a1f28;
+  --color-warm-white: #fffafc;
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Figtree', 'Segoe UI', Tahoma, sans-serif;
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) transparent;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 1.5rem;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  line-height: 1.6;
+  background: var(--color-warm-white);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

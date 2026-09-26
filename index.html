@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sanarse — Rocío Durazno</title>
+    <meta
+      name="description"
+      content="Terapia holística con Rocío Durazno: lectura de tarot, limpieza energética y acompañamiento espiritual. Agenda tu sesión por WhatsApp."
+    />
+
+    <!--
+      DEPLOY-TIME EDIT POINT.
+      The site is not live yet, so every URL that will need a domain is relative.
+      When the domain is decided, replace these four values with the absolute
+      origin (for example https://sanarse.mx):
+        1. link[rel=canonical] href
+        2. meta[property="og:url"] content
+        3. meta[property="og:image"] content
+        4. meta[name="twitter:image"] content
+      Relative URLs are accepted by WhatsApp, Facebook, X and Google, so the
+      previews already work; making them absolute is only needed so the share
+      card resolves the same way from outside the site.
+    -->
+    <!--
+      vite-ignore is required, not decorative: Vite's HTML plugin resolves every
+      link[href] as a build asset, and href="/" resolves to a directory, which
+      fails the build with EISDIR. The attribute tells Vite to leave this URL
+      alone. Do not remove it.
+    -->
+    <link rel="canonical" href="/" vite-ignore />
+
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#1f0f14" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:site_name" content="Sanarse" />
+    <meta property="og:title" content="Sanarse — Lectura de Tarot y Limpieza Energética" />
+    <meta
+      property="og:description"
+      content="Terapia holística con Rocío Durazno: lectura de tarot, limpieza energética y acompañamiento espiritual. Agenda tu sesión por WhatsApp."
+    />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/images/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Sanarse — tarot, limpieza energética y acompañamiento espiritual con Rocío Durazno."
+    />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Sanarse — Lectura de Tarot y Limpieza Energética" />
+    <meta
+      name="twitter:description"
+      content="Terapia holística con Rocío Durazno: lectura de tarot, limpieza energética y acompañamiento espiritual. Agenda tu sesión por WhatsApp."
+    />
+    <meta name="twitter:image" content="/images/og-image.png" />
+    <meta
+      name="twitter:image:alt"
+      content="Sanarse — tarot, limpieza energética y acompañamiento espiritual con Rocío Durazno."
+    />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+    <!--
+      Structured data. Deliberately omits telephone, address, geo, areaServed,
+      priceCurrency, offers and openingHours: those facts are not known yet and
+      publishing invented ones would be worse than publishing nothing.
+      src/tests/seo.test.jsx locks that omission in place.
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "/#organization",
+            "name": "Sanarse",
+            "alternateName": "Sanarse — Rocío Durazno",
+            "description": "Terapia holística: lectura de tarot, limpieza energética y acompañamiento espiritual, con Rocío Durazno.",
+            "url": "/",
+            "logo": "/favicon.svg",
+            "image": "/images/og-image.png",
+            "founder": { "@id": "/#person" }
+          },
+          {
+            "@type": "LocalBusiness",
+            "@id": "/#localbusiness",
+            "name": "Sanarse",
+            "description": "Servicios de terapia holística: lectura de tarot, limpieza energética y acompañamiento espiritual.",
+            "url": "/",
+            "image": "/images/og-image.png",
+            "founder": { "@id": "/#person" },
+            "employee": { "@id": "/#person" },
+            "knowsAbout": [
+              "Tarot",
+              "Limpieza energética",
+              "Acompañamiento espiritual",
+              "Chakras"
+            ]
+          },
+          {
+            "@type": "Person",
+            "@id": "/#person",
+            "name": "Rocío Durazno",
+            "jobTitle": "Terapeuta holística",
+            "description": "Terapeuta holística con más de 8 años de experiencia en tarot y limpieza energética.",
+            "worksFor": { "@id": "/#organization" },
+            "knowsAbout": [
+              "Tarot",
+              "Limpieza energética",
+              "Acompañamiento espiritual",
+              "Chakras",
+              "Cuencos y cristales"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "/#website",
+            "name": "Sanarse",
+            "description": "Sitio de Sanarse, terapia holística con Rocío Durazno: tarot, limpieza energética y acompañamiento espiritual.",
+            "url": "/",
+            "inLanguage": "es-MX",
+            "publisher": { "@id": "/#organization" }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

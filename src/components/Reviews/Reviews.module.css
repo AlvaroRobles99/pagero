@@ -1,0 +1,137 @@
+.reviews {
+  background: var(--color-light);
+}
+
+.carousel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.viewport {
+  overflow: hidden;
+  flex: 1;
+  border-radius: 16px;
+}
+
+.track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.slide {
+  min-width: 100%;
+  box-sizing: border-box;
+  padding: 0 0.5rem;
+}
+
+.card {
+  background: var(--color-warm-white);
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 8px 30px rgba(199, 58, 90, 0.1);
+  text-align: center;
+}
+
+.stars {
+  color: var(--color-accent);
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: 3px;
+}
+
+.card p {
+  color: var(--color-text);
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.author {
+  display: block;
+  margin-top: 0.75rem;
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.arrow {
+  flex-shrink: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  border: 1px solid rgba(199, 58, 90, 0.2);
+  background: var(--color-warm-white);
+  color: var(--color-primary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+  opacity: 0.6;
+}
+
+.arrow:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+  opacity: 1;
+}
+
+.arrowNext {
+  order: 1;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(199, 58, 90, 0.25);
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  padding: 0;
+}
+
+.dot:hover {
+  background: rgba(199, 58, 90, 0.5);
+  transform: scale(1.2);
+}
+
+.dotActive {
+  background: var(--color-primary);
+  transform: scale(1.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    transition-duration: 0.01ms;
+  }
+}
+
+@media (max-width: 600px) {
+  .arrow {
+    display: none;
+  }
+
+  .slide {
+    padding: 0;
+  }
+
+  .card {
+    padding: 1.5rem 1rem;
+  }
+}
