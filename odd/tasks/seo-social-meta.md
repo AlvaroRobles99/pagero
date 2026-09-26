@@ -50,27 +50,27 @@ User request: "Not a bug — a new feature," selected as **SEO + social meta**.
 ## Tasks
 
 ### T1 — OG image pipeline
-- [ ] `scripts/generate-og.mjs`: builds the 1200×630 SVG (brand gradient `#1f0f14`→`#c73a5a`, `Cormorant Garamond` wordmark, `Figtree` subtitle) → `Resvg` with `fontFiles` pointing at `scripts/fonts/*.ttf`, `loadSystemFonts: false` → writes `public/images/og-image.png`.
-- [ ] Subtitle text uses real site content: `Lectura de Tarot · Limpieza Energética`.
-- [ ] `package.json` script `generate:og`.
-- [ ] **Verify:** PNG exists, is a valid PNG signature, and is exactly 1200×630. Also assert it is **not** byte-identical to a system-font render (proves the brand font applied).
+- [x] `scripts/generate-og.mjs`: builds the 1200×630 SVG (brand gradient `#1f0f14`→`#c73a5a`, `Cormorant Garamond` wordmark, `Figtree` subtitle) → `Resvg` with `fontFiles` pointing at `scripts/fonts/*.ttf`, `loadSystemFonts: false` → writes `public/images/og-image.png`.
+- [x] Subtitle text uses real site content: `Lectura de Tarot · Limpieza Energética`.
+- [x] `package.json` script `generate:og`.
+- [x] **Verify:** PNG exists, is a valid PNG signature, and is exactly 1200×630. Also assert it is **not** byte-identical to a system-font render (proves the brand font applied).
 
 ### T2 — index.html meta
-- [ ] `<link rel="canonical" href="/">` — single place to make absolute at deploy.
-- [ ] Open Graph: `og:type`, `og:locale=es_MX`, `og:site_name`, `og:title`, `og:description`, `og:url`, `og:image` (+ `og:image:width/height/alt`).
-- [ ] Twitter: `summary_large_image` card.
-- [ ] `<meta name="theme-color" content="#1f0f14">`, `<meta name="robots" content="index, follow">`.
-- [ ] Favicon SVG + `apple-touch-icon`.
-- [ ] JSON-LD `@graph`: `Organization`/`LocalBusiness` + `Person` (Rocío Durazno) + `WebSite`. Spanish `name`/`description`. `offers` **omitted** (currency unknown). No fabricated `address`/`geo`/`telephone`.
+- [x] `<link rel="canonical" href="/">` — single place to make absolute at deploy.
+- [x] Open Graph: `og:type`, `og:locale=es_MX`, `og:site_name`, `og:title`, `og:description`, `og:url`, `og:image` (+ `og:image:width/height/alt`).
+- [x] Twitter: `summary_large_image` card.
+- [x] `<meta name="theme-color" content="#1f0f14">`, `<meta name="robots" content="index, follow">`.
+- [x] Favicon SVG + `apple-touch-icon`.
+- [x] JSON-LD `@graph`: `Organization`/`LocalBusiness` + `Person` (Rocío Durazno) + `WebSite`. Spanish `name`/`description`. `offers` **omitted** (currency unknown). No fabricated `address`/`geo`/`telephone`.
 
 ### T3 — Meta contract test
-- [ ] `src/tests/seo.test.jsx` reading `index.html` from disk via `node:fs`.
-- [ ] Asserts: canonical present, all 5 required `og:*`, `og:image` width/height, `twitter:card`, `theme-color`, valid parseable JSON-LD.
-- [ ] **Write this test BEFORE T2 changes land, and observe it fail.** That RED is the evidence.
+- [x] `src/tests/seo.test.jsx` reading `index.html` from disk via `node:fs`.
+- [x] Asserts: canonical present, all 5 required `og:*`, `og:image` width/height, `twitter:card`, `theme-color`, valid parseable JSON-LD.
+- [x] **Write this test BEFORE T2 changes land, and observe it fail.** That RED is the evidence.
 
 ### T4 — Docs
-- [ ] `AGENTS.md`: add `scripts/generate-og.mjs`, `scripts/fonts/`, `public/images/og-image.png`, favicon to structure.
-- [ ] `docs/project.md`: add a "SEO + Social" section; document the `generate:og` command and the deploy-time canonical step.
+- [x] `AGENTS.md`: add `scripts/generate-og.mjs`, `scripts/fonts/`, `public/images/og-image.png`, favicon to structure.
+- [x] `docs/project.md`: add a "SEO + Social" section; document the `generate:og` command and the deploy-time canonical step.
 
 ## Route declaration
 
@@ -108,7 +108,8 @@ None. Baseline is green: 25/25 tests, build succeeds.
 
 ## Known gaps (need Rocío, not engineering)
 
-- Real WhatsApp number → replace placeholder, then it can be added to JSON-LD `telephone`.
+- ~~Real WhatsApp number~~ → **resolved** in `550dc63`; `telephone` is now on the JSON-LD `Person`
+  node. Remaining caveat: confirm the Argentine `9` by tapping on a real phone.
 - City / service area → `address`, `geo`, `areaServed`.
 - Currency for `$500` / `$700` / `$1000` → `offers.priceCurrency`.
 - Deploy domain → make canonical, `og:url`, `og:image` absolute.
@@ -133,7 +134,11 @@ Final suite: **9 files, 54 tests, all passing.** Build succeeds.
 
 **Verified empirically, not assumed:** stripping `vite-ignore` → `EISDIR: illegal operation on a directory, read` in `vite:build-html`. Restoring it → build passes. `og:url` and `og:image` are unaffected; only `link[href]` is asset-resolved.
 
-> `vite-ignore` on that tag is **load-bearing**. Removing it fails the build. It is commented in `index.html` and must be mentioned in the deploy-time notes.
+> `vite-ignore` on that tag is **load-bearing while the href is relative**. Stripping it from
+> `href="/"` fails the build. Re-verified in `ad65c95` with tag-anchored replacements and cold
+> builds: once the href becomes absolute at deploy time, Vite leaves external URLs alone and the
+> attribute becomes optional. Keep it or drop it — both build. The `index.html` comment was
+> corrected to state this.
 
 ### Findings outside the original scope
 
@@ -145,8 +150,16 @@ Final suite: **9 files, 54 tests, all passing.** Build succeeds.
 
 ## Next step
 
-Nothing pending. Awaiting two user decisions:
+Nothing pending on the feature itself. Resolved during the session:
 
-1. **Real WhatsApp number** — still `521234567890` in `Hero.jsx:13`, `Contact.jsx:12`, `ServiceModal.jsx:79` **and** in `Hero.test.jsx:24` / `Contact.test.jsx:19`. Swapping it naively breaks the suite. Once real, it can also be added to JSON-LD `telephone` (a test currently forbids that).
-2. **Establish a git baseline** — a first commit would give the project version history and make future native review meaningful. Requires explicit user authorization; not done.
-3. **Visual sign-off on `og-image.png`** — structural validity is proven; the design is not. Needs human eyes.
+- ~~Establish a git baseline~~ — **done.** Commit `2c0a35a`, 56 files, 3286 insertions. Stray `go.mod` deleted. Working tree clean.
+- `opencode.json` was found to contain a live `CONTEXT7_API_KEY` and is now **gitignored**. It was never committed, so the key was never exposed and does not need rotating.
+
+Still awaiting the user:
+
+1. ~~**Real WhatsApp number**~~ — **done** in `550dc63`. The placeholder was replaced with the real
+   number via a single `src/data/contact.js` module, and `telephone` was added to the JSON-LD
+   `Person` node. One caveat remains open: whether the Argentine mobile form needs the `9`
+   (`5492974216017`) must be confirmed by tapping the link on a real phone.
+2. **Visual sign-off on `og-image.png`** — structural validity is proven; the design is not. Needs human eyes.
+3. **Deploy domain** — make canonical, `og:url`, `og:image`, `twitter:image` absolute.

@@ -22,7 +22,7 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .env.production.local
 .env.local
 
-# opencode MCP config — contains a live CONTEXT7_API_KEY.
+# opencode MCP config: contains a live CONTEXT7_API_KEY.
 # Never commit it: the key would be permanent in git history, and would
 # have to be rotated after any push to a remote. To share the MCP setup,
 # move the key to an environment variable and commit a key-free template.
