@@ -30,4 +30,23 @@ describe('Hero', () => {
     const href = screen.getByText('Agenda tu sesión').closest('a').getAttribute('href')
     expect(href).toMatch(/^https:\/\/wa\.me\/\d+$/)
   })
+
+  it('renders the brand logo as a decorative image with empty alt', () => {
+    // alt="" is deliberate: the logo is decorative, the h1 carries the name.
+    const { container } = render(<Hero />)
+    const logo = container.querySelector('img')
+    expect(logo).toBeInTheDocument()
+    expect(logo).toHaveAttribute('src', '/images/logo.png')
+    expect(logo).toHaveAttribute('alt', '')
+  })
+
+  it('places the logo before the h1 heading', () => {
+    const { container } = render(<Hero />)
+    const logo = container.querySelector('img')
+    const heading = container.querySelector('h1')
+    expect(logo).toBeInTheDocument()
+    expect(heading).toBeInTheDocument()
+    const FOLLOWS = Node.DOCUMENT_POSITION_FOLLOWING
+    expect(logo.compareDocumentPosition(heading) & FOLLOWS).toBe(FOLLOWS)
+  })
 })
