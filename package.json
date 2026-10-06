@@ -7,7 +7,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "generate:og": "bun run scripts/generate-og.mjs"
+    "generate:og": "bun run scripts/generate-og.mjs",
+    "generate:favicon": "bun run scripts/generate-favicon.mjs"
   },
   "dependencies": {
     "react": "^19.2.7",

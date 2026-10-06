@@ -121,12 +121,26 @@ describe('index.html — document meta', () => {
     expect(metaName('robots'), 'meta[name="robots"] not found').toBe('index, follow')
   })
 
-  it('links an SVG favicon', () => {
-    expect(linkHref('icon'), 'link[rel="icon"] not found').toBe('/favicon.svg')
+  it('links the PNG favicon set (32, 192 and 512), not an SVG', () => {
+    const icons = [...doc.querySelectorAll('link[rel="icon"]')]
+    expect(icons.length, 'index.html must link three PNG favicon sizes').toBe(3)
+    const expected = new Map([
+      ['/favicon-32x32.png', '32x32'],
+      ['/favicon-192x192.png', '192x192'],
+      ['/favicon-512x512.png', '512x512'],
+    ])
+    for (const link of icons) {
+      const href = link.getAttribute('href')
+      expect(expected.has(href), `unexpected favicon href: ${href}`).toBe(true)
+      expect(link.getAttribute('sizes'), `wrong sizes on ${href}`).toBe(expected.get(href))
+      expect(link.getAttribute('type'), `wrong type on ${href}`).toBe('image/png')
+    }
   })
 
   it('links an apple-touch-icon', () => {
-    expect(linkHref('apple-touch-icon'), 'link[rel="apple-touch-icon"] not found').toBeTruthy()
+    expect(linkHref('apple-touch-icon'), 'link[rel="apple-touch-icon"] not found').toBe(
+      '/apple-touch-icon.png',
+    )
   })
 
   it('keeps the page language set to Spanish', () => {
@@ -151,6 +165,24 @@ describe('index.html — the og:image asset', () => {
     expect(bytes.subarray(0, 8).toString('hex')).toBe('89504e470d0a1a0a')
     expect(bytes.readUInt32BE(16)).toBe(1200)
     expect(bytes.readUInt32BE(20)).toBe(630)
+  })
+})
+
+describe('index.html — the favicon assets', () => {
+  // Site-relative public path: drop the leading slash before joining, exactly
+  // like the og:image block above, or path.resolve is drive-absolute on Windows.
+  const publicAsset = (href) => resolve(PROJECT_ROOT, 'public', (href ?? '').replace(/^\//, ''))
+
+  it.each([
+    ['/favicon-32x32.png', 32],
+    ['/favicon-192x192.png', 192],
+    ['/favicon-512x512.png', 512],
+    ['/apple-touch-icon.png', 180],
+  ])('%s is a real %ix%i PNG on disk', (href, size) => {
+    const bytes = readFileSync(publicAsset(href))
+    expect(bytes.subarray(0, 8).toString('hex')).toBe('89504e470d0a1a0a')
+    expect(bytes.readUInt32BE(16)).toBe(size)
+    expect(bytes.readUInt32BE(20)).toBe(size)
   })
 })
 
@@ -184,6 +216,13 @@ describe('index.html — JSON-LD structured data', () => {
     expect(person.name, 'Person node needs a name').toBe('Rocío Durazno')
     expect(website.name, 'WebSite node needs a name').toBe('Sanarse')
     expect(website.inLanguage).toBe('es-MX')
+  })
+
+  it('points the Organization logo at the brand mark image', () => {
+    expect(jsonLdRaw, 'script[type="application/ld+json"] not found').toBeTruthy()
+    const nodes = JSON.parse(jsonLdRaw)['@graph']
+    const organization = nodes.find((node) => node['@type'] === 'Organization')
+    expect(organization.logo, 'Organization node needs a logo').toBe('/images/logo.png')
   })
 })
 
