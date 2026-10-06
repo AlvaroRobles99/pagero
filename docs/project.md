@@ -24,11 +24,15 @@ pageRo/
 ├── public/
 │   ├── images/
 │   │   ├── banner.svg          ← Hero background (paisaje espiritual con montañas, mar, loto)
+│   │   ├── logo.png            ← Marca de la marca; fuente de todos los favicons
 │   │   └── og-image.png        ← Imagen de compartir 1200×630 (generada, no editar a mano)
-│   ├── favicon.svg             ← Marca de loto para el favicon
-│   └── apple-touch-icon.png    ← Icono 180×180 para iOS (generado desde favicon.svg)
+│   ├── favicon-32x32.png       ← Favicon de pestaña 32×32 (generado desde logo.png)
+│   ├── favicon-192x192.png     ← Ícono 192×192 (generado desde logo.png)
+│   ├── favicon-512x512.png     ← Ícono 512×512 (generado desde logo.png)
+│   └── apple-touch-icon.png    ← Icono 180×180 para iOS (generado desde logo.png)
 ├── scripts/
 │   ├── generate-og.mjs         ← Genera la imagen OG (SVG en memoria → PNG con resvg)
+│   ├── generate-favicon.mjs    ← Genera los favicons + apple-touch-icon desde logo.png (resvg)
 │   └── fonts/                  ← TTFs de marca, usados solo por el generador OG
 ├── src/
 │   ├── main.jsx                ← Entry point de React
@@ -105,6 +109,7 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 ### Hero
 - Header full viewport con `banner.svg` de fondo
 - Overlay con `radial-gradient` spotlight (centro más claro, bordes oscuros)
+- Logo de marca (`images/logo.png`) sobre el título, como imagen decorativa (`alt=""`) con `drop-shadow`
 - Título, subtítulo, tagline, botón CTA
 - Animación `fadeInUp` en el contenido al cargar
 
@@ -112,7 +117,7 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - Sección con fondo `--color-light`
 - Loto decorativo arriba del título
 - Loto semi-transparente como marca de agua de fondo (vía `::before` con SVG inline y radial-gradient)
-- Párrafo de presentación personal
+- Bienvenida, pilares de sanación (Tarot Terapéutico, Limpieza Energética, Escucha sin Juicio), modelo de trabajo en bienestar, cita inspiradora y CTA con WhatsApp
 
 ### Lotus
 - SVG de loto estilizado (6 pétalos + centro)
@@ -168,7 +173,7 @@ Toda la metadata vive en `index.html`. React nunca la toca, y por eso el contrat
 | Documento | `lang="es"`, `robots` (`index, follow`), `theme-color` (`#1f0f14`) |
 | Open Graph | `og:type=website`, `og:locale=es_MX`, `og:site_name`, `og:title`, `og:description`, `og:url`, `og:image`, `og:image:width=1200`, `og:image:height=630`, `og:image:alt` |
 | Twitter | `twitter:card=summary_large_image`, `twitter:title`, `twitter:description`, `twitter:image`, `twitter:image:alt` |
-| Iconos | `link[rel=icon]` (SVG) y `link[rel=apple-touch-icon]` (PNG 180×180) |
+| Iconos | `link[rel=icon]` PNG (32×32, 192×192, 512×512) y `link[rel=apple-touch-icon]` (PNG 180×180) |
 | Datos estructurados | JSON-LD `@graph` con `Organization`, `LocalBusiness`, `Person` (Rocío Durazno, con `telephone`) y `WebSite` |
 
 Los textos de `og:*` y del JSON-LD están en español, igual que el resto del contenido del sitio. Las URLs de los nodos son referencias relativas (`/#organization`), y el `@context` es el IRI que exige schema.org.
@@ -228,6 +233,7 @@ window.IntersectionObserver = MockIntersectionObserver
 | `@build` | Compila para producción |
 | `@testRo` | Ejecuta `bun run test` |
 | `bun run generate:og` | Regenera `public/images/og-image.png` desde `scripts/generate-og.mjs` |
+| `bun run generate:favicon` | Regenera los favicons + `apple-touch-icon.png` desde `public/images/logo.png` |
 
 ## Número de WhatsApp
 

@@ -5,7 +5,9 @@ describe('App', () => {
   it('renderiza todas las secciones principales', () => {
     render(<App />)
     expect(screen.getAllByText(/Sanarse/).length).toBeGreaterThanOrEqual(2)
-    expect(screen.getByText('Sobre mí')).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 2, name: /Bienvenidos a tu espacio de evolución espiritual/i })
+    ).toBeInTheDocument()
     expect(screen.getByText('Servicios')).toBeInTheDocument()
     expect(screen.getByText('Reseñas')).toBeInTheDocument()
     expect(screen.getByText('Contacto')).toBeInTheDocument()

@@ -28,16 +28,188 @@
 }
 
 .aboutText {
-  max-width: 600px;
+  max-width: 680px;
   margin: 1rem auto 0;
   font-size: 1rem;
   color: var(--color-text);
   line-height: 1.8;
 }
 
+.intro {
+  max-width: 720px;
+  margin: 1rem auto 0;
+  font-size: 1rem;
+  color: var(--color-text);
+  line-height: 1.8;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.subsection {
+  margin: 2rem auto 0;
+  max-width: 720px;
+  text-align: left;
+}
+
+.subheading {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.subintro {
+  font-size: 1rem;
+  color: var(--color-text);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.pillarsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.pillarItem {
+  background: rgba(255, 250, 252, 0.8);
+  border-left: 3px solid var(--color-primary);
+  padding: 1rem 1.25rem;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 2px 8px rgba(31, 15, 20, 0.05);
+  line-height: 1.8;
+  color: var(--color-text);
+}
+
+.pillarTerm {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.orderedList {
+  max-width: 680px;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.orderedList li {
+  color: var(--color-text);
+  line-height: 1.8;
+  padding-left: 0.5rem;
+}
+
+.quote {
+  max-width: 680px;
+  margin: 2.5rem auto 0;
+  padding: 1.5rem 1.75rem;
+  background: rgba(255, 250, 252, 0.9);
+  border-left: 4px solid var(--color-accent);
+  border-radius: 0 12px 12px 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--color-text);
+  line-height: 1.6;
+  text-align: left;
+  box-shadow: 0 4px 12px rgba(31, 15, 20, 0.08);
+}
+
+.invitation {
+  max-width: 720px;
+  margin: 1rem auto 0;
+  font-size: 1rem;
+  color: var(--color-text);
+  line-height: 1.8;
+}
+
+.ctaArea {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.ctaLine {
+  max-width: 720px;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text);
+  line-height: 1.8;
+}
+
 @media (min-width: 768px) {
-  .aboutText {
+  .aboutText,
+  .intro,
+  .invitation,
+  .ctaLine {
     margin: 1.5rem auto 0;
     font-size: 1.15rem;
+  }
+
+  .subsection {
+    margin: 3rem auto 0;
+  }
+
+  .subheading {
+    font-size: 1.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .subintro {
+    font-size: 1.15rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .pillarTerm {
+    font-size: 1.25rem;
+  }
+
+  .pillarsList {
+    gap: 1.5rem;
+  }
+
+  .quote {
+    margin: 3rem auto 0;
+    padding: 2rem 2.25rem;
+    font-size: 1.5rem;
+  }
+
+  .orderedList {
+    padding-left: 2rem;
+  }
+
+  .orderedList li {
+    font-size: 1.15rem;
+  }
+
+  .ctaArea {
+    margin-top: 3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about * {
+    transition: none !important;
+    animation: none !important;
   }
 }
