@@ -11,10 +11,15 @@
  * generator, `@resvg/resvg-js` is a devDependency only: the PNGs are committed,
  * so production never needs this script.
  *
- * Usage: bun run generate:favicon
+ * Usage: bun run generate:favicon [source.png]
+ *
+ * The favicon set defaults to public/images/logo.png. Pass an explicit source
+ * PNG (path relative to the current working directory) to derive the set from
+ * another image, e.g. `bun run generate:favicon public/images/a.png`.
  */
 import { Resvg } from '@resvg/resvg-js'
 import { readFileSync, writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
 /** Source brand mark, resolved relative to this file so cwd does not matter. */
@@ -77,8 +82,8 @@ export function outputFileName(size) {
  * Writes the full icon set to public/ and returns the written paths.
  * Output is deterministic: the same source bytes always produce the same PNGs.
  */
-export function writeFavicons() {
-  const svg = buildFaviconSvg()
+export function writeFavicons(sourcePath = FAVICON_SOURCE_PATH) {
+  const svg = buildFaviconSvg(readFileSync(sourcePath))
   const paths = []
   for (const size of [...FAVICON_SIZES, APPLE_TOUCH_SIZE]) {
     const path = new URL(`../public/${outputFileName(size)}`, import.meta.url)
@@ -92,6 +97,9 @@ const invokedDirectly =
   process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url
 
 if (invokedDirectly) {
-  const paths = writeFavicons()
+  const sourceArg = process.argv[2]
+  const sourcePath = sourceArg ? resolve(process.cwd(), sourceArg) : FAVICON_SOURCE_PATH
+  console.log(`Favicon source: ${sourcePath}`)
+  const paths = writeFavicons(sourcePath)
   for (const path of paths) console.log(`Favicon written: ${path}`)
 }
