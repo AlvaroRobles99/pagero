@@ -39,7 +39,7 @@ pageRo/
 │   ├── App.jsx                 ← Layout principal (renderiza todas las secciones + divisores Lotus)
 │   ├── App.module.css          ← Estilos de layout compartidos (.section, .container, h2)
 │   ├── index.css               ← CSS reset + variables globales (colores, fuentes, prefers-reduced-motion)
-│   ├── shared.module.css       ← .btnWhatsapp (botón reutilizable)
+│   ├── shared.module.css       ← .btnPrimary (botón reutilizable)
 │   ├── data/
 │   │   ├── services.js          ← Array de servicios con datos extendidos (id, fullDescription, includes, duration)
 │   │   ├── reviews.js           ← Array de reseñas (id, text, author)

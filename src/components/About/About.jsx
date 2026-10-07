@@ -76,7 +76,7 @@ export default function About() {
             href={whatsappLink()}
             target="_blank"
             rel="noopener noreferrer"
-            className={sharedStyles.btnWhatsapp}
+            className={sharedStyles.btnPrimary}
           >
             Agendar una Sesión
           </a>

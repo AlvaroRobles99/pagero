@@ -11,7 +11,7 @@ export default function Contact() {
         <p>Tu proceso de sanación empieza con un mensaje. Escribime por WhatsApp y conversamos sin compromiso.</p>
         <a
           href={whatsappLink()}
-          className={shared.btnWhatsapp}
+          className={shared.btnPrimary}
           target="_blank"
           rel="noopener noreferrer"
         >
