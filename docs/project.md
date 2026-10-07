@@ -24,15 +24,19 @@ pageRo/
 ├── public/
 │   ├── images/
 │   │   ├── banner.svg          ← Hero background (paisaje espiritual con montañas, mar, loto)
-│   │   ├── logo.png            ← Marca de la marca; fuente de todos los favicons
-│   │   └── og-image.png        ← Imagen de compartir 1200×630 (generada, no editar a mano)
-│   ├── favicon-32x32.png       ← Favicon de pestaña 32×32 (generado desde logo.png)
-│   ├── favicon-192x192.png     ← Ícono 192×192 (generado desde logo.png)
-│   ├── favicon-512x512.png     ← Ícono 512×512 (generado desde logo.png)
-│   └── apple-touch-icon.png    ← Icono 180×180 para iOS (generado desde logo.png)
+│   │   ├── logo.png            ← Marca de la marca (no es la fuente de los favicons)
+│   │   ├── og-image.png        ← Imagen de compartir 1200×630 (generada, no editar a mano)
+│   │   └── favicon/            ← Salida del generador de íconos; se copia a la raíz de public/ al cambiar
+│   ├── favicon-16x16.png       ← Favicon de pestaña 16×16 (copiado desde images/favicon/)
+│   ├── favicon-32x32.png       ← Favicon de pestaña 32×32 (copiado desde images/favicon/)
+│   ├── android-chrome-192x192.png ← Ícono PWA 192×192 (referenciado por site.webmanifest)
+│   ├── android-chrome-512x512.png ← Ícono PWA 512×512 (referenciado por site.webmanifest)
+│   ├── favicon.ico             ← Ícono de pestaña legacy/fallback
+│   ├── apple-touch-icon.png    ← Ícono 180×180 para iOS (iOS no acepta SVG aquí)
+│   └── site.webmanifest        ← Manifiesto de web app (nombre, colores de marca, íconos PWA)
 ├── scripts/
 │   ├── generate-og.mjs         ← Genera la imagen OG (SVG en memoria → PNG con resvg)
-│   ├── generate-favicon.mjs    ← Genera los favicons + apple-touch-icon desde logo.png (resvg)
+│   ├── generate-favicon.mjs    ← Utilidad standalone de favicons (fuente por defecto logo.png); NO es la fuente del set publicado
 │   └── fonts/                  ← TTFs de marca, usados solo por el generador OG
 ├── src/
 │   ├── main.jsx                ← Entry point de React
@@ -173,7 +177,7 @@ Toda la metadata vive en `index.html`. React nunca la toca, y por eso el contrat
 | Documento | `lang="es"`, `robots` (`index, follow`), `theme-color` (`#1f0f14`) |
 | Open Graph | `og:type=website`, `og:locale=es_MX`, `og:site_name`, `og:title`, `og:description`, `og:url`, `og:image`, `og:image:width=1200`, `og:image:height=630`, `og:image:alt` |
 | Twitter | `twitter:card=summary_large_image`, `twitter:title`, `twitter:description`, `twitter:image`, `twitter:image:alt` |
-| Iconos | `link[rel=icon]` PNG (32×32, 192×192, 512×512) y `link[rel=apple-touch-icon]` (PNG 180×180) |
+| Iconos | `link[rel=icon]` PNG (16×16, 32×32), `link[rel=apple-touch-icon]` (PNG 180×180) y `link[rel=manifest]` (`/site.webmanifest`); los íconos PWA (`android-chrome-192/512`) salen del manifiesto |
 | Datos estructurados | JSON-LD `@graph` con `Organization`, `LocalBusiness`, `Person` (Rocío Durazno, con `telephone`) y `WebSite` |
 
 Los textos de `og:*` y del JSON-LD están en español, igual que el resto del contenido del sitio. Las URLs de los nodos son referencias relativas (`/#organization`), y el `@context` es el IRI que exige schema.org.
@@ -233,7 +237,7 @@ window.IntersectionObserver = MockIntersectionObserver
 | `@build` | Compila para producción |
 | `@testRo` | Ejecuta `bun run test` |
 | `bun run generate:og` | Regenera `public/images/og-image.png` desde `scripts/generate-og.mjs` |
-| `bun run generate:favicon` | Regenera los favicons + `apple-touch-icon.png` desde `public/images/logo.png` |
+| `bun run generate:favicon` | Utilidad standalone: genera un set de favicons + `apple-touch-icon.png` desde `public/images/logo.png`; NO es la fuente del set publicado |
 
 ## Número de WhatsApp
 

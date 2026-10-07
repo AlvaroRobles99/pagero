@@ -121,13 +121,12 @@ describe('index.html — document meta', () => {
     expect(metaName('robots'), 'meta[name="robots"] not found').toBe('index, follow')
   })
 
-  it('links the PNG favicon set (32, 192 and 512), not an SVG', () => {
+  it('links the PNG favicon set (16 and 32), not an SVG', () => {
     const icons = [...doc.querySelectorAll('link[rel="icon"]')]
-    expect(icons.length, 'index.html must link three PNG favicon sizes').toBe(3)
+    expect(icons.length, 'index.html must link two PNG favicon sizes').toBe(2)
     const expected = new Map([
       ['/favicon-32x32.png', '32x32'],
-      ['/favicon-192x192.png', '192x192'],
-      ['/favicon-512x512.png', '512x512'],
+      ['/favicon-16x16.png', '16x16'],
     ])
     for (const link of icons) {
       const href = link.getAttribute('href')
@@ -137,10 +136,15 @@ describe('index.html — document meta', () => {
     }
   })
 
-  it('links an apple-touch-icon', () => {
-    expect(linkHref('apple-touch-icon'), 'link[rel="apple-touch-icon"] not found').toBe(
-      '/apple-touch-icon.png',
-    )
+  it('links an apple-touch-icon at 180x180', () => {
+    const apple = doc.querySelector('link[rel="apple-touch-icon"]')
+    expect(apple, 'link[rel="apple-touch-icon"] not found').toBeTruthy()
+    expect(apple.getAttribute('href')).toBe('/apple-touch-icon.png')
+    expect(apple.getAttribute('sizes')).toBe('180x180')
+  })
+
+  it('links the web app manifest', () => {
+    expect(linkHref('manifest'), 'link[rel="manifest"] not found').toBe('/site.webmanifest')
   })
 
   it('keeps the page language set to Spanish', () => {
@@ -174,15 +178,31 @@ describe('index.html — the favicon assets', () => {
   const publicAsset = (href) => resolve(PROJECT_ROOT, 'public', (href ?? '').replace(/^\//, ''))
 
   it.each([
+    ['/favicon-16x16.png', 16],
     ['/favicon-32x32.png', 32],
-    ['/favicon-192x192.png', 192],
-    ['/favicon-512x512.png', 512],
     ['/apple-touch-icon.png', 180],
   ])('%s is a real %ix%i PNG on disk', (href, size) => {
     const bytes = readFileSync(publicAsset(href))
     expect(bytes.subarray(0, 8).toString('hex')).toBe('89504e470d0a1a0a')
     expect(bytes.readUInt32BE(16)).toBe(size)
     expect(bytes.readUInt32BE(20)).toBe(size)
+  })
+
+  it('ships a web manifest with the brand values and the PWA icons', () => {
+    const manifestPath = publicAsset('/site.webmanifest')
+    const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
+    expect(manifest.name, 'manifest must carry the brand name').toBe('Sanarse')
+    expect(manifest.short_name, 'manifest must carry the short brand name').toBe('Sanarse')
+    expect(manifest.theme_color, 'manifest must match the theme-color meta').toBe('#1f0f14')
+    expect(manifest.background_color, 'manifest must carry the brand background').toBe('#fffafc')
+    expect(Array.isArray(manifest.icons), 'manifest must declare an icons array').toBe(true)
+    const iconSrcs = manifest.icons.map((icon) => icon.src)
+    expect(iconSrcs, 'manifest must reference the 192 PWA icon').toContain(
+      '/android-chrome-192x192.png',
+    )
+    expect(iconSrcs, 'manifest must reference the 512 PWA icon').toContain(
+      '/android-chrome-512x512.png',
+    )
   })
 })
 

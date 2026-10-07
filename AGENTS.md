@@ -16,7 +16,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 - `bun run test` — run all tests (Vitest)
 - `bun run test:watch` — run tests in watch mode
 - `bun run generate:og` — regenerate `public/images/og-image.png` from `scripts/generate-og.mjs`
-- `bun run generate:favicon` — regenerate the favicon PNG set + `apple-touch-icon.png` from `public/images/logo.png`
+- `bun run generate:favicon` — standalone utility that renders a favicon set + `apple-touch-icon.png` from `public/images/logo.png` (resvg); it is NOT the source of the shipped icon set
 
 ## Structure
 
@@ -39,17 +39,22 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `src/data/contact.js` | WhatsApp number constants + `whatsappLink()` helper (single source of truth) |
 | `src/tests/` | Vitest suites, one per component + `seo.test.jsx` for the `index.html` meta and `whatsapp.test.jsx` for the link format |
 | `scripts/generate-og.mjs` | Builds the 1200×630 share image (inline SVG → PNG via resvg) |
-| `scripts/generate-favicon.mjs` | Derives the favicon PNG set + `apple-touch-icon.png` from `logo.png` (embedded in SVG → PNG via resvg) |
+| `scripts/generate-favicon.mjs` | Standalone favicon utility (default source `logo.png`, embedded in SVG → PNG via resvg); NOT the source of the shipped icon set |
 | `scripts/fonts/` | Brand TTFs, used only by the OG generator |
 | `public/images/` | Static assets (`banner.svg`, `logo.png`, generated `og-image.png`) |
-| `public/favicon-32x32.png`, `public/favicon-192x192.png`, `public/favicon-512x512.png` | Tab/PWA icon set; generated from `logo.png` via `bun run generate:favicon`, never edited by hand |
-| `public/apple-touch-icon.png` | 180×180 iOS home-screen icon (iOS does not accept SVG here); generated from `logo.png` |
+| `public/images/favicon/` | Generator output for the icon set; copied to `public/` root on change |
+| `public/favicon-16x16.png`, `public/favicon-32x32.png` | Tab favicons; shipped from `public/images/favicon/`, never edited by hand |
+| `public/android-chrome-192x192.png`, `public/android-chrome-512x512.png` | PWA icons referenced by `site.webmanifest` |
+| `public/favicon.ico` | Legacy/fallback tab icon |
+| `public/apple-touch-icon.png` | 180×180 iOS home-screen icon (iOS does not accept SVG here) |
+| `public/site.webmanifest` | Web app manifest (name, brand colors, PWA icons) |
 
 ## SEO + Social
 
 - Meta lives in `index.html` only — canonical, Open Graph, Twitter card, `theme-color`, `robots`, and a JSON-LD `@graph` (Organization, LocalBusiness, Person, WebSite).
 - `src/tests/seo.test.jsx` reads `index.html` from disk and asserts the whole contract, so a removed tag fails the suite.
 - URLs are intentionally **relative** until a domain is chosen. See the deploy-time step in `docs/project.md`.
+- Icons: `icon` 16×16/32×32 PNG + `apple-touch-icon` 180×180, plus `site.webmanifest`; the PWA icons (`android-chrome-192/512`) are referenced from the manifest.
 - `og-image.png` is generated, not hand-drawn. Change `scripts/generate-og.mjs`, then run `bun run generate:og`.
 
 ## MCP
