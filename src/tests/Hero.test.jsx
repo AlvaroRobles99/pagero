@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react'
 import Hero from '../components/Hero/Hero'
-import { WHATSAPP_NUMBER } from '../data/contact'
 
 describe('Hero', () => {
   it('renderiza el título principal', () => {
@@ -18,17 +17,14 @@ describe('Hero', () => {
     expect(screen.getByText('Amor, acompañamiento y confidencialidad')).toBeInTheDocument()
   })
 
-  it('renderiza el botón de WhatsApp con el texto correcto', () => {
+  it('renderiza el botón con enlace a servicios', () => {
     render(<Hero />)
-    const btn = screen.getByText('Agenda tu sesión')
+    const btn = screen.getByText('Ver servicios')
     expect(btn).toBeInTheDocument()
-    expect(btn.closest('a')).toHaveAttribute('href', `https://wa.me/${WHATSAPP_NUMBER}`)
-  })
-
-  it('renderiza un href de wa.me solo con dígitos', () => {
-    render(<Hero />)
-    const href = screen.getByText('Agenda tu sesión').closest('a').getAttribute('href')
-    expect(href).toMatch(/^https:\/\/wa\.me\/\d+$/)
+    const link = btn.closest('a')
+    expect(link).toHaveAttribute('href', '#services')
+    expect(link).not.toHaveAttribute('target', '_blank')
+    expect(link.getAttribute('href')).not.toMatch(/wa\.me/)
   })
 
   it('renders the brand logo as a decorative image with empty alt', () => {

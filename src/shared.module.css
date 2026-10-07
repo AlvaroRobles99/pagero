@@ -1,4 +1,4 @@
-.btnWhatsapp {
+.btnPrimary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -19,18 +19,18 @@
   cursor: pointer;
 }
 
-.btnWhatsapp:active {
+.btnPrimary:active {
   transform: scale(0.97);
   box-shadow: 0 2px 8px rgba(199, 58, 90, 0.25);
 }
 
 @media (min-width: 768px) {
-  .btnWhatsapp {
+  .btnPrimary {
     padding: 0.9rem 2.5rem;
     font-size: 1.1rem;
   }
 
-  .btnWhatsapp:hover {
+  .btnPrimary:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(199, 58, 90, 0.5);
     background: #b02e4e;
