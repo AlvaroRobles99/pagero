@@ -24,15 +24,16 @@ pageRo/
 ├── public/
 │   ├── images/
 │   │   ├── banner.svg          ← Hero background (paisaje espiritual con montañas, mar, loto)
-│   │   ├── logo.png            ← Marca de la marca; fuente de todos los favicons
+│   │   ├── logo.png            ← Marca de la marca (Hero + logo JSON-LD)
+│   │   ├── a.png               ← Fuente de los favicons (el set se genera desde ella)
 │   │   └── og-image.png        ← Imagen de compartir 1200×630 (generada, no editar a mano)
-│   ├── favicon-32x32.png       ← Favicon de pestaña 32×32 (generado desde logo.png)
-│   ├── favicon-192x192.png     ← Ícono 192×192 (generado desde logo.png)
-│   ├── favicon-512x512.png     ← Ícono 512×512 (generado desde logo.png)
-│   └── apple-touch-icon.png    ← Icono 180×180 para iOS (generado desde logo.png)
+│   ├── favicon-32x32.png       ← Favicon de pestaña 32×32 (generado desde a.png)
+│   ├── favicon-192x192.png     ← Ícono 192×192 (generado desde a.png)
+│   ├── favicon-512x512.png     ← Ícono 512×512 (generado desde a.png)
+│   └── apple-touch-icon.png    ← Icono 180×180 para iOS (generado desde a.png)
 ├── scripts/
 │   ├── generate-og.mjs         ← Genera la imagen OG (SVG en memoria → PNG con resvg)
-│   ├── generate-favicon.mjs    ← Genera los favicons + apple-touch-icon desde logo.png (resvg)
+│   ├── generate-favicon.mjs    ← Genera los favicons + apple-touch-icon desde el PNG fuente (resvg)
 │   └── fonts/                  ← TTFs de marca, usados solo por el generador OG
 ├── src/
 │   ├── main.jsx                ← Entry point de React
@@ -233,7 +234,7 @@ window.IntersectionObserver = MockIntersectionObserver
 | `@build` | Compila para producción |
 | `@testRo` | Ejecuta `bun run test` |
 | `bun run generate:og` | Regenera `public/images/og-image.png` desde `scripts/generate-og.mjs` |
-| `bun run generate:favicon` | Regenera los favicons + `apple-touch-icon.png` desde `public/images/logo.png` |
+| `bun run generate:favicon` | Regenera los favicons + `apple-touch-icon.png` desde `public/images/a.png` (o el PNG pasado como argumento) |
 
 ## Número de WhatsApp
 
