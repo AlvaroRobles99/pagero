@@ -28,7 +28,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `src/main.jsx` | React entry point |
 | `src/App.jsx` | Layout — renders all sections |
 | `src/index.css` | Global reset + CSS variables |
-| `src/shared.module.css` | Shared styles (btn-whatsapp) |
+| `src/shared.module.css` | Shared styles (btn-primary) |
 | `src/components/Lotus/` | Animated lotus SVG divider |
 | `src/components/Hero/` | Hero section + module CSS |
 | `src/components/About/` | About section + module CSS |
