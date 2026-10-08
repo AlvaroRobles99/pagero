@@ -8,6 +8,7 @@
  */
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { SOCIAL_LINKS } from '../data/social'
 
 // Vitest runs with the project root as cwd (see vitest.config.js).
 const PROJECT_ROOT = process.cwd()
@@ -223,6 +224,20 @@ describe('index.html — JSON-LD structured data', () => {
     const nodes = JSON.parse(jsonLdRaw)['@graph']
     const organization = nodes.find((node) => node['@type'] === 'Organization')
     expect(organization.logo, 'Organization node needs a logo').toBe('/images/logo.png')
+  })
+
+  it('keeps sameAs in sync with src/data/social.js, in both directions', () => {
+    expect(jsonLdRaw, 'script[type="application/ld+json"] not found').toBeTruthy()
+    const nodes = JSON.parse(jsonLdRaw)['@graph']
+    const declared = nodes.flatMap((node) => node.sameAs ?? [])
+    const published = SOCIAL_LINKS.map((social) => social.url)
+
+    for (const social of SOCIAL_LINKS) {
+      expect(declared, `${social.name} profile missing from JSON-LD sameAs`).toContain(social.url)
+    }
+    for (const url of declared) {
+      expect(published, `JSON-LD declares a profile absent from social.js: ${url}`).toContain(url)
+    }
   })
 })
 

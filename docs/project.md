@@ -176,7 +176,7 @@ Toda la metadata vive en `index.html`. React nunca la toca, y por eso el contrat
 | Open Graph | `og:type=website`, `og:locale=es_MX`, `og:site_name`, `og:title`, `og:description`, `og:url`, `og:image`, `og:image:width=1200`, `og:image:height=630`, `og:image:alt` |
 | Twitter | `twitter:card=summary_large_image`, `twitter:title`, `twitter:description`, `twitter:image`, `twitter:image:alt` |
 | Iconos | `link[rel=icon]` PNG (32×32, 192×192, 512×512) y `link[rel=apple-touch-icon]` (PNG 180×180) |
-| Datos estructurados | JSON-LD `@graph` con `Organization`, `LocalBusiness`, `Person` (Rocío Durazno, con `telephone`) y `WebSite` |
+| Datos estructurados | JSON-LD `@graph` con `Organization` (con `sameAs` → Instagram), `LocalBusiness`, `Person` (Rocío Durazno, con `telephone` y `sameAs` → Facebook y TikTok) y `WebSite` |
 
 Los textos de `og:*` y del JSON-LD están en español, igual que el resto del contenido del sitio. Las URLs de los nodos son referencias relativas (`/#organization`), y el `@context` es el IRI que exige schema.org.
 
