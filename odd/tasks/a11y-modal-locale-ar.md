@@ -68,9 +68,10 @@ Pedido del usuario: "arranca por los 2 major" — implementar las dos correccion
 - T1 — locale `es_AR`: `ab6fe74` `fix(seo): declare Argentine locale (es_AR) instead of es_MX`.
 - T2 — foco del modal: `2ab51aa` `fix(a11y): trap focus inside the service modal and restore it on close`.
 - Tests: T1 RED 2 fallos → GREEN 35/35 · T2 RED 3 fallos → GREEN 12/12 · suite completa 11 archivos / 97 tests en verde.
+- Gate RDD: **no disponible en este runtime**. `review.start` devuelve `immutable_review_transport_unsupported` (runtimes soportados: `claude-code`, `codex`), `mutation_outcome: not_started`, `retry_safe: false`. No se creó autoridad y **no se desactivó el modo** — la decisión del switch es del usuario.
 - No se tocaron los hallazgos MINOR (fuera de alcance).
 
 ## Notas
 
 - La delegación a subagentes no está disponible en este runtime (`task` falla con `OpenCode's free tier can only be used from within OpenCode`), así que el trabajo se implementa inline con verificación por test. No cuenta como verificación independiente.
-- El review nativo RDD no pudo correr sobre el proyecto completo (`lens_context_budget_exceeded`); queda pendiente por slices.
+- El review nativo RDD no es ejecutable en este runtime: además del `lens_context_budget_exceeded` sobre el proyecto completo, `review.start` de un candidato chico falla con `immutable_review_transport_unsupported`. Runtimes soportados: `claude-code`, `codex`.
