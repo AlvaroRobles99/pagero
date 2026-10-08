@@ -257,4 +257,3 @@ El mismo número tiene tres representaciones correctas, y confundirlas rompe el 
 
 - Ciudad o zona de servicio → `address`, `geo` y `areaServed` en el JSON-LD.
 - Dominio de deploy → volver absolutas `canonical`, `og:url` y `og:image` (ver "Paso de deploy").
-- **Falta el visto bueno visual de `og-image.png`.** La validación automática comprueba que el PNG es válido, que mide 1200×630 y que usa las fuentes de marca, pero no puede juzgar el diseño. Hay que revisarlo a ojo.
