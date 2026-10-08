@@ -44,7 +44,8 @@ pageRo/
 │   ├── data/
 │   │   ├── services.js          ← Array de servicios (id, icon, title, description, fullDescription)
 │   │   ├── reviews.js           ← Array de reseñas (id, text, author)
-│   │   └── contact.js           ← Constantes del número de WhatsApp + helper `whatsappLink()`
+│   │   ├── contact.js           ← Constantes del número de WhatsApp + helper `whatsappLink()`
+│   │   └── social.js            ← Array `SOCIAL_LINKS` (id, name, url, icon) de las tres redes
 │   ├── components/
 │   │   ├── Hero/                ← Header full-viewport con banner SVG + CTA
 │   │   ├── About/               ← Sección "Sobre mí" con texto de presentación
@@ -156,6 +157,7 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - Sección con fondo `--color-warm-white`
 - Loto semi-transparente como marca de agua de fondo (vía `::before`)
 - Texto de invitación cálido + botón WhatsApp con ícono 📱 que abre `wa.me` vía `whatsappLink()`
+- Bloque "Ver mi contenido" al final, debajo del CTA: regla dorada + 3 botones circulares (52px, borde dorado) con ícono SVG inline que abren Instagram, Facebook y TikTok en pestaña nueva — los links viven en `src/data/social.js` (única fuente de verdad)
 
 ### Footer
 - Copyright dinámico con `new Date().getFullYear()`
