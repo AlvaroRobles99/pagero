@@ -1,57 +1,59 @@
 const services = [
   {
-    id: 'tarot',
-    icon: '\u{1F52E}',
-    title: 'Lectura de Tarot',
-    description: 'Interpretación profunda del tarot para guiarte en el amor, trabajo, y decisiones importantes.',
+    id: 'tarot-angelical',
+    icon: '🔮',
+    title: 'Tarot Angelical',
+    description: 'Claridad sobre lo que estés atravesando: energías, emociones, vínculos y caminos posibles.',
     fullDescription:
-      'Cada lectura es un espacio sagrado donde conectamos con tu energía a través del tarot. Las cartas revelan los patrones, bloqueos y oportunidades que te rodean, ofreciéndote claridad y dirección en los momentos de incertidumbre.\n\n' +
-      'Con más de 8 años de experiencia, utilizo el tarot como un puente entre tu conciencia y tu intuición. No se trata de predecir un futuro fijo, sino de empoderarte para tomar decisiones alineadas con tu verdadero ser.',
-    includes: [
-      'Interpretación de 10 cartas en tirada personalizada',
-      'Enfoque en tu área de consulta (amor, trabajo, espiritualidad)',
-      'Consejos prácticos y pequeños rituales sugeridos',
-      'Grabación de la sesión (opcional)',
-    ],
-    duration: '45 minutos',
-    price: '$500',
+      'Una lectura para obtener claridad sobre situaciones que estés atravesando. A través de las cartas podemos explorar energías, emociones, vínculos y posibles caminos para tomar decisiones con mayor conciencia.',
   },
   {
-    id: 'limpieza',
-    icon: '\u{1F33F}',
-    title: 'Limpieza Energética',
-    description: 'Armonización de tu campo energético para liberar bloqueos y renovar tu vitalidad.',
+    id: 'registros-akashicos',
+    icon: '✨',
+    title: 'Registros Akáshicos',
+    description: 'Un espacio de conexión y autoconocimiento para comprender patrones y experiencias de tu presente.',
     fullDescription:
-      'Con el paso del tiempo acumulamos energías que no nos pertenecen: tensiones del día a día, cargas emocionales de otros, o simplemente el desgaste natural de nuestro campo energético. La limpieza energética restaura el flujo natural de tu energía.\n\n' +
-      'Trabajo con elementos naturales como el humo de palo santo, velas, cuencos y cristales para armonizar cada chakra y sellar tu campo energético. Es un proceso profundamente reparador que se siente como un suspiro profundo después de mucho tiempo conteniendo la respiración.',
-    includes: [
-      'Diagnóstico energético inicial',
-      'Limpieza profunda de chakras con cuencos y cristales',
-      'Sahumeo con palo santo o salvia',
-      'Sellado y protección energética',
-      'Recomendaciones para mantener tu energía limpia',
-    ],
-    duration: '60 minutos',
-    price: '$700',
+      'Un espacio de conexión y autoconocimiento donde se busca comprender experiencias, patrones, aprendizajes y situaciones que pueden estar influyendo en tu presente. Una mirada profunda hacia tu proceso personal.',
   },
   {
-    id: 'combo',
-    icon: '\u2728',
-    title: 'Lectura + Limpieza',
-    description: 'Combinación poderosa: lectura de tarot con limpieza energética profunda.',
+    id: 'limpiezas-energeticas',
+    icon: '🌿',
+    title: 'Limpiezas Energéticas',
+    description: 'Libera y renueva energías pesadas o estancadas en momentos de cansancio, cambios o bloqueos.',
     fullDescription:
-      'Esta sesión integradora combina lo mejor de ambas prácticas para una transformación completa. Primero identificamos a través del tarot qué áreas de tu vida necesitan atención y dónde se encuentran los bloqueos energéticos.\n\n' +
-      'Luego realizamos una limpieza energética enfocada precisamente en esos puntos detectados. Es la opción más completa porque no solo obtienes la guía del tarot, sino que además liberas la energía estancada para que esa guía pueda materializarse en tu vida.',
-    includes: [
-      'Tirada de tarot completa (12 cartas)',
-      'Limpieza energética focalizada en bloqueos detectados',
-      'Alineación y equilibrio de chakras',
-      'Protección energética',
-      'Grabación de la sesión (opcional)',
-      'Guía de cuidados posteriores',
-    ],
-    duration: '90 minutos',
-    price: '$1000',
+      'Una práctica destinada a liberar y renovar energías que pueden sentirse pesadas o estancadas. Ideal para momentos de cansancio, cambios, bloqueos o cuando sentís que necesitás hacer un "reinicio energético".',
+  },
+  {
+    id: 'velomancia',
+    icon: '🕯️',
+    title: 'Velomancia Angelical',
+    description: 'Observación de la vela para interpretar el proceso energético y recibir orientación.',
+    fullDescription:
+      'A través de la observación de la vela y sus manifestaciones, se interpreta simbólicamente el proceso energético realizado. Una herramienta para recibir orientación y profundizar en aquello que estás trabajando.',
+  },
+  {
+    id: 'abre-caminos',
+    icon: '🚪',
+    title: 'Abre Caminos',
+    description: 'Moviliza situaciones estancadas y acompaña procesos de apertura, avance y nuevos comienzos.',
+    fullDescription:
+      'Un trabajo energético enfocado en movilizar situaciones que sentís estancadas y acompañar procesos de apertura y nuevos comienzos. Ideal para quienes sienten que necesitan avanzar y dejar atrás determinados bloqueos.',
+  },
+  {
+    id: 'chakras',
+    icon: '💫',
+    title: 'Armonización de Chakras',
+    description: 'Trabajo sobre los principales centros energéticos para favorecer equilibrio y bienestar.',
+    fullDescription:
+      'Una práctica energética destinada a trabajar sobre los principales centros energéticos, buscando favorecer equilibrio, armonía y bienestar. Un momento para conectar con vos y recuperar tu centro.',
+  },
+  {
+    id: 'constelaciones',
+    icon: '🌸',
+    title: 'Constelaciones Familiares',
+    description: 'Observa vínculos y patrones familiares desde otra perspectiva para transformarlos.',
+    fullDescription:
+      'Un espacio para observar vínculos, dinámicas y patrones familiares desde otra perspectiva. Permite explorar situaciones que se repiten y generar una nueva mirada sobre aquello que querés transformar.',
   },
 ]
 
