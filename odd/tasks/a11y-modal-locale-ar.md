@@ -58,15 +58,17 @@ Pedido del usuario: "arranca por los 2 major" — implementar las dos correccion
 
 ### T2 — focus trap + restauración de foco en el modal (MAJOR #2)
 
-- [ ] `src/tests/ServiceModal.test.jsx` (nueva): render/portal, cierre con Escape, cierre click en overlay, no cierra click adentro, `role=dialog` + `aria-modal`, trap Tab/Shift+Tab, restauración de foco al trigger, CTA con `whatsappLink` del título (RED observable antes de implementar).
-- [ ] `ServiceModal.jsx`: ref del modal, trap de Tab dentro de los focusables, captura del elemento previamente enfocado y restauración en el cleanup, handler estable.
-- [ ] **Verify:** `bunx vitest run src/tests/ServiceModal.test.jsx` y luego la suite completa.
+- [x] `src/tests/ServiceModal.test.jsx` (nueva): render/portal, cierre con Escape, cierre click en overlay, no cierra click adentro, `role=dialog` + `aria-modal`, trap Tab/Shift+Tab, restauración de foco al trigger, CTA con `whatsappLink` del título (RED observable antes de implementar).
+- [x] `ServiceModal.jsx`: ref del modal, trap de Tab dentro de los focusables, captura del elemento previamente enfocado y restauración en el cleanup, handler estable.
+- [x] **Verify:** `bunx vitest run src/tests/ServiceModal.test.jsx` (RED: 3 fallos exactos de foco; GREEN: 12/12) y luego la suite completa (11 archivos / 97 tests en verde).
 
 ## Evidence
 
 - Rama: `fix/a11y-locale`.
-- Commits: _(se registran al cerrar cada tarea)_.
-- Resultado de tests: _(se registra al cerrar cada tarea)_.
+- T1 — locale `es_AR`: `ab6fe74` `fix(seo): declare Argentine locale (es_AR) instead of es_MX`.
+- T2 — foco del modal: se registra en el commit de esta tarea.
+- Tests: T1 RED 2 fallos → GREEN 35/35 · T2 RED 3 fallos → GREEN 12/12 · suite completa 11 archivos / 97 tests en verde.
+- No se tocaron los hallazgos MINOR (fuera de alcance).
 
 ## Notas
 
