@@ -66,7 +66,7 @@ Pedido del usuario: "arranca por los 2 major" — implementar las dos correccion
 
 - Rama: `fix/a11y-locale`.
 - T1 — locale `es_AR`: `ab6fe74` `fix(seo): declare Argentine locale (es_AR) instead of es_MX`.
-- T2 — foco del modal: se registra en el commit de esta tarea.
+- T2 — foco del modal: `2ab51aa` `fix(a11y): trap focus inside the service modal and restore it on close`.
 - Tests: T1 RED 2 fallos → GREEN 35/35 · T2 RED 3 fallos → GREEN 12/12 · suite completa 11 archivos / 97 tests en verde.
 - No se tocaron los hallazgos MINOR (fuera de alcance).
 
