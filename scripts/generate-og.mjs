@@ -42,7 +42,7 @@ const LIGHT = '#fef0f5'
 
 /* Real site content, kept in sync with src/data/services.js */
 const WORDMARK = 'Sanarse'
-const SUBTITLE = 'Lectura de Tarot \u00b7 Limpieza Energ\u00edtica'
+const SUBTITLE = 'Tarot \u00b7 Limpiezas \u00b7 Acompa\u00f1amiento espiritual'
 const SIGNATURE = 'Roc\u00eda Durazno'
 
 /* Composition grid */

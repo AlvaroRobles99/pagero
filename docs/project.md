@@ -186,7 +186,7 @@ Los textos de `og:*` y del JSON-LD están en español, igual que el resto del co
 bun run generate:og
 ```
 
-El script arma el SVG en memoria (degradado de marca `#1f0f14` → `#c73a5a`, wordmark en Cormorant Garamond, subtítulo "Lectura de Tarot · Limpieza Energética" en Figtree, marca de loto en dorado) y lo rasteriza con `@resvg/resvg-js` usando las fuentes de `scripts/fonts/` y `loadSystemFonts: false`, de modo que la salida es idéntica en cualquier máquina. El resultado es determinista: correrlo dos veces produce el mismo archivo byte a byte.
+El script arma el SVG en memoria (degradado de marca `#1f0f14` → `#c73a5a`, wordmark en Cormorant Garamond, subtítulo "Tarot · Limpiezas · Acompañamiento espiritual" en Figtree, marca de loto en dorado) y lo rasteriza con `@resvg/resvg-js` usando las fuentes de `scripts/fonts/` y `loadSystemFonts: false`, de modo que la salida es idéntica en cualquier máquina. El resultado es determinista: correrlo dos veces produce el mismo archivo byte a byte.
 
 El PNG está versionado y `@resvg/resvg-js` es una devDependency, así que producción nunca necesita la herramienta.
 
@@ -257,6 +257,5 @@ El mismo número tiene tres representaciones correctas, y confundirlas rompe el 
 
 - **Confirmar el `9` del número argentino** en un teléfono real (ver "Número de WhatsApp").
 - Ciudad o zona de servicio → `address`, `geo` y `areaServed` en el JSON-LD.
-- Moneda de los precios (`$500`, `$700`, `$1000`) → `offers.priceCurrency`.
 - Dominio de deploy → volver absolutas `canonical`, `og:url` y `og:image` (ver "Paso de deploy").
 - **Falta el visto bueno visual de `og-image.png`.** La validación automática comprueba que el PNG es válido, que mide 1200×630 y que usa las fuentes de marca, pero no puede juzgar el diseño. Hay que revisarlo a ojo.
