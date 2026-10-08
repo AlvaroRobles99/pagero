@@ -41,15 +41,15 @@ pageRo/
 │   ├── index.css               ← CSS reset + variables globales (colores, fuentes, prefers-reduced-motion)
 │   ├── shared.module.css       ← .btnWhatsapp (botón reutilizable)
 │   ├── data/
-│   │   ├── services.js          ← Array de servicios con datos extendidos (id, fullDescription, includes, duration)
+│   │   ├── services.js          ← Array de servicios (id, icon, title, description, fullDescription)
 │   │   ├── reviews.js           ← Array de reseñas (id, text, author)
 │   │   └── contact.js           ← Constantes del número de WhatsApp + helper `whatsappLink()`
 │   ├── components/
 │   │   ├── Hero/                ← Header full-viewport con banner SVG + CTA
 │   │   ├── About/               ← Sección "Sobre mí" con texto de presentación
 │   │   ├── Lotus/               ← SVG decorativo de loto con rotación animada
-│   │   ├── Services/            ← Grid de 3 cards clickeables con stagger reveal + apertura de modal
-│   │   ├── ServiceModal/        ← Modal a pantalla completa con detalle del servicio, includes, duración, CTA WhatsApp
+│   │   ├── Services/            ← Grid de 7 cards clickeables con stagger reveal + apertura de modal
+│   │   ├── ServiceModal/        ← Modal a pantalla completa con detalle del servicio y CTA WhatsApp
 │   │   ├── Reviews/             ← Grid de reseñas con estrellas y reveal animation
 │   │   ├── Contact/             ← Sección con botón de WhatsApp
 │   │   └── Footer/              ← Footer con copyright y año dinámico
@@ -126,20 +126,19 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - `aria-hidden="true"` (decorativo)
 
 ### Services
-- Datos importados desde `src/data/services.js` (icono, título, descripción corta, descripción completa, includes, duración, precio)
-- Cada card es clickeable (`role="button"`, `tabIndex={0}`, `onClick`, `onKeyDown Enter`)
-- Borde izquierdo decorativo por card: gold (Tarot), rose (Limpieza), gold→rose gradiente (Combo)
+- Datos importados desde `src/data/services.js` (id, icono emoji, título, resumen corto para la card, texto completo para el modal) — sin precios, sin `includes`, sin duración
+- 7 cards clickeables (`role="button"`, `tabIndex={0}`, `onClick`, `onKeyDown Enter`)
+- Borde izquierdo decorativo por card en ciclo de 3: gold (`3n+1`), rose (`3n+2`), gold→rose gradiente (`3n+3`)
 - Texto "Conoce más →" al pie de cada card, visible en hover desktop
-- Al hacer clic abre `ServiceModal` con información detallada
-- Animación stagger via `IntersectionObserver` (delay 0, 120, 240ms)
+- Al hacer clic abre `ServiceModal` con el texto completo del servicio
+- Animación stagger via `IntersectionObserver` (delay `index × 120ms`)
 
 ### ServiceModal
 - Portal a `document.body` para superponerse a toda la página
 - Overlay oscuro con `backdrop-filter: blur` + animación `fadeIn`
 - Modal centrado con animación `scaleIn` (cubic-bezier spring)
 - Cierre con ✕, Escape, o click fuera del modal
-- Muestra: icono grande, título (display font), descripción completa, lista "Qué incluye", duración, precio, CTA "Consultar vía WhatsApp" (el href lo arma `whatsappLink()` con el título del servicio como mensaje)
-- Lotus decorativo entre descripción y lista de includes
+- Muestra: icono grande, título (display font), párrafos de `fullDescription` (separados por línea en blanco) y CTA "Consultar vía WhatsApp" (el href lo arma `whatsappLink()` con el título del servicio como mensaje)
 - `prefers-reduced-motion` respetado
 
 ### Reviews

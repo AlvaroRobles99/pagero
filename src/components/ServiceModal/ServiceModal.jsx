@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import Lotus from '../Lotus/Lotus'
 import { whatsappLink } from '../../data/contact'
 import styles from './ServiceModal.module.css'
 
@@ -54,27 +53,6 @@ export default function ServiceModal({ service, onClose }) {
         {service.fullDescription.split('\n\n').map((p, i) => (
           <p key={i} className={styles.paragraph}>{p}</p>
         ))}
-
-        {service.includes && (
-          <>
-            <Lotus size={24} />
-            <h3 className={styles.includesTitle}>Qué incluye</h3>
-            <ul className={styles.includesList}>
-              {service.includes.map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
-          </>
-        )}
-
-        <div className={styles.footer}>
-          {service.duration && (
-            <span className={styles.duration}>
-              <strong>Duración:</strong> {service.duration}
-            </span>
-          )}
-          <span className={styles.price}>{service.price}</span>
-        </div>
 
         <a
           href={whatsappLink(`Hola Rocío, me interesa saber más sobre ${service.title}`)}

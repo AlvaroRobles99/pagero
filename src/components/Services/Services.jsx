@@ -45,7 +45,6 @@ function ServiceCard({ service, index, onSelect }) {
       <span className={styles.cardIcon}>{service.icon}</span>
       <h3>{service.title}</h3>
       <p>{service.description}</p>
-      <span className={styles.price}>{service.price}</span>
       <span className={styles.cardHint}>Conoce más →</span>
     </div>
   )
