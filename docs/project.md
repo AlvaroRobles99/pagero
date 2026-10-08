@@ -251,11 +251,10 @@ El mismo número tiene tres representaciones correctas, y confundirlas rompe el 
 
 `src/tests/whatsapp.test.jsx` bloquea ese formato, así que una edición mal hecha falla ruidosamente. `Hero.test.jsx` y `Contact.test.jsx` assertan contra la constante, nunca contra dígitos literales.
 
-> **Sin confirmar:** los móviles argentinos suelen escribirse `+54 9 297 421 6017`, donde el `9` marca la línea móvil. La convención de `wa.me` es **omitir** el `9`, que es lo que hace la constante. Hay que confirmar esto abriendo el link en un teléfono real. Si el `9` turns out necesario, es un cambio de un solo carácter en `src/data/contact.js`.
+> **Confirmado en un teléfono real:** el link abre el chat en el número correcto con la forma sin `9` (`542974216017`). Los móviles argentinos se escriben `+54 9 297 421 6017`, pero la convención de `wa.me` **omite** el `9`, que es lo que hace la constante. Si algún día falla, el ajuste es de un carácter en `src/data/contact.js`.
 
 ## Known gaps
 
-- **Confirmar el `9` del número argentino** en un teléfono real (ver "Número de WhatsApp").
 - Ciudad o zona de servicio → `address`, `geo` y `areaServed` en el JSON-LD.
 - Dominio de deploy → volver absolutas `canonical`, `og:url` y `og:image` (ver "Paso de deploy").
 - **Falta el visto bueno visual de `og-image.png`.** La validación automática comprueba que el PNG es válido, que mide 1200×630 y que usa las fuentes de marca, pero no puede juzgar el diseño. Hay que revisarlo a ojo.

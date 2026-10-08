@@ -11,10 +11,9 @@
  * A `+`, a space or a dash inside a `wa.me` href yields a dead link rather than
  * an error, so the format is locked by src/tests/whatsapp.test.jsx.
  *
- * Unconfirmed: Argentine mobile numbers are often written `+54 9 297 421 6017`,
- * where the 9 marks a mobile line. The `wa.me` convention is to drop the 9, which
- * is what WHATSAPP_NUMBER does. If the link does not open on a real phone, the
- * fix is a single character here.
+ * Confirmed on a real phone: the link opens a chat on the correct number in
+ * this digits-only form. Argentine `+54 9 297 ...` mobiles are written with a
+ * 9, but `wa.me` drops it — which is what WHATSAPP_NUMBER does.
  */
 
 /** Digits only. Never add a `+`, spaces, dashes or parentheses to this. */

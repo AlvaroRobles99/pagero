@@ -82,6 +82,6 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | JSON-LD `telephone` | `+54 297 421 6017` | schema.org wants the international form with `+`. |
 
 - `src/tests/whatsapp.test.jsx` locks that format, so a bad edit fails loudly. `Hero.test.jsx` / `Contact.test.jsx` assert against the constant, never against literal digits.
-- **Unconfirmed:** Argentine mobile numbers are often written `+54 9 297 421 6017`, where the `9` marks a mobile line. `wa.me` convention drops the `9`, which is what the constant does. This must be confirmed by opening the link on a real phone. If the `9` turns out to be required, it is a one-character fix in `src/data/contact.js`.
+- **Confirmed on a real phone:** the link opens a chat on the correct number in the digits-only form. Argentine `+54 9 297 421 6017` mobiles are written with a `9`, but the `wa.me` convention drops it, which is what the constant does. If it ever regresses, the fix is a single character in `src/data/contact.js`.
 - The test file is named `whatsapp.test.jsx`, not `contact.test.jsx`: the filesystem is case-insensitive on Windows, so a name differing from `Contact.test.jsx` only by case would resolve to it and overwrite that suite.
 
