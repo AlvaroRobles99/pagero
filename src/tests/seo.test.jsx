@@ -79,7 +79,7 @@ describe('index.html — Open Graph', () => {
   })
 
   it('declares og:locale and og:site_name', () => {
-    expect(og('og:locale'), 'meta[property="og:locale"] not found').toBe('es_MX')
+    expect(og('og:locale'), 'meta[property="og:locale"] not found').toBe('es_AR')
     expect(og('og:site_name'), 'meta[property="og:site_name"] not found').toBe('Sanarse')
   })
 
@@ -216,7 +216,7 @@ describe('index.html — JSON-LD structured data', () => {
     const website = nodes.find((node) => node['@type'] === 'WebSite')
     expect(person.name, 'Person node needs a name').toBe('Rocío Durazno')
     expect(website.name, 'WebSite node needs a name').toBe('Sanarse')
-    expect(website.inLanguage).toBe('es-MX')
+    expect(website.inLanguage).toBe('es-AR')
   })
 
   it('points the Organization logo at the brand mark image', () => {
