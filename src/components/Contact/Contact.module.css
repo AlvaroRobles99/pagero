@@ -38,3 +38,73 @@
     font-size: 1.1rem;
   }
 }
+
+.social {
+  margin-top: 2.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.socialRule {
+  width: 56px;
+  height: 1px;
+  background: var(--color-accent);
+  opacity: 0.5;
+}
+
+.socialLabel {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--color-text);
+  margin: 0;
+}
+
+/* `.contact p` (class + element) beats a bare `.socialLabel`, both for the
+   2rem bottom margin and for the 1.1rem font-size set at ≥768px, so the label
+   needs the extra class to keep its own spacing and type size. */
+.social .socialLabel {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 1rem;
+}
+
+.socialLink {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 154, 74, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.socialLink svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.socialLink:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-warm-white);
+  transform: translateY(-3px);
+}
+
+.socialLink:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
