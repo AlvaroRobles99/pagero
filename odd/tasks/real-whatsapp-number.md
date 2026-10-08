@@ -72,29 +72,29 @@ Because of that, the number lives in exactly one constant so adding a `9` is a o
 ## Tasks
 
 ### T1 — `src/data/contact.js`
-- [ ] `WHATSAPP_NUMBER = '542974216017'` (digits only, no `+`).
-- [ ] `WHATSAPP_DISPLAY = '+54 297 421 6017'` (human-readable).
-- [ ] `whatsappLink(message?)` returning `https://wa.me/<number>` or
+- [x] `WHATSAPP_NUMBER = '542974216017'` (digits only, no `+`).
+- [x] `WHATSAPP_DISPLAY = '+54 297 421 6017'` (human-readable).
+- [x] `whatsappLink(message?)` returning `https://wa.me/<number>` or
       `https://wa.me/<number>?text=<encoded>`. Must omit `?text=` entirely when no message is given.
 
 ### T2 — Rewire the three components
-- [ ] `Hero.jsx`, `Contact.jsx` — `href={whatsappLink()}`.
-- [ ] `ServiceModal.jsx` — `href={whatsappLink(\`Hola Rocío, me interesa saber más sobre ${service.title}\`)}`,
+- [x] `Hero.jsx`, `Contact.jsx` — `href={whatsappLink()}`.
+- [x] `ServiceModal.jsx` — `href={whatsappLink(\`Hola Rocío, me interesa saber más sobre ${service.title}\`)}`,
       preserving the existing Spanish message and the `encodeURIComponent` behaviour.
 
 ### T3 — JSON-LD
-- [ ] Add `"telephone": "+54 297 421 6017"` to the `Person` node.
-- [ ] Do NOT add it to `Organization`/`LocalBusiness` unless it reads naturally there.
+- [x] Add `"telephone": "+54 297 421 6017"` to the `Person` node.
+- [x] Do NOT add it to `Organization`/`LocalBusiness` unless it reads naturally there.
 
 ### T4 — Tests
-- [ ] `src/tests/contact.test.jsx` (new): assert the number is digits-only, starts with `54`,
+- [x] `src/tests/contact.test.jsx` (new): assert the number is digits-only, starts with `54`,
       has no `+`/space/dash, `whatsappLink()` matches `^https://wa\.me/\d+$`, and the message
       variant URL-encodes correctly. This suite is the guard that catches a bad future edit.
-- [ ] `Hero.test.jsx` / `Contact.test.jsx` — import the constant, stop hardcoding digits.
-- [ ] `src/tests/seo.test.jsx` — allow `telephone`; keep every other fabrication guard.
+- [x] `Hero.test.jsx` / `Contact.test.jsx` — import the constant, stop hardcoding digits.
+- [x] `src/tests/seo.test.jsx` — allow `telephone`; keep every other fabrication guard.
 
 ### T5 — Docs
-- [ ] `AGENTS.md`, `docs/project.md` — drop the placeholder warning, document `src/data/contact.js`
+- [x] `AGENTS.md`, `docs/project.md` — drop the placeholder warning, document `src/data/contact.js`
       and the three-format rule, and record the unconfirmed `9` caveat.
 
 ## Route declaration
