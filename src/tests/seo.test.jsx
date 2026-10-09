@@ -122,19 +122,20 @@ describe('index.html — document meta', () => {
     expect(metaName('robots'), 'meta[name="robots"] not found').toBe('index, follow')
   })
 
-  it('links the PNG favicon set (32, 192 and 512), not an SVG', () => {
+  it('links the favicon set (ico, 16 and 32 PNG), not an SVG', () => {
     const icons = [...doc.querySelectorAll('link[rel="icon"]')]
-    expect(icons.length, 'index.html must link three PNG favicon sizes').toBe(3)
+    expect(icons.length, 'index.html must link three favicon files').toBe(3)
     const expected = new Map([
-      ['/favicon-32x32.png', '32x32'],
-      ['/favicon-192x192.png', '192x192'],
-      ['/favicon-512x512.png', '512x512'],
+      ['/favicon.ico', { sizes: 'any', type: null }],
+      ['/favicon-16x16.png', { sizes: '16x16', type: 'image/png' }],
+      ['/favicon-32x32.png', { sizes: '32x32', type: 'image/png' }],
     ])
     for (const link of icons) {
       const href = link.getAttribute('href')
-      expect(expected.has(href), `unexpected favicon href: ${href}`).toBe(true)
-      expect(link.getAttribute('sizes'), `wrong sizes on ${href}`).toBe(expected.get(href))
-      expect(link.getAttribute('type'), `wrong type on ${href}`).toBe('image/png')
+      const spec = expected.get(href)
+      expect(spec, `unexpected favicon href: ${href}`).toBeTruthy()
+      expect(link.getAttribute('sizes'), `wrong sizes on ${href}`).toBe(spec.sizes)
+      expect(link.getAttribute('type'), `wrong type on ${href}`).toBe(spec.type)
     }
   })
 
@@ -142,6 +143,10 @@ describe('index.html — document meta', () => {
     expect(linkHref('apple-touch-icon'), 'link[rel="apple-touch-icon"] not found').toBe(
       '/apple-touch-icon.png',
     )
+  })
+
+  it('links the web manifest', () => {
+    expect(linkHref('manifest'), 'link[rel="manifest"] not found').toBe('/site.webmanifest')
   })
 
   it('keeps the page language set to Spanish', () => {
@@ -175,15 +180,32 @@ describe('index.html — the favicon assets', () => {
   const publicAsset = (href) => resolve(PROJECT_ROOT, 'public', (href ?? '').replace(/^\//, ''))
 
   it.each([
+    ['/favicon-16x16.png', 16],
     ['/favicon-32x32.png', 32],
-    ['/favicon-192x192.png', 192],
-    ['/favicon-512x512.png', 512],
+    ['/android-chrome-192x192.png', 192],
+    ['/android-chrome-512x512.png', 512],
     ['/apple-touch-icon.png', 180],
   ])('%s is a real %ix%i PNG on disk', (href, size) => {
     const bytes = readFileSync(publicAsset(href))
     expect(bytes.subarray(0, 8).toString('hex')).toBe('89504e470d0a1a0a')
     expect(bytes.readUInt32BE(16)).toBe(size)
     expect(bytes.readUInt32BE(20)).toBe(size)
+  })
+
+  it('favicon.ico is a real ICO on disk', () => {
+    expect(() => readFileSync(publicAsset('/favicon.ico'))).not.toThrow()
+    const bytes = readFileSync(publicAsset('/favicon.ico'))
+    expect(bytes.subarray(0, 4).toString('hex')).toBe('00000100')
+  })
+
+  it('site.webmanifest is valid JSON declaring the brand and the android icons', () => {
+    const manifest = JSON.parse(readFileSync(publicAsset('/site.webmanifest'), 'utf8'))
+    expect(manifest.name).toBe('Sanarse')
+    expect(manifest.theme_color).toBe('#1f0f14')
+    expect(manifest.icons.map((icon) => icon.src)).toEqual([
+      '/android-chrome-192x192.png',
+      '/android-chrome-512x512.png',
+    ])
   })
 })
 

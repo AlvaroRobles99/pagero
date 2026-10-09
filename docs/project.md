@@ -25,15 +25,16 @@ pageRo/
 │   ├── images/
 │   │   ├── banner.svg          ← Hero background (paisaje espiritual con montañas, mar, loto)
 │   │   ├── logo.png            ← Marca de la marca (Hero + logo JSON-LD)
-│   │   ├── a.png               ← Fuente de los favicons (el set se genera desde ella)
 │   │   └── og-image.png        ← Imagen de compartir 1200×630 (generada, no editar a mano)
-│   ├── favicon-32x32.png       ← Favicon de pestaña 32×32 (generado desde a.png)
-│   ├── favicon-192x192.png     ← Ícono 192×192 (generado desde a.png)
-│   ├── favicon-512x512.png     ← Ícono 512×512 (generado desde a.png)
-│   └── apple-touch-icon.png    ← Icono 180×180 para iOS (generado desde a.png)
+│   ├── favicon.ico             ← Favicon de pestaña (formato ICO, sizes any)
+│   ├── favicon-16x16.png       ← Favicon de pestaña 16×16 (estático, no generado)
+│   ├── favicon-32x32.png       ← Favicon de pestaña 32×32 (estático, no generado)
+│   ├── android-chrome-192x192.png ← Ícono Android 192×192 (vía site.webmanifest)
+│   ├── android-chrome-512x512.png ← Ícono Android 512×512 (vía site.webmanifest)
+│   ├── apple-touch-icon.png    ← Icono 180×180 para iOS (iOS no acepta SVG aquí)
+│   └── site.webmanifest        ← Manifest PWA: marca, colores #1f0f14, íconos android
 ├── scripts/
 │   ├── generate-og.mjs         ← Genera la imagen OG (SVG en memoria → PNG con resvg)
-│   ├── generate-favicon.mjs    ← Genera los favicons + apple-touch-icon desde el PNG fuente (resvg)
 │   └── fonts/                  ← TTFs de marca, usados solo por el generador OG
 ├── src/
 │   ├── main.jsx                ← Entry point de React
@@ -175,7 +176,7 @@ Toda la metadata vive en `index.html`. React nunca la toca, y por eso el contrat
 | Documento | `lang="es"`, `robots` (`index, follow`), `theme-color` (`#1f0f14`) |
 | Open Graph | `og:type=website`, `og:locale=es_AR`, `og:site_name`, `og:title`, `og:description`, `og:url`, `og:image`, `og:image:width=1200`, `og:image:height=630`, `og:image:alt` |
 | Twitter | `twitter:card=summary_large_image`, `twitter:title`, `twitter:description`, `twitter:image`, `twitter:image:alt` |
-| Iconos | `link[rel=icon]` PNG (32×32, 192×192, 512×512) y `link[rel=apple-touch-icon]` (PNG 180×180) |
+| Iconos | `link[rel=icon]` ICO (`sizes="any"`) + PNG 16×16 y 32×32, `link[rel=apple-touch-icon]` (PNG 180×180) y `link[rel=manifest]` → `site.webmanifest` |
 | Datos estructurados | JSON-LD `@graph` con `Organization` (con `sameAs` → Instagram), `LocalBusiness`, `Person` (Rocío Durazno, con `telephone` y `sameAs` → Facebook y TikTok) y `WebSite` (`inLanguage=es-AR`) |
 
 Los textos de `og:*` y del JSON-LD están en español, igual que el resto del contenido del sitio. Las URLs de los nodos son referencias relativas (`/#organization`), y el `@context` es el IRI que exige schema.org.
@@ -235,7 +236,6 @@ window.IntersectionObserver = MockIntersectionObserver
 | `@build` | Compila para producción |
 | `@testRo` | Ejecuta `bun run test` |
 | `bun run generate:og` | Regenera `public/images/og-image.png` desde `scripts/generate-og.mjs` |
-| `bun run generate:favicon` | Regenera los favicons + `apple-touch-icon.png` desde `public/images/a.png` (o el PNG pasado como argumento) |
 
 ## Número de WhatsApp
 

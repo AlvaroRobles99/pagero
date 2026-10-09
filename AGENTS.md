@@ -18,7 +18,6 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 - `bun run test` — run all tests (Vitest)
 - `bun run test:watch` — run tests in watch mode
 - `bun run generate:og` — regenerate `public/images/og-image.png` from `scripts/generate-og.mjs`
-- `bun run generate:favicon` — regenerate the favicon PNG set + `apple-touch-icon.png` from `public/images/a.png` (defaults to `logo.png` if no source is passed)
 
 ## Structure
 
@@ -41,11 +40,11 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `src/data/contact.js` | WhatsApp number constants + `whatsappLink()` helper (single source of truth) |
 | `src/tests/` | Vitest suites, one per component + `seo.test.jsx` for the `index.html` meta and `whatsapp.test.jsx` for the link format |
 | `scripts/generate-og.mjs` | Builds the 1200×630 share image (inline SVG → PNG via resvg) |
-| `scripts/generate-favicon.mjs` | Derives the favicon PNG set + `apple-touch-icon.png` from the passed source PNG (defaults to `logo.png`; embedded in SVG → PNG via resvg) |
 | `scripts/fonts/` | Brand TTFs, used only by the OG generator |
-| `public/images/` | Static assets (`banner.svg`, `logo.png`, `a.png` favicon source, generated `og-image.png`) |
-| `public/favicon-32x32.png`, `public/favicon-192x192.png`, `public/favicon-512x512.png` | Tab/PWA icon set; generated from `public/images/a.png` via `bun run generate:favicon`, never edited by hand |
-| `public/apple-touch-icon.png` | 180×180 iOS home-screen icon (iOS does not accept SVG here); generated from `public/images/a.png` |
+| `public/images/` | Static assets (`banner.svg`, `logo.png`, generated `og-image.png`) |
+| `public/favicon.ico`, `public/favicon-16x16.png`, `public/favicon-32x32.png`, `public/android-chrome-192x192.png`, `public/android-chrome-512x512.png` | Tab/PWA icon set — static files supplied as-is, not generated |
+| `public/apple-touch-icon.png` | 180×180 iOS home-screen icon (iOS does not accept SVG here); static file |
+| `public/site.webmanifest` | PWA manifest: brand name, deep theme/background `#1f0f14`, android icons |
 
 ## SEO + Social
 
