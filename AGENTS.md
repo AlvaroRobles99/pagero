@@ -4,6 +4,8 @@
 
 Antes de planificar cambios grandes en el proyecto (nuevas secciones, cambios de estructura, refactors, rediseños), leé `docs/project.md` para entender la arquitectura completa y el sistema de diseño actual.
 
+Cuando el trabajo toque UI (secciones nuevas, cambios visuales, tipografía, color, layout o rediseños), cargá la skill `frontend-design` (`.opencode/skills/frontend-design/SKILL.md`) antes de proponer o escribir código, para mantener la identidad visual de la marca y evitar resultados genéricos.
+
 ## Project
 
 React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, energy cleansing). All content is in Spanish.
