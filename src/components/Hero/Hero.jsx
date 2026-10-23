@@ -8,8 +8,8 @@ export default function Hero() {
       <div className={styles.heroContent}>
         <img src="/images/logo.png" alt="" className={styles.logo} />
         <h1 className={styles.title}>Sanarse</h1>
-        <p className={styles.subtitle}>Rocío — Terapeuta Holística</p>
-        <p className={styles.tagline}>Amor, acompañamiento y confidencialidad</p>
+        <p className={styles.subtitle}>Rocío Durazno — Terapeuta holística</p>
+        <p className={styles.tagline}>Tarot, limpieza energética y escucha sin juicio</p>
         <a href="#services" className={shared.btnPrimary}>
           Ver servicios
         </a>

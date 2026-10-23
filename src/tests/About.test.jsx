@@ -6,7 +6,7 @@ describe('About', () => {
   it('renderiza el título principal', () => {
     render(<About />)
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
-      'Bienvenidos a tu espacio de evolución espiritual'
+      'Un espacio para volver a vos'
     )
   })
 
@@ -30,7 +30,7 @@ describe('About', () => {
   it('renderiza el blockquote', () => {
     render(<About />)
     const blockquote = screen.getByText(
-      'El camino de la sanación te pertenece, pero no tienes que recorrerlo en soledad.'
+      'El camino de la sanación te pertenece, pero no tenés que recorrerlo en soledad.'
     )
     expect(blockquote.tagName).toBe('BLOCKQUOTE')
   })

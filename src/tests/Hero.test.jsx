@@ -9,12 +9,12 @@ describe('Hero', () => {
 
   it('renderiza el subtítulo', () => {
     render(<Hero />)
-    expect(screen.getByText('Rocío — Terapeuta Holística')).toBeInTheDocument()
+    expect(screen.getByText('Rocío Durazno — Terapeuta holística')).toBeInTheDocument()
   })
 
   it('renderiza la tagline', () => {
     render(<Hero />)
-    expect(screen.getByText('Amor, acompañamiento y confidencialidad')).toBeInTheDocument()
+    expect(screen.getByText('Tarot, limpieza energética y escucha sin juicio')).toBeInTheDocument()
   })
 
   it('renderiza el botón con enlace a servicios', () => {

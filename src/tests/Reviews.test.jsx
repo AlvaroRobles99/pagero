@@ -1,5 +1,6 @@
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import Reviews from '../components/Reviews/Reviews'
+import reviews from '../data/reviews'
 
 function getActiveSlide(container) {
   return container.querySelector('[aria-hidden="false"]')
@@ -14,8 +15,8 @@ describe('Reviews', () => {
   it('muestra la primera reseña por defecto', () => {
     const { container } = render(<Reviews />)
     const slide = getActiveSlide(container)
-    expect(slide).toHaveTextContent(/Rocío me ayudó a ver mi camino/)
-    expect(slide).toHaveTextContent(/María G\./)
+    expect(slide).toHaveTextContent(reviews[0].text)
+    expect(slide).toHaveTextContent(reviews[0].author)
   })
 
   it('navega a la siguiente reseña con el botón ▶', () => {
@@ -23,8 +24,8 @@ describe('Reviews', () => {
     const nextBtn = screen.getByLabelText('Reseña siguiente')
     fireEvent.click(nextBtn)
     const slide = getActiveSlide(container)
-    expect(slide).toHaveTextContent(/La limpieza energética fue increíble/)
-    expect(slide).toHaveTextContent(/Laura M\./)
+    expect(slide).toHaveTextContent(reviews[1 % reviews.length].text)
+    expect(slide).toHaveTextContent(reviews[1 % reviews.length].author)
   })
 
   it('navega a la reseña anterior con el botón ◀', () => {
@@ -35,27 +36,27 @@ describe('Reviews', () => {
     fireEvent.click(nextBtn)
     fireEvent.click(nextBtn)
     let slide = getActiveSlide(container)
-    expect(slide).toHaveTextContent(/Una experiencia transformadora/)
+    expect(slide).toHaveTextContent(reviews[2 % reviews.length].text)
 
     fireEvent.click(prevBtn)
     slide = getActiveSlide(container)
-    expect(slide).toHaveTextContent(/La limpieza energética fue increíble/)
+    expect(slide).toHaveTextContent(reviews[1 % reviews.length].text)
   })
 
   it('cambia de reseña al hacer clic en un dot', () => {
     const { container } = render(<Reviews />)
     const dots = screen.getAllByRole('tab')
 
-    fireEvent.click(dots[2])
+    fireEvent.click(dots[2 % reviews.length])
     const slide = getActiveSlide(container)
-    expect(slide).toHaveTextContent(/Una experiencia transformadora/)
-    expect(slide).toHaveTextContent(/Carla R\./)
+    expect(slide).toHaveTextContent(reviews[2 % reviews.length].text)
+    expect(slide).toHaveTextContent(reviews[2 % reviews.length].author)
   })
 
-  it('renderiza el número correcto de dots', () => {
+  it('renderiza un dot por cada reseña', () => {
     render(<Reviews />)
     const dots = screen.getAllByRole('tab')
-    expect(dots).toHaveLength(3)
+    expect(dots).toHaveLength(reviews.length)
   })
 
   it('no duplica el auto-avance cuando se reanuda dos veces', () => {
@@ -77,7 +78,7 @@ describe('Reviews', () => {
         vi.advanceTimersByTime(6000)
       })
 
-      expect(getActiveSlide(container)).toHaveTextContent(/La limpieza energética fue increíble/)
+      expect(getActiveSlide(container)).toHaveTextContent(reviews[1 % reviews.length].text)
     } finally {
       vi.useRealTimers()
     }

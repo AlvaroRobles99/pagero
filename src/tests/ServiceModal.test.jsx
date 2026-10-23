@@ -5,7 +5,6 @@ import { whatsappLink } from '../data/contact'
 
 const service = {
   id: 'tarot-angelical',
-  icon: '🔮',
   title: 'Tarot Angelical',
   description: 'Claridad sobre lo que estés atravesando.',
   fullDescription:
@@ -112,10 +111,10 @@ describe('ServiceModal', () => {
 
   it('arma el CTA de WhatsApp con el título del servicio', () => {
     render(<ServiceModal service={service} onClose={() => {}} />)
-    const cta = screen.getByRole('link', { name: /Consultar vía WhatsApp/ })
+    const cta = screen.getByRole('link', { name: /Consultar por WhatsApp/ })
     expect(cta).toHaveAttribute(
       'href',
-      whatsappLink('Hola Rocío, me interesa saber más sobre Tarot Angelical'),
+      whatsappLink('Hola Rocío, me interesa Tarot Angelical. ¿Me contás cómo funciona?'),
     )
     expect(cta).toHaveAttribute('rel', 'noopener noreferrer')
     expect(cta).toHaveAttribute('target', '_blank')
