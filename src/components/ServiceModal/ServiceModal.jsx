@@ -90,7 +90,6 @@ export default function ServiceModal({ service, onClose }) {
           ✕
         </button>
 
-        <span className={styles.icon}>{service.icon}</span>
         <h2 className={styles.title}>{service.title}</h2>
 
         {service.fullDescription.split('\n\n').map((p, i) => (
@@ -98,12 +97,12 @@ export default function ServiceModal({ service, onClose }) {
         ))}
 
         <a
-          href={whatsappLink(`Hola Rocío, me interesa saber más sobre ${service.title}`)}
+          href={whatsappLink(`Hola Rocío, me interesa ${service.title}. ¿Me contás cómo funciona?`)}
           className={styles.cta}
           target="_blank"
           rel="noopener noreferrer"
         >
-          Consultar vía WhatsApp ↗
+          Consultar por WhatsApp ↗
         </a>
       </div>
     </div>,

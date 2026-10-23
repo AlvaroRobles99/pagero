@@ -42,10 +42,9 @@ function ServiceCard({ service, index, onSelect }) {
       role="button"
       tabIndex={0}
     >
-      <span className={styles.cardIcon}>{service.icon}</span>
       <h3>{service.title}</h3>
       <p>{service.description}</p>
-      <span className={styles.cardHint}>Conoce más →</span>
+      <span className={styles.cardHint}>Ver cómo es →</span>
     </div>
   )
 }
@@ -57,6 +56,9 @@ export default function Services() {
     <section className={`${appStyles.section} ${styles.services}`} id="services">
       <div className={appStyles.container}>
         <h2>Servicios</h2>
+        <p className={styles.lead}>
+          Cada proceso es distinto. Abrí cada servicio para ver cómo funciona y si es lo que estás buscando.
+        </p>
         <div className={styles.cards}>
           {services.map((s, i) => (
             <ServiceCard service={s} index={i} key={s.id} onSelect={setSelected} />

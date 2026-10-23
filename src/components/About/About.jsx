@@ -9,76 +9,76 @@ export default function About() {
     <section className={`${appStyles.section} ${styles.about}`} id="about">
       <div className={appStyles.container}>
         <Lotus size={32} />
-        <div className={styles.eyebrow}>Sanarse Terapias Holísticas</div>
-        <h2>Bienvenidos a tu espacio de evolución espiritual</h2>
+        <div className={styles.eyebrow}>Sanarse · Terapias holísticas</div>
+        <h2>Un espacio para volver a vos</h2>
         <p className={styles.intro}>
-          Hola, soy Rocío, tu terapeuta holística personal.
+          Soy Rocío. Acompaño a personas que están en un momento de cambio y necesitan claridad, calma o, simplemente, un lugar donde hablar sin sentirse juzgadas.
         </p>
         <p className={styles.intro}>
-          Estoy aquí para acompañarte en el camino hacia tu despertar y la sanación espiritual que mereces. Creo firmemente que el bienestar real nace del equilibrio entre el cuerpo, la mente y el alma.
+          Trabajo con tarot, limpieza energética y otras herramientas que se adaptan a lo que cada persona trae. Creo en mirar lo que te pasa con honestidad, sin fórmulas mágicas ni respuestas cerradas.
         </p>
         <p className={styles.intro}>
-          En este espacio, no encontrarás fórmulas mágicas. Encontrarás presencia, respeto, confidencialidad y una guía honesta para que recuerdes tu propio poder de transformación.
+          En las sesiones vas a encontrar presencia, respeto y confidencialidad. Mi trabajo no es decirte qué hacer: es ayudarte a escuchar lo que ya sabés.
         </p>
 
         <section className={styles.subsection} aria-labelledby="pilares-title">
           <h3 id="pilares-title" className={styles.subheading}>
-            <span aria-hidden="true">🔮</span> Mis Pilares de Sanación
+            Con qué trabajo
           </h3>
           <p className={styles.subintro}>
-            Mis sesiones integran diferentes herramientas adaptadas a lo que tu alma necesita en este momento:
+            Cada sesión se arma según lo que necesites. Estas son las herramientas que más uso:
           </p>
           <ul className={styles.pillarsList}>
             <li className={styles.pillarItem}>
               <strong className={styles.pillarTerm}>Tarot Terapéutico</strong>
               {' — '}
-              Una herramienta de autoconocimiento y claridad para sintonizar con tu momento presente, identificar bloqueos y habilitar nuevas perspectivas.
+              Preguntas concretas y una lectura que ordena. Sirve para ver tu situación desde afuera y decidir con más calma.
             </li>
             <li className={styles.pillarItem}>
               <strong className={styles.pillarTerm}>Limpieza Energética</strong>
               {' — '}
-              Procesos orientados a transmutar densidades, liberar energías estancadas y restaurar la armonía en tu campo áurico.
+              Para cuando el cansancio no se explica y sentís que algo se estancó. Se trabaja para soltar y renovar.
             </li>
             <li className={styles.pillarItem}>
               <strong className={styles.pillarTerm}>Escucha sin Juicio</strong>
               {' — '}
-              Un contenedor seguro, amoroso y empático donde puedes expresarte con total libertad, sabiendo que cada parte de tu historia es respetada.
+              Un espacio para hablar de lo que no contás en otro lado, sin miedo a que te corrijan ni a que te juzguen.
             </li>
           </ul>
         </section>
 
         <section className={styles.subsection} aria-labelledby="trabajo-title">
           <h3 id="trabajo-title" className={styles.subheading}>
-            <span aria-hidden="true">🌿</span> ¿Cómo es trabajar en tu bienestar?
+            Qué buscamos en el proceso
           </h3>
           <p className={styles.subintro}>
-            La terapia holística es un compromiso contigo mismo. A través de la combinación de la guía del tarot y la armonización energética, buscamos:
+            Cada proceso es distinto, pero el trabajo apunta siempre a lo mismo:
           </p>
           <ol className={styles.orderedList}>
-            <li>Despertar la autoconciencia para reconocer patrones repetitivos.</li>
-            <li>Liberar cargas emocionales y bloqueos que detienen tu evolución.</li>
-            <li>Conectar con la paz mental y la claridad necesarias para tomar decisiones conscientes.</li>
+            <li>Reconocer los patrones que se repiten, para poder elegir distinto.</li>
+            <li>Soltar las cargas que venís arrastrando y que ya no te sirven.</li>
+            <li>Volver a sentirte en calma, con la cabeza más clara para decidir.</li>
           </ol>
         </section>
 
         <blockquote className={styles.quote}>
-          El camino de la sanación te pertenece, pero no tienes que recorrerlo en soledad.
+          El camino de la sanación te pertenece, pero no tenés que recorrerlo en soledad.
         </blockquote>
 
-        <p className={styles.invitation}>¿Sientes el llamado a iniciar tu proceso?</p>
+        <p className={styles.invitation}>¿Sentís que es tu momento?</p>
         <p className={styles.invitation}>
-          Te invito a reservar una sesión individual para comenzar a cuidar de tu energía y dar el primer paso hacia tu transformación integral.
+          Si querés empezar, escribime y coordinamos una sesión. No hace falta tener todo claro para dar el primer paso.
         </p>
 
         <div className={styles.ctaArea}>
-          <p className={styles.ctaLine}>✨ Agendar una Sesión o Contactar por WhatsApp para comenzar hoy.</p>
+          <p className={styles.ctaLine}>Escribime por WhatsApp y vemos qué necesitás.</p>
           <a
             href={whatsappLink()}
             target="_blank"
             rel="noopener noreferrer"
             className={sharedStyles.btnPrimary}
           >
-            Agendar una Sesión
+            Agendar una sesión
           </a>
         </div>
       </div>

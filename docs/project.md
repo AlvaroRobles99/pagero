@@ -43,7 +43,7 @@ pageRo/
 │   ├── index.css               ← CSS reset + variables globales (colores, fuentes, prefers-reduced-motion)
 │   ├── shared.module.css       ← .btnPrimary (botón reutilizable)
 │   ├── data/
-│   │   ├── services.js          ← Array de servicios (id, icon, title, description, fullDescription)
+│   │   ├── services.js          ← Array de servicios (id, title, description, fullDescription)
 │   │   ├── reviews.js           ← Array de reseñas (id, text, author)
 │   │   ├── contact.js           ← Constantes del número de WhatsApp + helper `whatsappLink()`
 │   │   └── social.js            ← Array `SOCIAL_LINKS` (id, name, url, icon) de las tres redes
@@ -120,7 +120,7 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - Sección con fondo `--color-light`
 - Loto decorativo arriba del título
 - Loto semi-transparente como marca de agua de fondo (vía `::before` con SVG inline y radial-gradient)
-- Bienvenida, pilares de sanación (Tarot Terapéutico, Limpieza Energética, Escucha sin Juicio), modelo de trabajo en bienestar, cita inspiradora y CTA con WhatsApp
+- Presentación, herramientas de trabajo (Tarot Terapéutico, Limpieza Energética, Escucha sin Juicio), qué se busca en el proceso, cita inspiradora y CTA con WhatsApp
 
 ### Lotus
 - SVG de loto estilizado (6 pétalos + centro)
@@ -129,10 +129,10 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - `aria-hidden="true"` (decorativo)
 
 ### Services
-- Datos importados desde `src/data/services.js` (id, icono emoji, título, resumen corto para la card, texto completo para el modal) — sin precios, sin `includes`, sin duración
+- Datos importados desde `src/data/services.js` (id, título, resumen corto para la card, texto completo para el modal) — sin precios, sin `includes`, sin duración, sin íconos
 - 7 cards clickeables (`role="button"`, `tabIndex={0}`, `onClick`, `onKeyDown Enter`)
 - Borde izquierdo decorativo por card en ciclo de 3: gold (`3n+1`), rose (`3n+2`), gold→rose gradiente (`3n+3`)
-- Texto "Conoce más →" al pie de cada card, visible en hover desktop
+- Texto "Ver cómo es →" al pie de cada card, visible en hover desktop
 - Al hacer clic abre `ServiceModal` con el texto completo del servicio
 - Animación stagger via `IntersectionObserver` (delay `index × 120ms`)
 
@@ -141,11 +141,12 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - Overlay oscuro con `backdrop-filter: blur` + animación `fadeIn`
 - Modal centrado con animación `scaleIn` (cubic-bezier spring)
 - Cierre con ✕, Escape, o click fuera del modal
-- Muestra: icono grande, título (display font), párrafos de `fullDescription` (separados por línea en blanco) y CTA "Consultar vía WhatsApp" (el href lo arma `whatsappLink()` con el título del servicio como mensaje)
+- Muestra: título (display font), párrafos de `fullDescription` (separados por línea en blanco) y CTA "Consultar por WhatsApp" (el href lo arma `whatsappLink()` con el título del servicio como mensaje)
 - `prefers-reduced-motion` respetado
 
 ### Reviews
 - Datos importados desde `src/data/reviews.js` (id, text, author)
+- **Las tres reseñas actuales son de ejemplo.** Para poner las reales alcanza con editar `src/data/reviews.js`: cada objeto lleva `text` (la cita) y `author` (el nombre que aparece después del guion), y el `id` solo tiene que ser único. El carrusel y los puntos se ajustan solos al número de reseñas, y `Reviews.test.jsx` lee del mismo archivo, así que no hay que tocar ningún test.
 - Carrusel horizontal que muestra una reseña a la vez
 - Navegación con flechas ◀ ▶ y dots inferiores
 - Auto-avance cada 6s, pausa en hover/focus
@@ -157,7 +158,7 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 ### Contact
 - Sección con fondo `--color-warm-white`
 - Loto semi-transparente como marca de agua de fondo (vía `::before`)
-- Texto de invitación cálido + botón WhatsApp con ícono 📱 que abre `wa.me` vía `whatsappLink()`
+- Texto de invitación cálido + botón WhatsApp que abre `wa.me` vía `whatsappLink()`
 - Bloque "Ver mi contenido" al final, debajo del CTA: regla dorada + 3 botones circulares (52px, borde dorado) con ícono SVG inline que abren Instagram, Facebook y TikTok en pestaña nueva — los links viven en `src/data/social.js` (única fuente de verdad)
 
 ### Footer

@@ -1,59 +1,59 @@
+/**
+ * Services shown in the cards and in the detail modal.
+ *
+ * `description` is the short line on the card, `fullDescription` is the modal
+ * body (blank lines become separate paragraphs). There are no prices, no
+ * duration and no "includes" list on purpose — those facts are not decided yet.
+ */
 const services = [
   {
     id: 'tarot-angelical',
-    icon: '🔮',
     title: 'Tarot Angelical',
-    description: 'Claridad sobre lo que estés atravesando: energías, emociones, vínculos y caminos posibles.',
+    description: 'Preguntas concretas y una lectura que ordena. Vemos qué energías están jugando en tu situación.',
     fullDescription:
-      'Una lectura para obtener claridad sobre situaciones que estés atravesando. A través de las cartas podemos explorar energías, emociones, vínculos y posibles caminos para tomar decisiones con mayor conciencia.',
+      'Trabajamos con preguntas concretas. A través de las cartas miramos qué energías están presentes, qué emociones se están moviendo y qué vínculos están en juego.\n\nNo es un pronóstico cerrado: es una forma de ver tu momento con más claridad para que puedas decidir con calma. Si hay algo que te tiene dando vueltas, traelo a la sesión.',
   },
   {
     id: 'registros-akashicos',
-    icon: '✨',
     title: 'Registros Akáshicos',
-    description: 'Un espacio de conexión y autoconocimiento para comprender patrones y experiencias de tu presente.',
+    description: 'Una mirada profunda a los patrones que se repiten en tu vida y a lo que hoy los sostiene.',
     fullDescription:
-      'Un espacio de conexión y autoconocimiento donde se busca comprender experiencias, patrones, aprendizajes y situaciones que pueden estar influyendo en tu presente. Una mirada profunda hacia tu proceso personal.',
+      'Un espacio de lectura y escucha. Miramos experiencias, aprendizajes y patrones que se repiten para entender de dónde vienen y cómo siguen influyendo en tu presente.\n\nNo se trata de buscar culpables ni de revivir el pasado. Se trata de reconocer lo que está pidiendo un cambio y de darte una mirada nueva sobre tu propio proceso.',
   },
   {
     id: 'limpiezas-energeticas',
-    icon: '🌿',
     title: 'Limpiezas Energéticas',
-    description: 'Libera y renueva energías pesadas o estancadas en momentos de cansancio, cambios o bloqueos.',
+    description: 'Para cuando el cansancio no se explica y sentís que algo se estancó.',
     fullDescription:
-      'Una práctica destinada a liberar y renovar energías que pueden sentirse pesadas o estancadas. Ideal para momentos de cansancio, cambios, bloqueos o cuando sentís que necesitás hacer un "reinicio energético".',
+      'Una práctica para soltar lo que se fue acumulando: energías pesadas, cansancio que no tiene una razón clara, sensaciones de bloqueo.\n\nSe trabaja con la intención de renovar la energía y volver a sentirte en equilibrio. Muchas personas se van con una sensación de descanso y de orden. Suele ser un buen punto de partida antes de un proceso más largo.',
   },
   {
     id: 'velomancia',
-    icon: '🕯️',
     title: 'Velomancia Angelical',
-    description: 'Observación de la vela para interpretar el proceso energético y recibir orientación.',
+    description: 'La vela como mapa: lo que aparece en ella habla de tu proceso.',
     fullDescription:
-      'A través de la observación de la vela y sus manifestaciones, se interpreta simbólicamente el proceso energético realizado. Una herramienta para recibir orientación y profundizar en aquello que estás trabajando.',
+      'La vela se enciende y se observa mientras trabaja. Su llama, sus formas y su comportamiento se interpretan como un mapa simbólico del momento que estás atravesando.\n\nSirve para confirmar lo que ya intuías, para entender qué está pidiendo atención y para llevarte una orientación clara.',
   },
   {
     id: 'abre-caminos',
-    icon: '🚪',
     title: 'Abre Caminos',
-    description: 'Moviliza situaciones estancadas y acompaña procesos de apertura, avance y nuevos comienzos.',
+    description: 'Para esas situaciones que llevan tiempo trabadas y no terminan de destrabarse.',
     fullDescription:
-      'Un trabajo energético enfocado en movilizar situaciones que sentís estancadas y acompañar procesos de apertura y nuevos comienzos. Ideal para quienes sienten que necesitan avanzar y dejar atrás determinados bloqueos.',
+      'Un trabajo energético pensado para mover lo que está estancado: decisiones que no salen, puertas que parecen cerradas, procesos que no arrancan.\n\nLa idea no es forzar nada, sino despejar el terreno para que lo que tenga que suceder encuentre su lugar. Se suele elegir en momentos de cambio o justo antes de empezarlos.',
   },
   {
     id: 'chakras',
-    icon: '💫',
     title: 'Armonización de Chakras',
-    description: 'Trabajo sobre los principales centros energéticos para favorecer equilibrio y bienestar.',
+    description: 'Recorremos los centros energéticos para devolverle el equilibrio al sistema.',
     fullDescription:
-      'Una práctica energética destinada a trabajar sobre los principales centros energéticos, buscando favorecer equilibrio, armonía y bienestar. Un momento para conectar con vos y recuperar tu centro.',
+      'Se trabaja sobre los principales centros energéticos, uno por uno, mirando cuáles están más cargados y cuáles más apagados. El objetivo es volver a sentir el cuerpo y la energía en orden.\n\nEs una sesión tranquila, con silencio y respiración. Suele elegirse después de una etapa de exigencia o cuando sentís que perdiste tu centro.',
   },
   {
     id: 'constelaciones',
-    icon: '🌸',
     title: 'Constelaciones Familiares',
-    description: 'Observa vínculos y patrones familiares desde otra perspectiva para transformarlos.',
+    description: 'Otra forma de mirar lo que se repite en tu familia y de dónde viene.',
     fullDescription:
-      'Un espacio para observar vínculos, dinámicas y patrones familiares desde otra perspectiva. Permite explorar situaciones que se repiten y generar una nueva mirada sobre aquello que querés transformar.',
+      'Miramos el sistema familiar como lo que es: una red de vínculos donde cada persona ocupa un lugar. Desde ahí se entienden muchas repeticiones y lealtades que no se ven a simple vista.\n\nLa sesión abre una perspectiva nueva sobre el patrón: qué lo sostiene, qué se heredó y qué se puede empezar a soltar.',
   },
 ]
 

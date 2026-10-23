@@ -11,7 +11,7 @@ describe('Contact', () => {
 
   it('renderiza el texto de invitación', () => {
     render(<Contact />)
-    expect(screen.getByText(/Tu proceso de sanación/)).toBeInTheDocument()
+    expect(screen.getByText(/Escribime y contame/)).toBeInTheDocument()
   })
 
   it('renderiza el botón de WhatsApp', () => {
