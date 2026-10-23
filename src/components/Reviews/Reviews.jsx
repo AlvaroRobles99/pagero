@@ -20,13 +20,19 @@ export default function Reviews() {
     setCurrent(index)
   }, [])
 
-  const startTimer = useCallback(() => {
-    timerRef.current = setInterval(next, 6000)
-  }, [next])
-
   const stopTimer = useCallback(() => {
-    clearInterval(timerRef.current)
+    if (timerRef.current !== null) {
+      clearInterval(timerRef.current)
+      timerRef.current = null
+    }
   }, [])
+
+  const startTimer = useCallback(() => {
+    // Dos señales de reanudación seguidas (salir con el puntero y perder el foco)
+    // no deben apilar intervalos: siempre se reemplaza el anterior.
+    stopTimer()
+    timerRef.current = setInterval(next, 6000)
+  }, [next, stopTimer])
 
   useEffect(() => {
     startTimer()

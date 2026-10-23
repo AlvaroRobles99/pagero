@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, act } from '@testing-library/react'
 import Reviews from '../components/Reviews/Reviews'
 
 function getActiveSlide(container) {
@@ -56,5 +56,30 @@ describe('Reviews', () => {
     render(<Reviews />)
     const dots = screen.getAllByRole('tab')
     expect(dots).toHaveLength(3)
+  })
+
+  it('no duplica el auto-avance cuando se reanuda dos veces', () => {
+    vi.useFakeTimers()
+
+    try {
+      const { container } = render(<Reviews />)
+      const carousel = screen.getByRole('region', { name: 'Reseñas de clientas' })
+
+      // El puntero sale del carrusel mientras un elemento interno pierde el foco:
+      // los dos handlers de reanudación corren seguidos y antes dejaban dos
+      // intervalos vivos, así que un solo tick avanzaba dos reseñas.
+      fireEvent.focusIn(carousel)
+      fireEvent.mouseOver(carousel, { relatedTarget: document.body })
+      fireEvent.mouseOut(carousel, { relatedTarget: document.body })
+      fireEvent.focusOut(carousel)
+
+      act(() => {
+        vi.advanceTimersByTime(6000)
+      })
+
+      expect(getActiveSlide(container)).toHaveTextContent(/La limpieza energética fue increíble/)
+    } finally {
+      vi.useRealTimers()
+    }
   })
 })
