@@ -38,3 +38,8 @@ opencode.json
 
 # Finder (MacOS) folder config
 .DS_Store
+
+# Gentle AI local tooling state: the skill registry and the default-agent
+# marker are generated per machine and are never part of the site.
+.atl/
+.gentle-ai-default-agent.json
