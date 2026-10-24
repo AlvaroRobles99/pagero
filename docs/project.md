@@ -68,6 +68,10 @@ pageRo/
 │       ├── Footer.test.jsx
 │       ├── Lotus.test.jsx
 │       └── whatsapp.test.jsx    ← Guard del formato del link de WhatsApp
+├── .github/
+│   └── workflows/
+│       ├── ci.yml               ← GitHub Actions: tests y build en cada PR
+│       └── release-please.yml   ← GitHub Actions: PR de release + release notes
 ├── .opencode/
 │   ├── commands/
 │   │   ├── dev.md               ← @dev: inicia servidor de desarrollo
@@ -77,6 +81,8 @@ pageRo/
 │       └── frontend-design/     ← Skill de diseño visual
 ├── opencode.json                ← Config de opencode (MCP Context7 + instrucciones)
 ├── AGENTS.md                    ← Instrucciones para agentes de opencode
+├── release-please-config.json   ← Config de release-please (changelog + versión)
+├── .release-please-manifest.json ← Versión publicada; la mantiene release-please
 ├── vitest.config.js             ← Config de Vitest
 └── package.json
 ```
@@ -228,6 +234,49 @@ bun run test:watch  # Modo watch
 class MockIntersectionObserver { observe() {} unobserve() {} disconnect() {} }
 window.IntersectionObserver = MockIntersectionObserver
 ```
+
+## CI
+
+`.github/workflows/ci.yml` corre en GitHub Actions con Bun `1.4.4` (la misma versión que usa el proyecto) y Node 24, e instala con `--frozen-lockfile` para que el lockfile sea la única fuente de dependencias. Bun instala las dependencias; Node ejecuta Vite y Vitest.
+
+| Se ejecuta | Cuándo |
+|---|---|
+| `pull_request` | En cada PR abierto, actualizado o reabierto |
+| `push` a `main` | Después de cada merge |
+| `workflow_dispatch` | Manual desde la pestaña Actions |
+
+Pasos del job `Verify`: **test → build**. Si cualquiera falla, el check queda en rojo.
+
+> Un check en rojo **no bloquea el merge por sí solo**. Para que GitHub lo exija hay que marcarlo como *required status check* en la protección de la rama `main`. El nombre a exigir es `Verify`.
+
+No hay paso de lint porque el proyecto todavía no tiene linter configurado. Si se agrega uno, se suma un paso más antes de los tests.
+
+## Releases
+
+`.github/workflows/release-please.yml` usa `googleapis/release-please-action@v5.0.0` para generar las release notes a partir de los commits convencionales.
+
+1. Un `push` a `main` (o una ejecución manual) analiza los commits desde la última release.
+2. Si hay cambios visibles (`feat`, `fix`, `perf`, `revert`), abre o actualiza un PR de release con el `CHANGELOG.md` y el bump de versión en `package.json`.
+3. Al mergear ese PR, crea el tag `vX.Y.Z` y publica el GitHub Release con las notas.
+
+| Archivo | Rol |
+|---|---|
+| `release-please-config.json` | Release type `node`, tags `vX.Y.Z` sin prefijo de componente, y `bootstrap-sha` |
+| `.release-please-manifest.json` | Última versión conocida. Empieza en `0.0.0` y lo actualiza release-please |
+
+Reglas de versión: `fix:` → patch, `feat:` → minor, `!` o `BREAKING CHANGE` → major (minor mientras la versión sea `0.x`). `chore:`, `ci:`, `docs:` y `test:` no generan release.
+
+`bootstrap-sha` limita la primera release a los commits posteriores a ese SHA, para no volcar toda la historia del repo en el primer changelog. Si quieres que la primera release incluya todo el historial, borra esa clave.
+
+### Token y CI del PR de release
+
+Con el `GITHUB_TOKEN` por defecto el PR de release se crea igual, pero GitHub **no dispara workflows** para eventos generados por ese token. Consecuencia: el PR de release no corre `Verify` y, si `Verify` es required status check, queda bloqueado.
+
+Para evitarlo, crea un fine-grained PAT con acceso al repo y permisos `Contents: Read and write`, `Pull requests: Read and write` e `Issues: Read and write`, y guárdalo como secreto `RELEASE_PLEASE_TOKEN`. El workflow lo usa automáticamente si existe y cae a `github.token` si no. Los PAT caducan: si expira, el workflow vuelve a crear PRs sin disparar CI.
+
+También hay que habilitar **Settings → Actions → General → Allow GitHub Actions to create and approve pull requests** para que el PR se pueda abrir.
+
+> release-please no toca `bun.lock`: la versión de la app no vive en el lockfile, así que `bun install --frozen-lockfile` sigue funcionando en el PR de release.
 
 ## Comandos opencode
 
