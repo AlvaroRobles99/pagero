@@ -247,9 +247,22 @@ window.IntersectionObserver = MockIntersectionObserver
 
 Pasos del job `Verify`: **test → build**. Si cualquiera falla, el check queda en rojo.
 
-> Un check en rojo **no bloquea el merge por sí solo**. Para que GitHub lo exija hay que marcarlo como *required status check* en la protección de la rama `main`. El nombre a exigir es `Verify`.
-
 No hay paso de lint porque el proyecto todavía no tiene linter configurado. Si se agrega uno, se suma un paso más antes de los tests.
+
+### Protección de `main`
+
+La rama `main` está protegida con `Verify` como *required status check*. La regla se aplica también a administradores, así que un check en rojo o ausente bloquea el merge. Tampoco se puede pushear directo un commit nuevo: GitHub lo rechaza porque ese commit no pasó por CI. En la práctica, todo cambio entra por PR.
+
+| Ajuste | Estado |
+|---|---|
+| Required status check | `Verify` (GitHub Actions) |
+| Aplica a administradores | Sí |
+| Force pushes | Bloqueados |
+| Borrado de la rama | Bloqueado |
+| Require branches to be up to date | No |
+| Require a pull request before merging | No |
+
+Para editar la regla: **Settings → Branches → `main`**.
 
 ## Releases
 
@@ -270,9 +283,9 @@ Reglas de versión: `fix:` → patch, `feat:` → minor, `!` o `BREAKING CHANGE`
 
 ### Token y CI del PR de release
 
-Con el `GITHUB_TOKEN` por defecto el PR de release se crea igual, pero GitHub **no dispara workflows** para eventos generados por ese token. Consecuencia: el PR de release no corre `Verify` y, si `Verify` es required status check, queda bloqueado.
+Con el `GITHUB_TOKEN` por defecto el PR de release se crea igual, pero GitHub **no dispara workflows** para eventos generados por ese token. Consecuencia: el PR de release no corre `Verify`. Como `Verify` es required status check y la regla aplica a administradores, el PR queda bloqueado.
 
-Para evitarlo, crea un fine-grained PAT con acceso al repo y permisos `Contents: Read and write`, `Pull requests: Read and write` e `Issues: Read and write`, y guárdalo como secreto `RELEASE_PLEASE_TOKEN`. El workflow lo usa automáticamente si existe y cae a `github.token` si no. Los PAT caducan: si expira, el workflow vuelve a crear PRs sin disparar CI.
+Para evitarlo, crea un fine-grained PAT con acceso al repo y permisos `Contents: Read and write`, `Pull requests: Read and write` e `Issues: Read and write`, y guárdalo como secreto `RELEASE_PLEASE_TOKEN`. El workflow lo usa automáticamente si existe y cae a `github.token` si no. Los PAT caducan: si expira, el workflow vuelve a crear PRs sin disparar CI y esos PRs quedan bloqueados por la protección de `main`.
 
 También hay que habilitar **Settings → Actions → General → Allow GitHub Actions to create and approve pull requests** para que el PR se pueda abrir.
 
