@@ -7,7 +7,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "generate:og": "bun run scripts/generate-og.mjs"
+    "generate:og": "bun run scripts/generate-og.mjs",
+    "typecheck": "bun check"
   },
   "dependencies": {
     "react": "^19.2.7",
@@ -22,6 +23,10 @@
     "@vitejs/plugin-react": "^6.0.3",
     "jsdom": "^29.1.1",
     "vite": "^8.1.0",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.9",
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^7"
   }
 }
