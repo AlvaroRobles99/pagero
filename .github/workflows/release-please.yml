@@ -1,0 +1,27 @@
+name: Release Please
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    name: Release Please
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Release Please
+        uses: googleapis/release-please-action@v5.0.0
+        with:
+          # A PAT makes CI run on the release PR. Without it, GitHub does not
+          # trigger workflows for PRs created with the default token.
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
