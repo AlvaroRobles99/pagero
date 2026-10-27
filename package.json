@@ -8,7 +8,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "generate:og": "bun run scripts/generate-og.mjs",
-    "typecheck": "bun check"
+    "typecheck": "bun check && bun check -p tsconfig.node.json"
   },
   "dependencies": {
     "react": "^19.2.7",
@@ -22,12 +22,10 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
     "jsdom": "^29.1.1",
+    "typescript": "^7.0.2",
     "vite": "^8.1.0",
     "vitest": "^4.1.9",
     "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^7"
   },
   "version": "0.1.3"
 }

@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    // Build tooling and the OG image generator: Node/Bun context, never the DOM.
+    "lib": ["ESNext"],
+    "target": "ESNext",
+    "module": "Preserve",
+    "moduleDetection": "force",
+
+    "allowJs": true,
+    "checkJs": false,
+    "types": ["bun"],
+
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+
+    "strict": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true
+  },
+  "include": ["scripts", "vite.config.js", "vitest.config.js"]
+}
