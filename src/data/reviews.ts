@@ -13,7 +13,17 @@
  *
  * Los tres textos de abajo son de ejemplo, todavía no son palabras reales.
  */
-const reviews = [
+
+export interface Review {
+  /** Unique lowercase key: React key, never rendered. */
+  id: string
+  /** The quote shown in the card. */
+  text: string
+  /** Name shown after the em dash. */
+  author: string
+}
+
+const reviews: readonly Review[] = [
   {
     id: 'maria',
     text: 'Fui sin saber bien qué preguntar y salí con las ideas ordenadas. Rocío tiene una forma muy tranquila de decir las cosas.',
