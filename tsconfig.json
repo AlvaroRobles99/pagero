@@ -7,10 +7,10 @@
     "moduleDetection": "force",
     "jsx": "react-jsx",
 
-    // Migration in progress: .jsx files are resolved by Vite but not type-checked.
-    // This tsconfig excludes src/tests until the test migration lands.
-    "allowJs": true,
-    "checkJs": false,
+    // Pure TypeScript: every file the project resolves is checked. src/tests stays
+    // excluded until the test migration lands; tsconfig.node.json still allows JS for
+    // the Vite configs and the scripts.
+    "allowJs": false,
 
     // vite/client declares the CSS-module and static-asset imports.
     "types": ["vite/client"],
