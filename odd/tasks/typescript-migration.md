@@ -1,6 +1,6 @@
 # TypeScript migration — F0 + F1
 
-Status: phase 2 done · next is F2 slice B · Branch: `refactor/typescript-baseline` · Started: 2026-10-27
+Status: phase 3 done · next is F2 slice C · Branch: `refactor/typescript-baseline` · Started: 2026-10-27
 
 ## Objective
 
@@ -108,12 +108,54 @@ The gate is one step inside the already-required `Verify` job: no new check, no 
 change. It cannot be proven locally — the first real Actions run happens on the first push of this
 branch.
 
+### Phase 3 — F2 slice B
+
+| ID | Task | Route | State |
+|---|---|---|---|
+| F2B.1 | `Services` → `.tsx`: `ServiceCardProps`, `useOnScreen(ref: RefObject<HTMLDivElement \| null>)`, `useState<Service \| null>` | delegated | done |
+| F2B.2 | `Reviews` → `.tsx`: `useRef<ReturnType<typeof setInterval> \| null>`, typed `goTo` | delegated | done |
+| F2B.3 | `ServiceModal` → `.tsx`: `ServiceModalProps`, typed refs, DOM `KeyboardEvent` for the window listener, React `MouseEvent` for the JSX handler, `focusables` guard | delegated | done |
+
+This is the slice where the compiler can prevent a runtime crash instead of a CSS typo. Two rules
+decide whether it stays honest:
+
+- `verbatimModuleSyntax` is on: every type-only import must be `import type`, or the build breaks.
+- `noUncheckedIndexedAccess` is on: `focusables[0]` is `Element | undefined`. Guard it; do not assert.
+
+### Phase 3 evidence — observed
+
+| Check | Result |
+|---|---|
+| `bun run typecheck` | 14 app + 3 node files, exit 0 |
+| `bun run test` (changed suites) | 3 files / 22 tests, exit 0 — re-run by the parent |
+| `bun run test` (full) | 11 files / 103 tests, exit 0 — worker |
+| `bun run build` | 38 modules, exit 0 |
+| Diff shape | `-M` similarity 95% / 81% / 79%: only imports, type annotations and two guards |
+| Risk assessment | `medium` (`executable_change`), `review_due: false` (`under_budget`) |
+| Discipline | no `any`/`as`/`!`; DOM `KeyboardEvent` on the window listener, React `MouseEvent` on the JSX handler |
+
+Three places where the compiler paid for itself instead of decorating the code:
+
+- `([entry])` from `IntersectionObserver` is `IntersectionObserverEntry | undefined`; `entry?.isIntersecting`
+  keeps the original behaviour and stops a crash the JS version could have had.
+- `focusables[0]` and `focusables[length - 1]` are `Element | undefined`; the `if (!first || !last) return`
+  guard is unreachable in practice, but it is what makes the rest provable without a cast.
+- `querySelectorAll<HTMLElement>(FOCUSABLE)` gives `.focus()` on the results — a type argument, not an
+  assertion, so nothing was silenced.
+
 ## Delivery forecast
 
-Measured after phase 2: 342 authored changed lines (additions + deletions, docs included), of which
-117 are code. Still under the ~400-line budget, so the feature stays a single PR slice with
-`ask-on-risk` and no chaining. If slice B pushes the count past 400, the chain-strategy question is
-asked once, before the next commit — not after.
+At the slice B commit (`9eac62c`) the branch measured **exactly 400 authored lines** (341 insertions
++ 59 deletions), of which **163 are code** and 237 are documentation; this docs commit takes the
+total to 449, and every one of those added lines is documentation. Git's rename detection collapses
+the nine `.jsx` → `.tsx` moves, so a reviewer sees annotation lines, not moved files.
+
+The heuristic lands on its own boundary, and the split is what decides it: the code half is 163
+lines, every component hunk is a rename or a type annotation, and chaining would either separate the
+docs from the code they describe or hold the CI gate back into a second PR. `ask-on-risk` is
+recorded here with the measurement rather than a forecast, and the eight work-unit commits are
+already cut on the seams — config, data, CI, components, docs — so splitting later is a cherry-pick
+away, not a rewrite.
 
 ## Test-first policy
 
@@ -148,7 +190,9 @@ Findings from the independent verifier, resolved before the docs commit:
 | Docs (phase 1) | `952134a docs: document the TypeScript baseline and update data paths` |
 | F4 CI gate | `fa726c0 ci: typecheck before tests in the verify job` |
 | F2 slice A | `5727018 refactor(components): migrate the static components to TypeScript` |
-| Docs (phase 2) | this commit |
+| Docs (phase 2) | `51f1fea docs(odd): record the phase 2 evidence and delivery count` |
+| F2 slice B | `9eac62c refactor(components): migrate the stateful components to TypeScript` |
+| Docs (phase 3) | this commit |
 
 ## Progress log
 
@@ -156,13 +200,17 @@ Findings from the independent verifier, resolved before the docs commit:
   checked; `tsc -p` pulls `dist/`; 66 errors under an honest web config).
 - 2026-10-27: F0 + F1 implemented by one worker, verified by the parent and by an independent
   verifier, committed in three work units.
+- 2026-10-27: F4 + slice A implemented by one worker. Risk came back `high` because `ci.yml` is
+  shell source, so an independent verifier re-checked it: `pass-with-notes`, no defects.
+- 2026-10-27: slice B implemented by one worker, re-checked by the parent over the full `-M` diff.
+  Risk `medium`, `under_budget`. The three changed suites were re-run by the parent, not taken on
+  trust.
 
 ## Next step
 
-F2 slice B: `Services` (with `useOnScreen` and the `IntersectionObserver` callback), `Reviews`
-(timer, `useRef`, modulo indexing) and `ServiceModal` (portal, focus trap, `querySelectorAll` under
-`noUncheckedIndexedAccess`). Those are the ~20 real possibly-null findings from the baseline
-measurement — the only place in this repo where the types catch bugs instead of styling.
+F2 slice C: `src/main.jsx` and the root guard — the last `.jsx` outside `src/tests`. That is what
+lets `allowJs` be turned off for the app project, which is the real finish line: today the gate
+covers 13 of the 14 files it resolves.
 
-Then slice C (`main.jsx` and the root guard) and F3 (tests). The `allowJs` note comes off only when
-no `.js` or `.jsx` is left in `src`.
+Then F3 (tests, needs a third tsconfig with `@types/node` and `vitest/globals`). F5 stays closed on
+purpose: typed CSS Modules buy autocompletion, not safety.
