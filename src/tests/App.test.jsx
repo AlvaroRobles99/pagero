@@ -12,4 +12,11 @@ describe('App', () => {
     expect(screen.getByText('Reseñas')).toBeInTheDocument()
     expect(screen.getByText('Contacto')).toBeInTheDocument()
   })
+
+  it('expone un único landmark main, con banner y contentinfo', () => {
+    render(<App />)
+    expect(screen.getAllByRole('main')).toHaveLength(1)
+    expect(screen.getByRole('banner')).toBeInTheDocument()
+    expect(screen.getByRole('contentinfo')).toBeInTheDocument()
+  })
 })
