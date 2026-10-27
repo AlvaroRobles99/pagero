@@ -17,16 +17,26 @@ const INDEX_HTML_PATH = resolve(PROJECT_ROOT, 'index.html')
 const html = readFileSync(INDEX_HTML_PATH, 'utf8')
 const doc = new DOMParser().parseFromString(html, 'text/html')
 
+/**
+ * Narrows a lookup the suite asserts on, so the reads after it are typed.
+ * The JS version assumed the value was there and would have thrown otherwise.
+ */
+function required<T>(value: T | null | undefined, what: string): T {
+  if (value === null || value === undefined) throw new Error(`${what} not found in index.html`)
+  return value
+}
+
 /** Content of <meta property="..."> (Open Graph convention). */
-const og = (property) =>
+const og = (property: string) =>
   doc.querySelector(`meta[property="${property}"]`)?.getAttribute('content') ?? null
 /** Content of <meta name="..."> (Twitter / document convention). */
-const metaName = (name) =>
+const metaName = (name: string) =>
   doc.querySelector(`meta[name="${name}"]`)?.getAttribute('content') ?? null
-const linkHref = (rel) =>
+const linkHref = (rel: string) =>
   doc.querySelector(`link[rel="${rel}"]`)?.getAttribute('href') ?? null
 const jsonLdRaw =
   doc.querySelector('script[type="application/ld+json"]')?.textContent ?? null
+if (jsonLdRaw === null) throw new Error('script[type="application/ld+json"] not found in index.html')
 
 const ABSOLUTE_URL = /^https?:\/\//i
 const ogImage = og('og:image')
@@ -50,13 +60,13 @@ describe('index.html — Open Graph', () => {
 
   it('declares a non-empty og:title', () => {
     expect(og('og:title'), 'meta[property="og:title"] not found').toBeTruthy()
-    expect(og('og:title').length).toBeGreaterThan(0)
+    expect(required(og('og:title'), 'meta[property="og:title"]').length).toBeGreaterThan(0)
   })
 
   it('declares a non-empty og:description of at most 160 characters', () => {
     expect(og('og:description'), 'meta[property="og:description"] not found').toBeTruthy()
-    expect(og('og:description').length).toBeGreaterThan(0)
-    expect(og('og:description').length).toBeLessThanOrEqual(160)
+    expect(required(og('og:description'), 'meta[property="og:description"]').length).toBeGreaterThan(0)
+    expect(required(og('og:description'), 'meta[property="og:description"]').length).toBeLessThanOrEqual(160)
   })
 
   it('declares og:image pointing at the generated share image', () => {
@@ -71,7 +81,7 @@ describe('index.html — Open Graph', () => {
 
   it('declares a non-empty Spanish og:image:alt', () => {
     expect(og('og:image:alt'), 'meta[property="og:image:alt"] not found').toBeTruthy()
-    expect(og('og:image:alt').length).toBeGreaterThan(0)
+    expect(required(og('og:image:alt'), 'meta[property="og:image:alt"]').length).toBeGreaterThan(0)
   })
 
   it('declares og:url', () => {
@@ -131,11 +141,12 @@ describe('index.html — document meta', () => {
       ['/favicon-32x32.png', { sizes: '32x32', type: 'image/png' }],
     ])
     for (const link of icons) {
-      const href = link.getAttribute('href')
+      const href = required(link.getAttribute('href'), 'favicon link href')
       const spec = expected.get(href)
       expect(spec, `unexpected favicon href: ${href}`).toBeTruthy()
-      expect(link.getAttribute('sizes'), `wrong sizes on ${href}`).toBe(spec.sizes)
-      expect(link.getAttribute('type'), `wrong type on ${href}`).toBe(spec.type)
+      const attrs = required(spec, `favicon spec for ${href}`)
+      expect(link.getAttribute('sizes'), `wrong sizes on ${href}`).toBe(attrs.sizes)
+      expect(link.getAttribute('type'), `wrong type on ${href}`).toBe(attrs.type)
     }
   })
 
@@ -177,7 +188,7 @@ describe('index.html — the og:image asset', () => {
 describe('index.html — the favicon assets', () => {
   // Site-relative public path: drop the leading slash before joining, exactly
   // like the og:image block above, or path.resolve is drive-absolute on Windows.
-  const publicAsset = (href) => resolve(PROJECT_ROOT, 'public', (href ?? '').replace(/^\//, ''))
+  const publicAsset = (href: string) => resolve(PROJECT_ROOT, 'public', (href ?? '').replace(/^\//, ''))
 
   it.each([
     ['/favicon-16x16.png', 16],
@@ -202,12 +213,18 @@ describe('index.html — the favicon assets', () => {
     const manifest = JSON.parse(readFileSync(publicAsset('/site.webmanifest'), 'utf8'))
     expect(manifest.name).toBe('Sanarse')
     expect(manifest.theme_color).toBe('#1f0f14')
-    expect(manifest.icons.map((icon) => icon.src)).toEqual([
+    expect(manifest.icons.map((icon: { src: string }) => icon.src)).toEqual([
       '/android-chrome-192x192.png',
       '/android-chrome-512x512.png',
     ])
   })
 })
+
+/** The JSON-LD node fields the suite reads inside a callback. */
+interface JsonLdNode {
+  '@type': string
+  sameAs?: string[]
+}
 
 describe('index.html — JSON-LD structured data', () => {
   it('is present and parses as valid JSON', () => {
@@ -224,7 +241,7 @@ describe('index.html — JSON-LD structured data', () => {
 
   it('describes the organization, the practitioner and the website', () => {
     expect(jsonLdRaw, 'script[type="application/ld+json"] not found').toBeTruthy()
-    const types = JSON.parse(jsonLdRaw)['@graph'].map((node) => node['@type'])
+    const types = JSON.parse(jsonLdRaw)['@graph'].map((node: JsonLdNode) => node['@type'])
     expect(types).toContain('Organization')
     expect(types).toContain('LocalBusiness')
     expect(types).toContain('Person')
@@ -234,8 +251,8 @@ describe('index.html — JSON-LD structured data', () => {
   it('names the practitioner and the brand', () => {
     expect(jsonLdRaw, 'script[type="application/ld+json"] not found').toBeTruthy()
     const nodes = JSON.parse(jsonLdRaw)['@graph']
-    const person = nodes.find((node) => node['@type'] === 'Person')
-    const website = nodes.find((node) => node['@type'] === 'WebSite')
+    const person = nodes.find((node: JsonLdNode) => node['@type'] === 'Person')
+    const website = nodes.find((node: JsonLdNode) => node['@type'] === 'WebSite')
     expect(person.name, 'Person node needs a name').toBe('Rocío Durazno')
     expect(website.name, 'WebSite node needs a name').toBe('Sanarse')
     expect(website.inLanguage).toBe('es-AR')
@@ -244,14 +261,14 @@ describe('index.html — JSON-LD structured data', () => {
   it('points the Organization logo at the brand mark image', () => {
     expect(jsonLdRaw, 'script[type="application/ld+json"] not found').toBeTruthy()
     const nodes = JSON.parse(jsonLdRaw)['@graph']
-    const organization = nodes.find((node) => node['@type'] === 'Organization')
+    const organization = nodes.find((node: JsonLdNode) => node['@type'] === 'Organization')
     expect(organization.logo, 'Organization node needs a logo').toBe('/images/logo.png')
   })
 
   it('keeps sameAs in sync with src/data/social.ts, in both directions', () => {
     expect(jsonLdRaw, 'script[type="application/ld+json"] not found').toBeTruthy()
     const nodes = JSON.parse(jsonLdRaw)['@graph']
-    const declared = nodes.flatMap((node) => node.sameAs ?? [])
+    const declared = nodes.flatMap((node: JsonLdNode) => node.sameAs ?? [])
     const published = SOCIAL_LINKS.map((social) => social.url)
 
     for (const social of SOCIAL_LINKS) {
@@ -271,7 +288,7 @@ describe('index.html — no fabricated business data', () => {
   it('publishes the real telephone on the Person node, in international form', () => {
     expect(jsonLdRaw, 'script[type="application/ld+json"] not found').toBeTruthy()
     const nodes = JSON.parse(jsonLdRaw)['@graph']
-    const person = nodes.find((node) => node['@type'] === 'Person')
+    const person = nodes.find((node: JsonLdNode) => node['@type'] === 'Person')
     expect(person.telephone, 'Person node needs a telephone').toBeTruthy()
     expect(person.telephone).toBe('+54 297 421 6017')
     // schema.org wants the full international form here, unlike wa.me hrefs.

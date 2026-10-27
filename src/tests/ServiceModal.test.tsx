@@ -58,6 +58,7 @@ describe('ServiceModal', () => {
     const onClose = vi.fn()
     render(<ServiceModal service={service} onClose={onClose} />)
     const overlay = screen.getByRole('dialog').parentElement
+    if (!overlay) throw new Error('The dialog is not wrapped in an overlay')
     fireEvent.click(overlay)
     expect(onClose).toHaveBeenCalledTimes(1)
   })

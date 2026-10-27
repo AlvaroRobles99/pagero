@@ -76,6 +76,8 @@ describe('whatsappLink()', () => {
     const message = 'Hola Rocío, me interesa saber más sobre Lectura de Tarot & Limpieza'
     const link = whatsappLink(message)
     expect(new URL(link).searchParams.get('text')).toBe(message)
-    expect(decodeURIComponent(link.split('?text=')[1])).toBe(message)
+    const encoded = link.split('?text=')[1]
+    if (!encoded) throw new Error(`whatsappLink() emitted no text query for ${message}`)
+    expect(decodeURIComponent(encoded)).toBe(message)
   })
 })
