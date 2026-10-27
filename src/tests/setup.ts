@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom'
 
 class MockIntersectionObserver {
-  constructor(callback) {
+  callback: IntersectionObserverCallback
+  constructor(callback: IntersectionObserverCallback) {
     this.callback = callback
   }
   observe() {}

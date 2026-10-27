@@ -24,6 +24,7 @@ describe('Hero', () => {
     const link = btn.closest('a')
     expect(link).toHaveAttribute('href', '#services')
     expect(link).not.toHaveAttribute('target', '_blank')
+    if (!link) throw new Error('The Hero CTA is not wrapped in a link')
     expect(link.getAttribute('href')).not.toMatch(/wa\.me/)
   })
 
@@ -43,6 +44,7 @@ describe('Hero', () => {
     expect(logo).toBeInTheDocument()
     expect(heading).toBeInTheDocument()
     const FOLLOWS = Node.DOCUMENT_POSITION_FOLLOWING
+    if (!logo || !heading) throw new Error('The logo and the h1 must both exist to compare them')
     expect(logo.compareDocumentPosition(heading) & FOLLOWS).toBe(FOLLOWS)
   })
 
@@ -62,6 +64,7 @@ describe('Hero', () => {
     expect(logo).toBeInTheDocument()
     expect(heading).toBeInTheDocument()
     const FOLLOWS = Node.DOCUMENT_POSITION_FOLLOWING
+    if (!logo || !heading) throw new Error('The logo and the h1 must both exist to compare them')
     expect(logo.compareDocumentPosition(heading) & FOLLOWS).toBe(FOLLOWS)
   })
 })

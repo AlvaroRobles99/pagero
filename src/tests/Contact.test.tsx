@@ -23,7 +23,9 @@ describe('Contact', () => {
 
   it('renderiza un href de wa.me solo con dígitos', () => {
     render(<Contact />)
-    const href = screen.getByText(/Escribir por WhatsApp/).closest('a').getAttribute('href')
+    const link = screen.getByText(/Escribir por WhatsApp/).closest('a')
+    if (!link) throw new Error('The WhatsApp CTA is not wrapped in a link')
+    const href = link.getAttribute('href')
     expect(href).toMatch(/^https:\/\/wa\.me\/\d+$/)
   })
 
@@ -36,6 +38,7 @@ describe('Contact', () => {
     it('renderiza exactamente 3 links sociales', () => {
       render(<Contact />)
       const bloque = screen.getByText('Ver mi contenido').closest('div')
+      if (!bloque) throw new Error('The "Ver mi contenido" block is missing')
       expect(bloque.querySelectorAll('a')).toHaveLength(3)
     })
 

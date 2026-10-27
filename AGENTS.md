@@ -18,7 +18,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 - `bun run test` — run all tests (Vitest)
 - `bun run test:watch` — run tests in watch mode
 - `bun run generate:og` — regenerate `public/images/og-image.png` from `scripts/generate-og.mjs`
-- `bun run typecheck` — type-check the app and the Node tooling (`bun check`, TypeScript 7)
+- `bun run typecheck` — type-check the app, the tests and the Node tooling (`bun check`, TypeScript 7)
 
 ## Structure
 
@@ -39,7 +39,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `src/components/Contact/` | Contact section + module CSS |
 | `src/components/Footer/` | Footer with year + module CSS |
 | `src/data/contact.ts` | WhatsApp number constants + `whatsappLink()` helper (single source of truth) |
-| `src/tests/` | Vitest suites, one per component + `seo.test.jsx` for the `index.html` meta and `whatsapp.test.jsx` for the link format |
+| `src/tests/` | Vitest suites, one per component + `seo.test.tsx` for the `index.html` meta and `whatsapp.test.tsx` for the link format |
 | `scripts/generate-og.mjs` | Builds the 1200×630 share image (inline SVG → PNG via resvg) |
 | `scripts/fonts/` | Brand TTFs, used only by the OG generator |
 | `public/images/` | Static assets (`banner.svg`, `logo.png`, generated `og-image.png`) |
@@ -50,7 +50,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 ## SEO + Social
 
 - Meta lives in `index.html` only — canonical, Open Graph, Twitter card, `theme-color`, `robots`, and a JSON-LD `@graph` (Organization, LocalBusiness, Person, WebSite).
-- `src/tests/seo.test.jsx` reads `index.html` from disk and asserts the whole contract, so a removed tag fails the suite.
+- `src/tests/seo.test.tsx` reads `index.html` from disk and asserts the whole contract, so a removed tag fails the suite.
 - URLs are intentionally **relative** until a domain is chosen. See the deploy-time step in `docs/project.md`.
 - `og-image.png` is generated, not hand-drawn. Change `scripts/generate-og.mjs`, then run `bun run generate:og`.
 
@@ -83,7 +83,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | Visible UI text | `+54 297 421 6017` | Human-readable. |
 | JSON-LD `telephone` | `+54 297 421 6017` | schema.org wants the international form with `+`. |
 
-- `src/tests/whatsapp.test.jsx` locks that format, so a bad edit fails loudly. `Hero.test.jsx` / `Contact.test.jsx` assert against the constant, never against literal digits.
+- `src/tests/whatsapp.test.tsx` locks that format, so a bad edit fails loudly. `Hero.test.tsx` / `Contact.test.tsx` assert against the constant, never against literal digits.
 - **Confirmed on a real phone:** the link opens a chat on the correct number in the digits-only form. Argentine `+54 9 297 421 6017` mobiles are written with a `9`, but the `wa.me` convention drops it, which is what the constant does. If it ever regresses, the fix is a single character in `src/data/contact.ts`.
-- The test file is named `whatsapp.test.jsx`, not `contact.test.jsx`: the filesystem is case-insensitive on Windows, so a name differing from `Contact.test.jsx` only by case would resolve to it and overwrite that suite.
+- The test file is named `whatsapp.test.tsx`, not `contact.test.tsx`: the filesystem is case-insensitive on Windows, so a name differing from `Contact.test.tsx` only by case would resolve to it and overwrite that suite.
 

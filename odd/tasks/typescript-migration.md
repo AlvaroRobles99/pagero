@@ -1,6 +1,6 @@
 # TypeScript migration — the app is TypeScript
 
-Status: phase 4 done · the app is TypeScript · Branch: `refactor/typescript-baseline` · PR #18 · Started: 2026-10-27
+Status: phase 4 done, merged in #18 · phase 5 (F3) implemented, pending PR · Branch: `refactor/typescript-tests` · Started: 2026-10-27
 
 ## Objective
 
@@ -32,10 +32,10 @@ WhatsApp number is the site's only conversion path.
 - **F1 — data contracts.** `src/data/{services,reviews,social,contact}.js` → `.ts` with exported types.
 - **F2 — components.** Every component, `App` and `main` → `.tsx`; `allowJs` off for the app project.
 - **F4 — CI gate.** `bun run typecheck` inside the already-required `Verify` job.
+- **F3 — tests.** New `tsconfig.test.json` (DOM + Node); `src/tests/**` → `.tsx`; `setup.js` → `setup.ts`.
 
 ## Not done (deliberate)
 
-- F3: tests (`src/tests/**`) stay `.jsx` / `.js` until a third tsconfig exists for them.
 - F5: `scripts/generate-og` to TS, typed CSS Modules.
 - The three `.js` of the tooling project are still included but not checked (`checkJs: false`).
 
@@ -54,7 +54,7 @@ WhatsApp number is the site's only conversion path.
 
 - The `whatsappLink` JSDoc was rewritten instead of merely stripped of `@param` / `@returns`, to keep
   the empty-`?text=` rationale in the file's own Spanish. Behavior text unchanged.
-- The `it()` title in `src/tests/seo.test.jsx` was updated from `social.js` to `social.ts`. It is a
+- The `it()` title in `src/tests/seo.test.tsx` was updated from `social.js` to `social.ts`. It is a
   documentation string inside a test name; no test logic, selector or assertion was touched.
 
 ## Tasks
@@ -174,6 +174,39 @@ The root guard is the whole point of the slice: `createRoot` needs an `Element`,
 `Root element #root not found in index.html` — a message a human can act on — which is why no `!`
 was needed anywhere in the migration.
 
+### Phase 5 — F3, tests to TypeScript (done)
+
+| ID | Task | Route | State |
+|---|---|---|---|
+| F3.1 | New `tsconfig.test.json`: `src/tests`, `types: ["vite/client", "vitest/globals", "node"]` | delegated | done |
+| F3.2 | `@types/node` declared in `devDependencies` — it is already installed through `@types/bun`, so declaring it removes the reliance on hoisting rather than adding a package | delegated | done |
+| F3.3 | 11 `*.test.jsx` → `.test.tsx` and `setup.js` → `setup.ts` | delegated | done |
+| F3.4 | `vitest.config.js` setup path, and the `typecheck` script chains the third project | delegated | done |
+
+The third project is what keeps the browser project honest: the app project still carries no Node
+types, so `process` or `node:fs` can never leak into component code. Tests are the only place where
+both worlds meet, and that project is excluded from the app program.
+
+Evidence, re-run by the parent instead of taken from the worker's report:
+
+| Check | Result |
+|---|---|
+| `bun run typecheck` | 14 app files, 3 node files, 25 test files, no errors |
+| `bun run test` | 11 files / 103 tests, exit 0 |
+| `bun run build` | 38 modules transformed |
+| `bun check -p tsconfig.test.json --listFiles` | 12 entries under `src/tests`, no `.js` / `.jsx` left |
+
+Five of the eleven suites moved with zero content change (`About`, `App`, `Footer`, `Lotus`,
+`Services`). The rest only added what the compiler demanded: parameter types and helpers in
+`seo.test.tsx` (`required<T>`, `JsonLdNode`), a `Review` helper in `Reviews.test.tsx` that throws
+instead of indexing into `reviews[index]`, and `if (!node) throw` guards where a DOM lookup returns
+`T | null` right before `fireEvent.click` or `getAttribute`. No `any`, no `as`, no `!`, and not one
+assertion changed.
+
+One deviation worth naming: `seo.test.tsx` validates the JSON-LD script at module scope, so a missing
+`<script type="application/ld+json">` now fails during collection instead of producing about eighteen
+assertion failures. Same red suite, earlier and clearer message.
+
 ## Delivery forecast
 
 At the phase 4 code commit (`851d664`) the branch measures **471 authored lines** (405 insertions +
@@ -194,11 +227,15 @@ No new behavior, so there is no meaningful RED: the existing suite *is* the regr
 test must stay green and no test file may be modified in this pass. The type-level proof is the gate
 itself (see Checks).
 
+F3 is the one place where a test file changes: extensions, type annotations, and null guards only.
+Not one assertion, selector, test name or expectation was touched, and the suite still reports 11
+files / 103 tests.
+
 ## Checks — observed
 
 | Check | Result |
 |---|---|
-| `bun run typecheck` | `✓ No type errors in 14 files` + `✓ No type errors in 3 files`, exit 0 |
+| `bun run typecheck` | `✓ No type errors in 14 files` (app) + `3 files` (node) + `25 files` (tests), exit 0 |
 | `bun run test` | `Test Files 11 passed (11)` · `Tests 103 passed (103)`, exit 0 |
 | `bun run build` | `✓ 38 modules transformed`, built in ~4.5s, exit 0 |
 | Negative probe | `const __probe: number = 'not a number'` in `src/data/services.ts` → `TS2322`, exit 1. Reverted, gate green again |
@@ -227,7 +264,12 @@ Findings from the independent verifier, resolved before the docs commit:
 | F2 slice C | `6af5270 refactor(app): migrate the entry point to TypeScript with a root guard` |
 | `allowJs` off | `8942e9b build(typescript): stop allowing JavaScript in the app project` |
 | Docs (phase 4) | `851d664 docs: update the file extensions and the TypeScript section` |
-| Task doc (phase 4) | this commit |
+| Task doc (phase 4) | `408896a docs(odd): record the phase 4 evidence and close the app migration` |
+| PR + CI | `98cce0d docs(odd): record the PR and the first green CI run` |
+| F3 config | `084e826 build(typescript): add a project for the test suite` |
+| F3 files | `a9f387e test(typescript): migrate the test suite to TypeScript` |
+| Docs (phase 5) | `7b039bd docs: document the test project and the three-project gate` |
+| Task doc (phase 5) | this commit |
 
 ## Progress log
 
@@ -242,15 +284,18 @@ Findings from the independent verifier, resolved before the docs commit:
   trust.
 - 2026-10-27: slice C + `allowJs` off, done inline. The app project is now pure TypeScript and the
   full suite was re-run because `index.html` changed.
+- 2026-10-27: PR #18 merged into `main` (`5a3fbfe`), `Verify` green twice on the PR and again on
+  `main`. The branch was deleted and `main` synced.
+- 2026-10-27: F3 implemented by one worker on `refactor/typescript-tests`. Risk `medium`,
+  `under_budget`. Five of the eleven suites are byte-identical renames; the rest add types and
+  guards only. The parent re-ran typecheck, tests and build over the finished diff before committing.
 
 ## Next step
 
-The app is closed, the gate is proven on CI, and PR #18 is open. What is left is optional, and each
-piece is a separate decision:
+What is left is the tooling: `vite.config.js`, `vitest.config.js` and `scripts/generate-og.mjs` are
+included by `tsconfig.node.json` but unchecked, because `checkJs` is off. Migrating them is what
+closes the last `allowJs`.
 
-- **F3 — tests to `.tsx`.** Needs a third tsconfig (`@types/node` + `vitest/globals`) so the browser
-  project stays clean. That is what takes the gate from 14 files to the whole of `src/`.
-- **Tooling** — the three `.js` in `scripts/` and the Vite configs are included but unchecked;
-  migrating them is what closes the last `allowJs`.
-- **Push + PR.** Eleven commits, nothing pushed. The CI `Typecheck` step has never run: the first
-  push is its first real proof.
+Typed CSS Modules — the rest of F5 — stays deliberately out of the migration.
+
+This branch still needs its PR: `bun check -p tsconfig.test.json` has only ever run locally.
