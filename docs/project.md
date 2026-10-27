@@ -257,12 +257,17 @@ todos los núcleos. `typescript` vive en `devDependencies` porque es una herrami
 la app, no una dependencia que se publique.
 
 Ojo con leer el resultado: con `checkJs` apagado, el proyecto de tooling incluye sus tres `.js` pero
-no los chequea, así que hoy el gate real son los cuatro `.ts` de `src/data/`.
+no los chequea, así que hoy el gate real son los cuatro `.ts` de `src/data/` y los seis componentes
+ya migrados: 10 de los 14 archivos del proyecto.
 
 La primera capa migrada fue `src/data/`: exporta las interfaces `Service`, `Review` y `SocialLink`,
-y `whatsappLink(message?: string): string`. Componentes y tests siguen en `.jsx` y son el paso
-siguiente. Los tests quedan fuera del proyecto de la app hasta que se migren, para no arrastrar
-`@types/node` y `vitest/globals` a código que corre en el navegador.
+y `whatsappLink(message?: string): string`. Después se sumaron los componentes estáticos (`App`,
+`Hero`, `About`, `Contact`, `Footer` y `Lotus`, el único con props: `size` y `className`). `Services`,
+`Reviews`, `ServiceModal` y `main` siguen en `.jsx`, igual que los tests: ahí viven los refs, los
+timers y el focus trap, que es el paso siguiente.
+
+Los tests quedan fuera del proyecto de la app hasta que se migren, para no arrastrar `@types/node` y
+`vitest/globals` a código que corre en el navegador.
 
 > `allowJs` + `checkJs: false` es un estado de transición, no el destino: cuando todos los `.jsx`
 > sean `.tsx`, se apaga `allowJs` y el gate cubre el repo completo.

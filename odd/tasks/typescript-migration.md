@@ -1,6 +1,6 @@
 # TypeScript migration — F0 + F1
 
-Status: in progress · Branch: `refactor/typescript-baseline` · Started: 2026-10-27
+Status: phase 2 done · next is F2 slice B · Branch: `refactor/typescript-baseline` · Started: 2026-10-27
 
 ## Objective
 
@@ -73,10 +73,47 @@ Writer trigger fired: 7 non-trivial files (2 configs + 4 data files + `package.j
 go to one bounded `gentle-ai-worker`. The config *design* was decided inline during exploration, so
 the worker executes a fixed spec instead of re-deriving it.
 
+### Phase 2 — F4 + F2 slice A (current)
+
+| ID | Task | Route | State |
+|---|---|---|---|
+| F4.1 | Add `bun run typecheck` to the existing `verify` job, before Test | delegated | done |
+| F2A.1 | `Lotus` → `.tsx` with `LotusProps` | delegated | done |
+| F2A.2 | `Footer` → `.tsx` | delegated | done |
+| F2A.3 | `Hero` → `.tsx` | delegated | done |
+| F2A.4 | `About` → `.tsx` | delegated | done |
+| F2A.5 | `Contact` → `.tsx` (first consumer of the typed `SOCIAL_LINKS`) | delegated | done |
+| F2A.6 | `App` → `.tsx` | delegated | done |
+
+F4 is one step inside the existing `Verify` job, which is already a required status check on `main`:
+no new check, no GitHub Settings change, and the gate becomes mandatory as soon as it merges.
+
+Slice A is the low-risk half of F2: five of the six components take no props at all, and only
+`Lotus` needs an interface (`size?: number`, `className?: string`). `Services`, `Reviews` and
+`ServiceModal` stay `.jsx` for slice B, where the refs, timers and focus trap live.
+
+### Phase 2 evidence — observed
+
+| Check | Result |
+|---|---|
+| `bun run typecheck` | 14 app + 3 node files, exit 0 |
+| `bun run test` | 11 suites / 103 tests, exit 0 |
+| `bun run build` | 38 modules, exit 0 |
+| Rename fidelity | five files are 100% identical blobs; `Lotus` has exactly one hunk (interface + typed parameter) |
+| Program membership | `bun check --listFiles` lists all six `.tsx` and nothing from `src/tests` |
+| Risk assessment | `high` (`shell_source` on `ci.yml`), `review_due: true` |
+| Independent verification | `pass-with-notes`: CI diff is +3/−0, no leftover `.jsx` at the six paths, no `any`/`as`/`!`, lockfile ships `@typescript/typescript-linux-x64` |
+
+The gate is one step inside the already-required `Verify` job: no new check, no GitHub Settings
+change. It cannot be proven locally — the first real Actions run happens on the first push of this
+branch.
+
 ## Delivery forecast
 
-~150 authored changed lines (additions + deletions), almost all of it renames and interface headers.
-Well under the ~400-line budget: strategy `ask-on-risk`, single PR slice, no chaining needed.
+Measured after phase 2: 342 authored changed lines (additions + deletions, docs included), of which
+117 are code. Still under the ~400-line budget, so the feature stays a single PR slice with
+`ask-on-risk` and no chaining. If slice B pushes the count past 400, the chain-strategy question is
+asked once, before the next commit — not after.
 
 ## Test-first policy
 
@@ -108,7 +145,10 @@ Findings from the independent verifier, resolved before the docs commit:
 |---|---|
 | F0 config | `0715c51 chore(tooling): split tsconfig into app and node projects` |
 | F1 data | `38cf6b5 refactor(data): migrate the data layer to TypeScript` |
-| Docs | this commit (`docs: document the TypeScript baseline and update data paths`) |
+| Docs (phase 1) | `952134a docs: document the TypeScript baseline and update data paths` |
+| F4 CI gate | `fa726c0 ci: typecheck before tests in the verify job` |
+| F2 slice A | `5727018 refactor(components): migrate the static components to TypeScript` |
+| Docs (phase 2) | this commit |
 
 ## Progress log
 
@@ -119,5 +159,10 @@ Findings from the independent verifier, resolved before the docs commit:
 
 ## Next step
 
-F2 (components → `.tsx`), then F3 (tests), then F4 — add `bun run typecheck` to CI as a required
-check. F4 is what stops this from decaying: until then the gate is manual and skippable.
+F2 slice B: `Services` (with `useOnScreen` and the `IntersectionObserver` callback), `Reviews`
+(timer, `useRef`, modulo indexing) and `ServiceModal` (portal, focus trap, `querySelectorAll` under
+`noUncheckedIndexedAccess`). Those are the ~20 real possibly-null findings from the baseline
+measurement — the only place in this repo where the types catch bugs instead of styling.
+
+Then slice C (`main.jsx` and the root guard) and F3 (tests). The `allowJs` note comes off only when
+no `.js` or `.jsx` is left in `src`.
