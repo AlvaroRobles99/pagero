@@ -1,16 +1,17 @@
-# TypeScript migration — F0 + F1
+# TypeScript migration — the app is TypeScript
 
-Status: phase 3 done · next is F2 slice C · Branch: `refactor/typescript-baseline` · Started: 2026-10-27
+Status: phase 4 done · the app is TypeScript · Branch: `refactor/typescript-baseline` · Started: 2026-10-27
 
 ## Objective
 
-Make the TypeScript toolchain that is already installed actually type-check something, and give the
-data layer real contracts, without touching a single component or test.
+Make the TypeScript toolchain that was already installed actually type-check something, give the
+data layer real contracts, put the gate in CI, and move the app to `.ts` / `.tsx` without changing
+behaviour.
 
 ## Problem
 
-`typescript@7.0.2` is installed, `tsconfig.json` exists and `bun run typecheck` prints
-"No type errors in 30 files". That green is decorative:
+`typescript@7.0.2` is installed, `tsconfig.json` exists and `bun run typecheck` printed
+"No type errors in 30 files". That green was decorative:
 
 - `checkJs` is off, so every `.js` / `.jsx` file is parsed but never checked.
 - `tsconfig.json` has no `include` / `exclude`, so `tsc -p tsconfig.json` also walks `dist/` and
@@ -25,17 +26,18 @@ The four files in `src/data/` are the single source of truth for services, revie
 the WhatsApp link. Nothing verifies their shape, so a missing field only fails at runtime — and the
 WhatsApp number is the site's only conversion path.
 
-## Scope (authorized)
+## Scope (authorized, all delivered)
 
 - **F0 — toolchain honesty.** `tsconfig.json`, new `tsconfig.node.json`, `package.json`.
 - **F1 — data contracts.** `src/data/{services,reviews,social,contact}.js` → `.ts` with exported types.
+- **F2 — components.** Every component, `App` and `main` → `.tsx`; `allowJs` off for the app project.
+- **F4 — CI gate.** `bun run typecheck` inside the already-required `Verify` job.
 
-## Out of scope (not authorized in this pass)
+## Not done (deliberate)
 
-- F2: components (`src/components/**`, `App.jsx`, `main.jsx`) stay `.jsx`.
-- F3: tests (`src/tests/**`) stay `.jsx` / `.js`.
-- F4: CI gate (`bun run typecheck` as a required check).
+- F3: tests (`src/tests/**`) stay `.jsx` / `.js` until a third tsconfig exists for them.
 - F5: `scripts/generate-og` to TS, typed CSS Modules.
+- The three `.js` of the tooling project are still included but not checked (`checkJs: false`).
 
 ## Constraints
 
@@ -143,19 +145,47 @@ Three places where the compiler paid for itself instead of decorating the code:
 - `querySelectorAll<HTMLElement>(FOCUSABLE)` gives `.focus()` on the results — a type argument, not an
   assertion, so nothing was silenced.
 
+### Phase 4 — F2 slice C + closing `allowJs` (current)
+
+| ID | Task | Route | State |
+|---|---|---|---|
+| F2C.1 | `src/main.jsx` → `main.tsx`, with a real root guard instead of `!` | inline | done |
+| F2C.2 | `index.html` entry points at `/src/main.tsx` | inline | done |
+| F2C.3 | App tsconfig turns `allowJs` off and drops the now-dead `checkJs` | inline | done |
+| F2C.4 | Docs stop claiming a `.jsx` is left in `src/` | inline | done |
+
+Route is inline on purpose: one source file plus two one-line config edits. The writer trigger asks
+for two or more non-trivial files, and this is one.
+
+### Phase 4 evidence — observed
+
+| Check | Result |
+|---|---|
+| `bun run typecheck` | 14 app + 3 node files, exit 0 |
+| App program | `bun check --listFiles`: 14 project files, all `.ts`/`.tsx`, zero `.js`/`.jsx`, nothing from `src/tests` |
+| `bun run test` | full suite, 11 files / 103 tests, exit 0 — `index.html` changed, so the SEO contract had to be re-proven |
+| `bun run build` | 38 modules, exit 0 — Vite resolves the new entry point |
+| Leftover JS | `src/` outside `src/tests` holds zero `.js` and zero `.jsx` |
+| Risk assessment | `medium` (`executable_change`), `review_due: false` (`under_budget`) |
+
+The root guard is the whole point of the slice: `createRoot` needs an `Element`, and the cheap fix is
+`document.getElementById('root')!`. Instead the container is checked once and the app fails with
+`Root element #root not found in index.html` — a message a human can act on — which is why no `!`
+was needed anywhere in the migration.
+
 ## Delivery forecast
 
-At the slice B commit (`9eac62c`) the branch measured **exactly 400 authored lines** (341 insertions
-+ 59 deletions), of which **163 are code** and 237 are documentation; this docs commit takes the
-total to 449, and every one of those added lines is documentation. Git's rename detection collapses
-the nine `.jsx` → `.tsx` moves, so a reviewer sees annotation lines, not moved files.
+At the phase 4 code commit (`851d664`) the branch measures **471 authored lines** (405 insertions +
+66 deletions), of which **175 are code** and 296 are documentation; the commits that close this
+phase add a few more, all of it documentation. Git's rename detection collapses the ten
+`.jsx` → `.tsx` moves, so a reviewer sees annotation lines, not moved files.
 
-The heuristic lands on its own boundary, and the split is what decides it: the code half is 163
-lines, every component hunk is a rename or a type annotation, and chaining would either separate the
-docs from the code they describe or hold the CI gate back into a second PR. `ask-on-risk` is
-recorded here with the measurement rather than a forecast, and the eight work-unit commits are
-already cut on the seams — config, data, CI, components, docs — so splitting later is a cherry-pick
-away, not a rewrite.
+The ~400 heuristic is exceeded by 71, and every one of those 71 lines is documentation. The split is
+what decides the size question: the code half is 175 lines, every component hunk is a rename or a
+type annotation, and chaining would either separate the docs from the code they describe or hold the
+CI gate back into a second PR. `ask-on-risk` is recorded here with the measurement rather than a
+forecast, and the eleven work-unit commits are already cut on the seams — config, data, CI,
+components, entry point, docs — so splitting later is a cherry-pick away, not a rewrite.
 
 ## Test-first policy
 
@@ -192,7 +222,11 @@ Findings from the independent verifier, resolved before the docs commit:
 | F2 slice A | `5727018 refactor(components): migrate the static components to TypeScript` |
 | Docs (phase 2) | `51f1fea docs(odd): record the phase 2 evidence and delivery count` |
 | F2 slice B | `9eac62c refactor(components): migrate the stateful components to TypeScript` |
-| Docs (phase 3) | this commit |
+| Docs (phase 3) | `b5d51e7 docs(odd): record the phase 3 evidence and close slice B` |
+| F2 slice C | `6af5270 refactor(app): migrate the entry point to TypeScript with a root guard` |
+| `allowJs` off | `8942e9b build(typescript): stop allowing JavaScript in the app project` |
+| Docs (phase 4) | `851d664 docs: update the file extensions and the TypeScript section` |
+| Task doc (phase 4) | this commit |
 
 ## Progress log
 
@@ -205,12 +239,16 @@ Findings from the independent verifier, resolved before the docs commit:
 - 2026-10-27: slice B implemented by one worker, re-checked by the parent over the full `-M` diff.
   Risk `medium`, `under_budget`. The three changed suites were re-run by the parent, not taken on
   trust.
+- 2026-10-27: slice C + `allowJs` off, done inline. The app project is now pure TypeScript and the
+  full suite was re-run because `index.html` changed.
 
 ## Next step
 
-F2 slice C: `src/main.jsx` and the root guard — the last `.jsx` outside `src/tests`. That is what
-lets `allowJs` be turned off for the app project, which is the real finish line: today the gate
-covers 13 of the 14 files it resolves.
+The app is closed. What is left is optional, and each piece is a separate decision:
 
-Then F3 (tests, needs a third tsconfig with `@types/node` and `vitest/globals`). F5 stays closed on
-purpose: typed CSS Modules buy autocompletion, not safety.
+- **F3 — tests to `.tsx`.** Needs a third tsconfig (`@types/node` + `vitest/globals`) so the browser
+  project stays clean. That is what takes the gate from 14 files to the whole of `src/`.
+- **Tooling** — the three `.js` in `scripts/` and the Vite configs are included but unchecked;
+  migrating them is what closes the last `allowJs`.
+- **Push + PR.** Eleven commits, nothing pushed. The CI `Typecheck` step has never run: the first
+  push is its first real proof.
