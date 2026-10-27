@@ -91,27 +91,40 @@
 .dots {
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
-  margin-top: 1.25rem;
+  gap: 0.25rem;
+  margin-top: 0.875rem;
 }
 
 .dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Punto visual de 10px dentro de un target de 24px: se ve igual de fino,
+   pero cumple el mínimo de 24px de area tactil (WCAG 2.5.8). */
+.dot::before {
+  content: '';
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  border: none;
   background: rgba(199, 58, 90, 0.25);
-  cursor: pointer;
   transition: background 0.3s ease, transform 0.2s ease;
-  padding: 0;
 }
 
-.dot:hover {
+.dot:hover::before {
   background: rgba(199, 58, 90, 0.5);
   transform: scale(1.2);
 }
 
-.dotActive {
+.dotActive::before {
   background: var(--color-primary);
   transform: scale(1.15);
 }
