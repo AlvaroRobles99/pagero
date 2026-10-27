@@ -1,6 +1,6 @@
 # TypeScript migration — the app is TypeScript
 
-Status: phase 4 done · the app is TypeScript · Branch: `refactor/typescript-baseline` · Started: 2026-10-27
+Status: phase 4 done · the app is TypeScript · Branch: `refactor/typescript-baseline` · PR #18 · Started: 2026-10-27
 
 ## Objective
 
@@ -167,6 +167,7 @@ for two or more non-trivial files, and this is one.
 | `bun run build` | 38 modules, exit 0 — Vite resolves the new entry point |
 | Leftover JS | `src/` outside `src/tests` holds zero `.js` and zero `.jsx` |
 | Risk assessment | `medium` (`executable_change`), `review_due: false` (`under_budget`) |
+| CI, first real run | `Verify` green on PR #18: `Typecheck` printed **`No type errors in 14 files`** on ubuntu (not an empty program), `Test` 11 files, `Build` ok |
 
 The root guard is the whole point of the slice: `createRoot` needs an `Element`, and the cheap fix is
 `document.getElementById('root')!`. Instead the container is checked once and the app fails with
@@ -244,7 +245,8 @@ Findings from the independent verifier, resolved before the docs commit:
 
 ## Next step
 
-The app is closed. What is left is optional, and each piece is a separate decision:
+The app is closed, the gate is proven on CI, and PR #18 is open. What is left is optional, and each
+piece is a separate decision:
 
 - **F3 — tests to `.tsx`.** Needs a third tsconfig (`@types/node` + `vitest/globals`) so the browser
   project stays clean. That is what takes the gate from 14 files to the whole of `src/`.
