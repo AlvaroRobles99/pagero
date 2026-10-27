@@ -98,7 +98,8 @@ Definidas en `src/index.css` y usadas en todos los módulos CSS via `var(--nombr
 | `--color-deep` | `#1f0f14` | Footer, overlays |
 | `--color-primary` | `#c73a5a` | Títulos h2, botones, acentos |
 | `--color-light` | `#fef0f5` | Fondos alternados (About, Reviews) |
-| `--color-accent` | `#c99a4a` | Tagline, estrellas, línea bajo h2 |
+| `--color-accent` | `#c99a4a` | Tagline, líneas y bordes decorativos |
+| `--color-accent-deep` | `#8f661d` | Acento como texto sobre fondos claros (eyebrow de About, estrellas de reseñas) |
 | `--color-text` | `#3a1f28` | Texto sobre fondos claros |
 | `--color-warm-white` | `#fffafc` | Fondo principal (Services, Contact) |
 | `--font-display` | `'Cormorant Garamond', Georgia, serif` | Títulos, hero, tagline |
