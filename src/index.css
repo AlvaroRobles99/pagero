@@ -3,6 +3,9 @@
   --color-primary: #c73a5a;
   --color-light: #fef0f5;
   --color-accent: #c99a4a;
+  /* Variante oscura del acento para texto sobre fondos claros: #c99a4a
+     alcanza 2.32:1 sobre --color-light y no llega al mínimo AA (4.5:1). */
+  --color-accent-deep: #8f661d;
   --color-text: #3a1f28;
   --color-warm-white: #fffafc;
 

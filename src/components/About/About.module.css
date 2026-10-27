@@ -48,7 +48,7 @@
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--color-accent);
+  color: var(--color-accent-deep);
   margin-bottom: 0.5rem;
   font-weight: 600;
 }
