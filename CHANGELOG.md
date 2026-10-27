@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.3](https://github.com/AlvaroRobles99/pagero/compare/v0.1.2...v0.1.3) (2026-10-27)
+
+
+### Bug Fixes
+
+* **a11y:** wrap page sections in a single main landmark ([81bf4c1](https://github.com/AlvaroRobles99/pagero/commit/81bf4c1782bda7335e80ce77d9d4fe228657b23b))
+* **a11y:** wrap page sections in a single main landmark ([a5c0ea0](https://github.com/AlvaroRobles99/pagero/commit/a5c0ea0e81df19826cf6394960fc35d07b8b17b8))
+
 ## [0.1.2](https://github.com/AlvaroRobles99/pagero/compare/v0.1.1...v0.1.2) (2026-10-27)
 
 
