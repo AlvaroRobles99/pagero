@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
+import type { RefObject } from 'react'
 import services from '../../data/services'
+import type { Service } from '../../data/services'
 import ServiceModal from '../ServiceModal/ServiceModal'
 import appStyles from '../../App.module.css'
 import styles from './Services.module.css'
 
-function useOnScreen(ref) {
+function useOnScreen(ref: RefObject<HTMLDivElement | null>) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -13,7 +15,7 @@ function useOnScreen(ref) {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry?.isIntersecting) {
           setVisible(true)
           observer.unobserve(el)
         }
@@ -28,8 +30,14 @@ function useOnScreen(ref) {
   return visible
 }
 
-function ServiceCard({ service, index, onSelect }) {
-  const ref = useRef(null)
+interface ServiceCardProps {
+  service: Service
+  index: number
+  onSelect: (service: Service) => void
+}
+
+function ServiceCard({ service, index, onSelect }: ServiceCardProps) {
+  const ref = useRef<HTMLDivElement | null>(null)
   const visible = useOnScreen(ref)
 
   return (
@@ -50,7 +58,7 @@ function ServiceCard({ service, index, onSelect }) {
 }
 
 export default function Services() {
-  const [selected, setSelected] = useState(null)
+  const [selected, setSelected] = useState<Service | null>(null)
 
   return (
     <section className={`${appStyles.section} ${styles.services}`} id="services">

@@ -5,7 +5,18 @@
  * body (blank lines become separate paragraphs). There are no prices, no
  * duration and no "includes" list on purpose — those facts are not decided yet.
  */
-const services = [
+
+export interface Service {
+  /** Stable key: React key on the cards and the modal identity. */
+  id: string
+  title: string
+  /** Short line shown on the card. */
+  description: string
+  /** Modal body text. A blank line separates paragraphs. */
+  fullDescription: string
+}
+
+const services: readonly Service[] = [
   {
     id: 'tarot-angelical',
     title: 'Tarot Angelical',

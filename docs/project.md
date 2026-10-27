@@ -37,16 +37,16 @@ pageRo/
 │   ├── generate-og.mjs         ← Genera la imagen OG (SVG en memoria → PNG con resvg)
 │   └── fonts/                  ← TTFs de marca, usados solo por el generador OG
 ├── src/
-│   ├── main.jsx                ← Entry point de React
-│   ├── App.jsx                 ← Layout principal: landmark `<main>` con todas las secciones + divisores Lotus, entre el header (Hero) y el footer
+│   ├── main.tsx                ← Entry point de React
+│   ├── App.tsx                 ← Layout principal: landmark `<main>` con todas las secciones + divisores Lotus, entre el header (Hero) y el footer
 │   ├── App.module.css          ← Estilos de layout compartidos (.section, .container, h2)
 │   ├── index.css               ← CSS reset + variables globales (colores, fuentes, prefers-reduced-motion)
 │   ├── shared.module.css       ← .btnPrimary (botón reutilizable)
 │   ├── data/
-│   │   ├── services.js          ← Array de servicios (id, title, description, fullDescription)
-│   │   ├── reviews.js           ← Array de reseñas (id, text, author)
-│   │   ├── contact.js           ← Constantes del número de WhatsApp + helper `whatsappLink()`
-│   │   └── social.js            ← Array `SOCIAL_LINKS` (id, name, url, icon) de las tres redes
+│   │   ├── services.ts          ← Array de servicios (id, title, description, fullDescription)
+│   │   ├── reviews.ts           ← Array de reseñas (id, text, author)
+│   │   ├── contact.ts           ← Constantes del número de WhatsApp + helper `whatsappLink()`
+│   │   └── social.ts            ← Array `SOCIAL_LINKS` (id, name, url, icon) de las tres redes
 │   ├── components/
 │   │   ├── Hero/                ← Header full-viewport con banner SVG + CTA
 │   │   ├── About/               ← Sección "Sobre mí" con texto de presentación
@@ -79,6 +79,8 @@ pageRo/
 │   │   └── testRo.md            ← @testRo: ejecuta tests
 │   └── skills/
 │       └── frontend-design/     ← Skill de diseño visual
+├── tsconfig.json                ← Proyecto TS de la app (navegador, `src/`, sin tests por ahora)
+├── tsconfig.node.json           ← Proyecto TS del tooling (`scripts/` + configs de Vite, Bun/Node)
 ├── opencode.json                ← Config de opencode (MCP Context7 + instrucciones)
 ├── AGENTS.md                    ← Instrucciones para agentes de opencode
 ├── release-please-config.json   ← Config de release-please (changelog + versión)
@@ -136,7 +138,7 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - `aria-hidden="true"` (decorativo)
 
 ### Services
-- Datos importados desde `src/data/services.js` (id, título, resumen corto para la card, texto completo para el modal) — sin precios, sin `includes`, sin duración, sin íconos
+- Datos importados desde `src/data/services.ts` (id, título, resumen corto para la card, texto completo para el modal) — sin precios, sin `includes`, sin duración, sin íconos
 - 7 cards clickeables (`role="button"`, `tabIndex={0}`, `onClick`, `onKeyDown Enter`)
 - Borde izquierdo decorativo por card en ciclo de 3: gold (`3n+1`), rose (`3n+2`), gold→rose gradiente (`3n+3`)
 - Texto "Ver cómo es →" al pie de cada card, visible en hover desktop
@@ -152,8 +154,8 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - `prefers-reduced-motion` respetado
 
 ### Reviews
-- Datos importados desde `src/data/reviews.js` (id, text, author)
-- **Las tres reseñas actuales son de ejemplo.** Para poner las reales alcanza con editar `src/data/reviews.js`: cada objeto lleva `text` (la cita) y `author` (el nombre que aparece después del guion), y el `id` solo tiene que ser único. El carrusel y los puntos se ajustan solos al número de reseñas, y `Reviews.test.jsx` lee del mismo archivo, así que no hay que tocar ningún test.
+- Datos importados desde `src/data/reviews.ts` (id, text, author)
+- **Las tres reseñas actuales son de ejemplo.** Para poner las reales alcanza con editar `src/data/reviews.ts`: cada objeto lleva `text` (la cita) y `author` (el nombre que aparece después del guion), y el `id` solo tiene que ser único. El carrusel y los puntos se ajustan solos al número de reseñas, y `Reviews.test.jsx` lee del mismo archivo, así que no hay que tocar ningún test.
 - Carrusel horizontal que muestra una reseña a la vez
 - Navegación con flechas ◀ ▶ y dots inferiores
 - Auto-avance cada 6s, pausa en hover/focus
@@ -166,7 +168,7 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - Sección con fondo `--color-warm-white`
 - Loto semi-transparente como marca de agua de fondo (vía `::before`)
 - Texto de invitación cálido + botón WhatsApp que abre `wa.me` vía `whatsappLink()`
-- Bloque "Ver mi contenido" al final, debajo del CTA: regla dorada + 3 botones circulares (52px, borde dorado) con ícono SVG inline que abren Instagram, Facebook y TikTok en pestaña nueva — los links viven en `src/data/social.js` (única fuente de verdad)
+- Bloque "Ver mi contenido" al final, debajo del CTA: regla dorada + 3 botones circulares (52px, borde dorado) con ícono SVG inline que abren Instagram, Facebook y TikTok en pestaña nueva — los links viven en `src/data/social.ts` (única fuente de verdad)
 
 ### Footer
 - Copyright dinámico con `new Date().getFullYear()`
@@ -236,6 +238,46 @@ class MockIntersectionObserver { observe() {} unobserve() {} disconnect() {} }
 window.IntersectionObserver = MockIntersectionObserver
 ```
 
+## TypeScript
+
+La app es TypeScript puro: `src/` es todo `.ts`/`.tsx` y `allowJs` está apagado, así que cada archivo
+que el proyecto resuelve se chequea. La única excepción son los tests, que quedan fuera hasta que se
+migren.
+
+| Archivo | Alcance |
+|---|---|
+| `tsconfig.json` | App: `src/` (excluye `src/tests` por ahora), `lib` con DOM y `types: ["vite/client"]`, sin JS |
+| `tsconfig.node.json` | Tooling: `scripts/` y los configs de Vite y Vitest, `types: ["bun"]`, sin DOM, con `allowJs` |
+
+```bash
+bun run typecheck   # los dos proyectos, vía `bun check`
+```
+
+`bun check` es el checker nativo de Bun (TypeScript 7): reporta los mismos errores que `tsc` y usa
+todos los núcleos. `typescript` vive en `devDependencies` porque es una herramienta de desarrollo de
+la app, no una dependencia que se publique.
+
+Ojo con leer el resultado: el proyecto de tooling incluye sus tres `.js` con `checkJs` apagado, así
+que aparecen en el conteo pero no se chequean. El gate real son los 14 archivos de la app: los cuatro
+`.ts` de `src/data/`, los nueve `.tsx` de componentes y `src/main.tsx`.
+
+La primera capa migrada fue `src/data/`: exporta las interfaces `Service`, `Review` y `SocialLink`,
+y `whatsappLink(message?: string): string`. Después se sumaron todos los componentes. Los que tienen
+estado llevan lo suyo: `ServiceCardProps` y `ServiceModalProps`, `RefObject<HTMLDivElement | null>`
+en `useOnScreen`, y en el focus trap del modal conviven los dos tipos de evento —
+`KeyboardEvent` del DOM para el listener de `window`, `MouseEvent` de React para el `onClick` del
+JSX. Confundirlos compila mal: son tipos distintos con el mismo nombre.
+
+`src/main.tsx` guarda el contenedor antes de montar: si `index.html` pierde el `div#root`, la app
+falla con un error explícito en vez de con un `null` de casualidad. Por eso el entry point no
+necesita un `!`.
+
+> `allowJs` + `checkJs: false` sigue siendo el estado de transición del **tooling**, no el de la app:
+> cuando esos tres `.js` pasen a `.ts`, el gate cubre también los configs y los scripts.
+
+`bun run typecheck` corre en CI como paso del job `Verify` (ver abajo), así que los tipos no se
+degradan sin que nadie se entere.
+
 ## CI
 
 `.github/workflows/ci.yml` corre en GitHub Actions con Bun `1.4.4` (la misma versión que usa el proyecto) y Node 24, e instala con `--frozen-lockfile` para que el lockfile sea la única fuente de dependencias. Bun instala las dependencias; Node ejecuta Vite y Vitest.
@@ -303,7 +345,7 @@ También hay que habilitar **Settings → Actions → General → Allow GitHub A
 
 ## Número de WhatsApp
 
-`src/data/contact.js` es la **única fuente de verdad**. `Hero.jsx`, `Contact.jsx` y `ServiceModal.jsx` arman su href con `whatsappLink()`; el número no se hardcodea en ningún otro lado.
+`src/data/contact.ts` es la **única fuente de verdad**. `Hero.tsx`, `Contact.tsx` y `ServiceModal.tsx` arman su href con `whatsappLink()`; el número no se hardcodea en ningún otro lado.
 
 El mismo número tiene tres representaciones correctas, y confundirlas rompe el CTA:
 
@@ -317,7 +359,7 @@ El mismo número tiene tres representaciones correctas, y confundirlas rompe el 
 
 `src/tests/whatsapp.test.jsx` bloquea ese formato, así que una edición mal hecha falla ruidosamente. `Hero.test.jsx` y `Contact.test.jsx` assertan contra la constante, nunca contra dígitos literales.
 
-> **Confirmado en un teléfono real:** el link abre el chat en el número correcto con la forma sin `9` (`542974216017`). Los móviles argentinos se escriben `+54 9 297 421 6017`, pero la convención de `wa.me` **omite** el `9`, que es lo que hace la constante. Si algún día falla, el ajuste es de un carácter en `src/data/contact.js`.
+> **Confirmado en un teléfono real:** el link abre el chat en el número correcto con la forma sin `9` (`542974216017`). Los móviles argentinos se escriben `+54 9 297 421 6017`, pero la convención de `wa.me` **omite** el `9`, que es lo que hace la constante. Si algún día falla, el ajuste es de un carácter en `src/data/contact.ts`.
 
 ## Known gaps
 

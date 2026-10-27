@@ -23,15 +23,13 @@ export const WHATSAPP_NUMBER = '542974216017'
 export const WHATSAPP_DISPLAY = '+54 297 421 6017'
 
 /**
- * Builds a WhatsApp deep link, optionally prefilling the message.
+ * Arma un enlace profundo de WhatsApp, con el mensaje precargado si se pasa.
  *
- * The `?text=` query is omitted entirely when no message is passed, because an
- * empty `?text=` opens a chat with a blank composer that the user has to clear.
- *
- * @param {string} [message] Prefill text for the chat composer.
- * @returns {string} A `https://wa.me/<digits>` URL.
+ * La consulta `?text=` se omite por completo cuando no hay mensaje, porque un
+ * `?text=` vacío abre el chat con un compositor en blanco que la persona
+ * tendría que borrar a mano.
  */
-export function whatsappLink(message) {
+export function whatsappLink(message?: string): string {
   const base = `https://wa.me/${WHATSAPP_NUMBER}`
   return message ? `${base}?text=${encodeURIComponent(message)}` : base
 }

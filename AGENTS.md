@@ -18,6 +18,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 - `bun run test` — run all tests (Vitest)
 - `bun run test:watch` — run tests in watch mode
 - `bun run generate:og` — regenerate `public/images/og-image.png` from `scripts/generate-og.mjs`
+- `bun run typecheck` — type-check the app and the Node tooling (`bun check`, TypeScript 7)
 
 ## Structure
 
@@ -26,8 +27,8 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `docs/project.md` | Full project documentation |
 | `index.html` | Vite entry HTML |
 | `vite.config.js` | Vite config |
-| `src/main.jsx` | React entry point |
-| `src/App.jsx` | Layout — renders all sections |
+| `src/main.tsx` | React entry point |
+| `src/App.tsx` | Layout — renders all sections |
 | `src/index.css` | Global reset + CSS variables |
 | `src/shared.module.css` | Shared styles (btn-primary) |
 | `src/components/Lotus/` | Animated lotus SVG divider |
@@ -37,7 +38,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `src/components/Reviews/` | Reviews section + module CSS |
 | `src/components/Contact/` | Contact section + module CSS |
 | `src/components/Footer/` | Footer with year + module CSS |
-| `src/data/contact.js` | WhatsApp number constants + `whatsappLink()` helper (single source of truth) |
+| `src/data/contact.ts` | WhatsApp number constants + `whatsappLink()` helper (single source of truth) |
 | `src/tests/` | Vitest suites, one per component + `seo.test.jsx` for the `index.html` meta and `whatsapp.test.jsx` for the link format |
 | `scripts/generate-og.mjs` | Builds the 1200×630 share image (inline SVG → PNG via resvg) |
 | `scripts/fonts/` | Brand TTFs, used only by the OG generator |
@@ -73,7 +74,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 
 ## WhatsApp number
 
-- `src/data/contact.js` is the **single source of truth**. `Hero.jsx`, `Contact.jsx` and `ServiceModal.jsx` all build their href with `whatsappLink()`. Never hardcode the number anywhere else.
+- `src/data/contact.ts` is the **single source of truth**. `Hero.tsx`, `Contact.tsx` and `ServiceModal.tsx` all build their href with `whatsappLink()`. Never hardcode the number anywhere else.
 - The same number has three correct forms. Using the wrong one breaks the CTA:
 
 | Destination | Form | Why |
@@ -83,6 +84,6 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | JSON-LD `telephone` | `+54 297 421 6017` | schema.org wants the international form with `+`. |
 
 - `src/tests/whatsapp.test.jsx` locks that format, so a bad edit fails loudly. `Hero.test.jsx` / `Contact.test.jsx` assert against the constant, never against literal digits.
-- **Confirmed on a real phone:** the link opens a chat on the correct number in the digits-only form. Argentine `+54 9 297 421 6017` mobiles are written with a `9`, but the `wa.me` convention drops it, which is what the constant does. If it ever regresses, the fix is a single character in `src/data/contact.js`.
+- **Confirmed on a real phone:** the link opens a chat on the correct number in the digits-only form. Argentine `+54 9 297 421 6017` mobiles are written with a `9`, but the `wa.me` convention drops it, which is what the constant does. If it ever regresses, the fix is a single character in `src/data/contact.ts`.
 - The test file is named `whatsapp.test.jsx`, not `contact.test.jsx`: the filesystem is case-insensitive on Windows, so a name differing from `Contact.test.jsx` only by case would resolve to it and overwrite that suite.
 

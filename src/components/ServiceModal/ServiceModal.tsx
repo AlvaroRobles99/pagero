@@ -1,16 +1,23 @@
 import { useEffect, useRef } from 'react'
+import type { MouseEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { whatsappLink } from '../../data/contact'
+import type { Service } from '../../data/services'
 import styles from './ServiceModal.module.css'
 
 // Elements that can receive keyboard focus inside the dialog.
 const FOCUSABLE =
   'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
 
-export default function ServiceModal({ service, onClose }) {
-  const overlayRef = useRef(null)
-  const modalRef = useRef(null)
-  const closeRef = useRef(null)
+interface ServiceModalProps {
+  service: Service
+  onClose: () => void
+}
+
+export default function ServiceModal({ service, onClose }: ServiceModalProps) {
+  const overlayRef = useRef<HTMLDivElement | null>(null)
+  const modalRef = useRef<HTMLDivElement | null>(null)
+  const closeRef = useRef<HTMLButtonElement | null>(null)
   const onCloseRef = useRef(onClose)
 
   // Keep the latest onClose without re-running the mount effect below.
@@ -23,7 +30,7 @@ export default function ServiceModal({ service, onClose }) {
     document.body.style.overflow = 'hidden'
     closeRef.current?.focus()
 
-    const handleKey = (e) => {
+    const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onCloseRef.current()
         return
@@ -31,11 +38,12 @@ export default function ServiceModal({ service, onClose }) {
 
       if (e.key !== 'Tab') return
 
-      const focusables = modalRef.current?.querySelectorAll(FOCUSABLE)
+      const focusables = modalRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE)
       if (!focusables || focusables.length === 0) return
 
       const first = focusables[0]
       const last = focusables[focusables.length - 1]
+      if (!first || !last) return
 
       // Wrap focus so Tab never escapes the modal to the page behind it.
       if (e.shiftKey && document.activeElement === first) {
@@ -64,7 +72,7 @@ export default function ServiceModal({ service, onClose }) {
     }
   }, [])
 
-  const handleOverlayClick = (e) => {
+  const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === overlayRef.current) onClose()
   }
 

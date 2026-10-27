@@ -14,8 +14,14 @@
  * URLs copied into the test.
  */
 
-/** @type {ReadonlyArray<{ id: string, name: string, url: string, icon: string }>} */
-export const SOCIAL_LINKS = [
+export interface SocialLink {
+  id: string
+  name: string
+  url: string
+  icon: string
+}
+
+export const SOCIAL_LINKS: readonly SocialLink[] = [
   {
     id: 'instagram',
     name: 'Instagram',

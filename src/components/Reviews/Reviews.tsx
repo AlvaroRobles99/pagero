@@ -5,8 +5,8 @@ import styles from './Reviews.module.css'
 
 export default function Reviews() {
   const [current, setCurrent] = useState(0)
-  const timerRef = useRef(null)
-  const carouselRef = useRef(null)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const carouselRef = useRef<HTMLDivElement | null>(null)
 
   const next = useCallback(() => {
     setCurrent((c) => (c + 1) % reviews.length)
@@ -16,7 +16,7 @@ export default function Reviews() {
     setCurrent((c) => (c - 1 + reviews.length) % reviews.length)
   }, [])
 
-  const goTo = useCallback((index) => {
+  const goTo = useCallback((index: number) => {
     setCurrent(index)
   }, [])
 
