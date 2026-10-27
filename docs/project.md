@@ -57,17 +57,17 @@ pageRo/
 │   │   ├── Contact/             ← Sección con botón de WhatsApp
 │   │   └── Footer/              ← Footer con copyright y año dinámico
 │   └── tests/
-│       ├── setup.js             ← Setup global (@testing-library/jest-dom + mock IntersectionObserver)
-│       ├── seo.test.jsx         ← Contrato de meta de index.html (lee el archivo del disco)
-│       ├── App.test.jsx
-│       ├── Hero.test.jsx
-│       ├── About.test.jsx
-│       ├── Services.test.jsx
-│       ├── Reviews.test.jsx
-│       ├── Contact.test.jsx
-│       ├── Footer.test.jsx
-│       ├── Lotus.test.jsx
-│       └── whatsapp.test.jsx    ← Guard del formato del link de WhatsApp
+│       ├── setup.ts             ← Setup global (@testing-library/jest-dom + mock IntersectionObserver)
+│       ├── seo.test.tsx         ← Contrato de meta de index.html (lee el archivo del disco)
+│       ├── App.test.tsx
+│       ├── Hero.test.tsx
+│       ├── About.test.tsx
+│       ├── Services.test.tsx
+│       ├── Reviews.test.tsx
+│       ├── Contact.test.tsx
+│       ├── Footer.test.tsx
+│       ├── Lotus.test.tsx
+│       └── whatsapp.test.tsx    ← Guard del formato del link de WhatsApp
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml               ← GitHub Actions: tests y build en cada PR
@@ -79,7 +79,8 @@ pageRo/
 │   │   └── testRo.md            ← @testRo: ejecuta tests
 │   └── skills/
 │       └── frontend-design/     ← Skill de diseño visual
-├── tsconfig.json                ← Proyecto TS de la app (navegador, `src/`, sin tests por ahora)
+├── tsconfig.json                ← Proyecto TS de la app (navegador, `src/` sin los tests)
+├── tsconfig.test.json           ← Proyecto TS de los tests (`src/tests`, DOM + Node)
 ├── tsconfig.node.json           ← Proyecto TS del tooling (`scripts/` + configs de Vite, Bun/Node)
 ├── opencode.json                ← Config de opencode (MCP Context7 + instrucciones)
 ├── AGENTS.md                    ← Instrucciones para agentes de opencode
@@ -155,7 +156,7 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 
 ### Reviews
 - Datos importados desde `src/data/reviews.ts` (id, text, author)
-- **Las tres reseñas actuales son de ejemplo.** Para poner las reales alcanza con editar `src/data/reviews.ts`: cada objeto lleva `text` (la cita) y `author` (el nombre que aparece después del guion), y el `id` solo tiene que ser único. El carrusel y los puntos se ajustan solos al número de reseñas, y `Reviews.test.jsx` lee del mismo archivo, así que no hay que tocar ningún test.
+- **Las tres reseñas actuales son de ejemplo.** Para poner las reales alcanza con editar `src/data/reviews.ts`: cada objeto lleva `text` (la cita) y `author` (el nombre que aparece después del guion), y el `id` solo tiene que ser único. El carrusel y los puntos se ajustan solos al número de reseñas, y `Reviews.test.tsx` lee del mismo archivo, así que no hay que tocar ningún test.
 - Carrusel horizontal que muestra una reseña a la vez
 - Navegación con flechas ◀ ▶ y dots inferiores
 - Auto-avance cada 6s, pausa en hover/focus
@@ -223,34 +224,50 @@ bun run test:watch  # Modo watch
 ```
 
 ### Agregar un test nuevo
-1. Crear `src/tests/MiComponente.test.jsx`
+1. Crear `src/tests/MiComponente.test.tsx`
 2. Usar `render`, `screen`, `describe`, `it`, `expect` (globales de Vitest + testing-library)
-3. Si el componente usa `IntersectionObserver`, ya está mockeado en `setup.js`
-4. Vitest escanea `src/tests/**/*.test.jsx` automáticamente
+3. Si el componente usa `IntersectionObserver`, ya está mockeado en `setup.ts`
+4. Vitest escanea `src/tests/**/*.test.tsx` automáticamente
 
 ### Test de metadata
-`src/tests/seo.test.jsx` no renderiza nada: lee `index.html` con `node:fs`, lo parsea con `DOMParser` y verifica el contrato de la sección "SEO + Social". Si se borra o cambia una etiqueta, la suite falla. Resuelve la raíz del proyecto con `process.cwd()`, que Vitest configura como cwd.
+`src/tests/seo.test.tsx` no renderiza nada: lee `index.html` con `node:fs`, lo parsea con `DOMParser` y verifica el contrato de la sección "SEO + Social". Si se borra o cambia una etiqueta, la suite falla. Resuelve la raíz del proyecto con `process.cwd()`, que Vitest configura como cwd.
 
 ### Mock disponible
-```js
-// src/tests/setup.js — mock global
-class MockIntersectionObserver { observe() {} unobserve() {} disconnect() {} }
-window.IntersectionObserver = MockIntersectionObserver
+```ts
+// src/tests/setup.ts — mock global
+class MockIntersectionObserver {
+  callback: IntersectionObserverCallback
+  constructor(callback: IntersectionObserverCallback) {
+    this.callback = callback
+  }
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+Object.defineProperty(window, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: MockIntersectionObserver,
+})
 ```
+
+`defineProperty` en lugar de una asignación directa es lo que evita un cast: la clase no implementa
+`IntersectionObserver` entera, y `window.IntersectionObserver = ...` no compilaría sin `as`.
 
 ## TypeScript
 
-La app es TypeScript puro: `src/` es todo `.ts`/`.tsx` y `allowJs` está apagado, así que cada archivo
-que el proyecto resuelve se chequea. La única excepción son los tests, que quedan fuera hasta que se
-migren.
+El repo es TypeScript puro: cada archivo que resuelve alguno de los tres proyectos se chequea. Son
+tres, y cada uno tiene su mundo de tipos:
 
 | Archivo | Alcance |
 |---|---|
-| `tsconfig.json` | App: `src/` (excluye `src/tests` por ahora), `lib` con DOM y `types: ["vite/client"]`, sin JS |
+| `tsconfig.json` | App: `src/` menos `src/tests`, `lib` con DOM y `types: ["vite/client"]`. Sin Node, así que `process` o `node:fs` no pueden entrar al código del navegador |
+| `tsconfig.test.json` | Tests: `src/tests`, con `types: ["vite/client", "vitest/globals", "node"]`. Es el único lugar donde DOM y Node conviven, porque el test de SEO lee `index.html` del disco |
 | `tsconfig.node.json` | Tooling: `scripts/` y los configs de Vite y Vitest, `types: ["bun"]`, sin DOM, con `allowJs` |
 
 ```bash
-bun run typecheck   # los dos proyectos, vía `bun check`
+bun run typecheck   # los tres proyectos, vía `bun check`
 ```
 
 `bun check` es el checker nativo de Bun (TypeScript 7): reporta los mismos errores que `tsc` y usa
@@ -258,8 +275,9 @@ todos los núcleos. `typescript` vive en `devDependencies` porque es una herrami
 la app, no una dependencia que se publique.
 
 Ojo con leer el resultado: el proyecto de tooling incluye sus tres `.js` con `checkJs` apagado, así
-que aparecen en el conteo pero no se chequean. El gate real son los 14 archivos de la app: los cuatro
-`.ts` de `src/data/`, los nueve `.tsx` de componentes y `src/main.tsx`.
+que aparecen en el conteo pero no se chequean. Los otros dos sí son gate real: la app (14 archivos:
+los cuatro `.ts` de `src/data/`, los nueve `.tsx` de componentes y `src/main.tsx`) y los tests (25
+archivos: los 12 de `src/tests` más los 13 de la app que importan).
 
 La primera capa migrada fue `src/data/`: exporta las interfaces `Service`, `Review` y `SocialLink`,
 y `whatsappLink(message?: string): string`. Después se sumaron todos los componentes. Los que tienen
@@ -272,8 +290,9 @@ JSX. Confundirlos compila mal: son tipos distintos con el mismo nombre.
 falla con un error explícito en vez de con un `null` de casualidad. Por eso el entry point no
 necesita un `!`.
 
-> `allowJs` + `checkJs: false` sigue siendo el estado de transición del **tooling**, no el de la app:
-> cuando esos tres `.js` pasen a `.ts`, el gate cubre también los configs y los scripts.
+> `allowJs` + `checkJs: false` sigue siendo el estado de transición del **tooling**, nada más: la app
+> y los tests ya son TypeScript puro. Cuando esos tres `.js` pasen a `.ts`, el gate cubre también los
+> configs y los scripts.
 
 `bun run typecheck` corre en CI como paso del job `Verify` (ver abajo), así que los tipos no se
 degradan sin que nadie se entere.
@@ -357,7 +376,7 @@ El mismo número tiene tres representaciones correctas, y confundirlas rompe el 
 
 `whatsappLink(message)` devuelve `https://wa.me/<número>` o, si se le pasa un mensaje, `https://wa.me/<número>?text=<codificado>`. Cuando no hay mensaje, omite el `?text=` por completo: un `?text=` vacío abre el chat con un compositor en blanco que la clienta tiene que borrar a mano.
 
-`src/tests/whatsapp.test.jsx` bloquea ese formato, así que una edición mal hecha falla ruidosamente. `Hero.test.jsx` y `Contact.test.jsx` assertan contra la constante, nunca contra dígitos literales.
+`src/tests/whatsapp.test.tsx` bloquea ese formato, así que una edición mal hecha falla ruidosamente. `Hero.test.tsx` y `Contact.test.tsx` assertan contra la constante, nunca contra dígitos literales.
 
 > **Confirmado en un teléfono real:** el link abre el chat en el número correcto con la forma sin `9` (`542974216017`). Los móviles argentinos se escriben `+54 9 297 421 6017`, pero la convención de `wa.me` **omite** el `9`, que es lo que hace la constante. Si algún día falla, el ajuste es de un carácter en `src/data/contact.ts`.
 
