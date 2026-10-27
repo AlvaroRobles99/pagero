@@ -27,8 +27,8 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `docs/project.md` | Full project documentation |
 | `index.html` | Vite entry HTML |
 | `vite.config.js` | Vite config |
-| `src/main.jsx` | React entry point |
-| `src/App.jsx` | Layout — renders all sections |
+| `src/main.tsx` | React entry point |
+| `src/App.tsx` | Layout — renders all sections |
 | `src/index.css` | Global reset + CSS variables |
 | `src/shared.module.css` | Shared styles (btn-primary) |
 | `src/components/Lotus/` | Animated lotus SVG divider |
@@ -74,7 +74,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 
 ## WhatsApp number
 
-- `src/data/contact.ts` is the **single source of truth**. `Hero.jsx`, `Contact.jsx` and `ServiceModal.jsx` all build their href with `whatsappLink()`. Never hardcode the number anywhere else.
+- `src/data/contact.ts` is the **single source of truth**. `Hero.tsx`, `Contact.tsx` and `ServiceModal.tsx` all build their href with `whatsappLink()`. Never hardcode the number anywhere else.
 - The same number has three correct forms. Using the wrong one breaks the CTA:
 
 | Destination | Form | Why |

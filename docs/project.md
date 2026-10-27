@@ -37,8 +37,8 @@ pageRo/
 │   ├── generate-og.mjs         ← Genera la imagen OG (SVG en memoria → PNG con resvg)
 │   └── fonts/                  ← TTFs de marca, usados solo por el generador OG
 ├── src/
-│   ├── main.jsx                ← Entry point de React
-│   ├── App.jsx                 ← Layout principal: landmark `<main>` con todas las secciones + divisores Lotus, entre el header (Hero) y el footer
+│   ├── main.tsx                ← Entry point de React
+│   ├── App.tsx                 ← Layout principal: landmark `<main>` con todas las secciones + divisores Lotus, entre el header (Hero) y el footer
 │   ├── App.module.css          ← Estilos de layout compartidos (.section, .container, h2)
 │   ├── index.css               ← CSS reset + variables globales (colores, fuentes, prefers-reduced-motion)
 │   ├── shared.module.css       ← .btnPrimary (botón reutilizable)
@@ -240,13 +240,14 @@ window.IntersectionObserver = MockIntersectionObserver
 
 ## TypeScript
 
-La migración es incremental. `allowJs` sigue activo y `checkJs` está en `false`, así que los `.jsx`
-que todavía no se migraron se resuelven pero no se chequean. Los `.ts` sí se verifican siempre.
+La app es TypeScript puro: `src/` es todo `.ts`/`.tsx` y `allowJs` está apagado, así que cada archivo
+que el proyecto resuelve se chequea. La única excepción son los tests, que quedan fuera hasta que se
+migren.
 
 | Archivo | Alcance |
 |---|---|
-| `tsconfig.json` | App: `src/` (excluye `src/tests` por ahora), `lib` con DOM y `types: ["vite/client"]` |
-| `tsconfig.node.json` | Tooling: `scripts/`, `vite.config.js` y `vitest.config.js`, `types: ["bun"]`, sin DOM |
+| `tsconfig.json` | App: `src/` (excluye `src/tests` por ahora), `lib` con DOM y `types: ["vite/client"]`, sin JS |
+| `tsconfig.node.json` | Tooling: `scripts/` y los configs de Vite y Vitest, `types: ["bun"]`, sin DOM, con `allowJs` |
 
 ```bash
 bun run typecheck   # los dos proyectos, vía `bun check`
@@ -256,9 +257,9 @@ bun run typecheck   # los dos proyectos, vía `bun check`
 todos los núcleos. `typescript` vive en `devDependencies` porque es una herramienta de desarrollo de
 la app, no una dependencia que se publique.
 
-Ojo con leer el resultado: con `checkJs` apagado, el proyecto de tooling incluye sus tres `.js` pero
-no los chequea, así que hoy el gate real son los cuatro `.ts` de `src/data/` y los nueve `.tsx` de
-`src/`: 13 de los 14 archivos del proyecto.
+Ojo con leer el resultado: el proyecto de tooling incluye sus tres `.js` con `checkJs` apagado, así
+que aparecen en el conteo pero no se chequean. El gate real son los 14 archivos de la app: los cuatro
+`.ts` de `src/data/`, los nueve `.tsx` de componentes y `src/main.tsx`.
 
 La primera capa migrada fue `src/data/`: exporta las interfaces `Service`, `Review` y `SocialLink`,
 y `whatsappLink(message?: string): string`. Después se sumaron todos los componentes. Los que tienen
@@ -267,15 +268,15 @@ en `useOnScreen`, y en el focus trap del modal conviven los dos tipos de evento 
 `KeyboardEvent` del DOM para el listener de `window`, `MouseEvent` de React para el `onClick` del
 JSX. Confundirlos compila mal: son tipos distintos con el mismo nombre.
 
-`src/main.jsx` es el único archivo de la app que sigue en `.jsx`; cuando se migre, `allowJs` se apaga
-para el proyecto de la app. Los tests quedan fuera hasta que se migren, para no arrastrar
-`@types/node` y `vitest/globals` a código que corre en el navegador.
+`src/main.tsx` guarda el contenedor antes de montar: si `index.html` pierde el `div#root`, la app
+falla con un error explícito en vez de con un `null` de casualidad. Por eso el entry point no
+necesita un `!`.
 
-> `allowJs` + `checkJs: false` es un estado de transición, no el destino: cuando todos los `.jsx`
-> sean `.tsx`, se apaga `allowJs` y el gate cubre el repo completo.
+> `allowJs` + `checkJs: false` sigue siendo el estado de transición del **tooling**, no el de la app:
+> cuando esos tres `.js` pasen a `.ts`, el gate cubre también los configs y los scripts.
 
-Hoy `bun run typecheck` es manual: el CI todavía corre solo test y build, así que falta sumarlo como
-paso requerido. Sin ese paso, los tipos se degradan sin que nadie se entere.
+`bun run typecheck` corre en CI como paso del job `Verify` (ver abajo), así que los tipos no se
+degradan sin que nadie se entere.
 
 ## CI
 
@@ -344,7 +345,7 @@ También hay que habilitar **Settings → Actions → General → Allow GitHub A
 
 ## Número de WhatsApp
 
-`src/data/contact.ts` es la **única fuente de verdad**. `Hero.jsx`, `Contact.jsx` y `ServiceModal.jsx` arman su href con `whatsappLink()`; el número no se hardcodea en ningún otro lado.
+`src/data/contact.ts` es la **única fuente de verdad**. `Hero.tsx`, `Contact.tsx` y `ServiceModal.tsx` arman su href con `whatsappLink()`; el número no se hardcodea en ningún otro lado.
 
 El mismo número tiene tres representaciones correctas, y confundirlas rompe el CTA:
 
