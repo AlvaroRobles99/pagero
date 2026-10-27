@@ -38,7 +38,7 @@ pageRo/
 │   └── fonts/                  ← TTFs de marca, usados solo por el generador OG
 ├── src/
 │   ├── main.jsx                ← Entry point de React
-│   ├── App.jsx                 ← Layout principal (renderiza todas las secciones + divisores Lotus)
+│   ├── App.jsx                 ← Layout principal: landmark `<main>` con todas las secciones + divisores Lotus, entre el header (Hero) y el footer
 │   ├── App.module.css          ← Estilos de layout compartidos (.section, .container, h2)
 │   ├── index.css               ← CSS reset + variables globales (colores, fuentes, prefers-reduced-motion)
 │   ├── shared.module.css       ← .btnPrimary (botón reutilizable)

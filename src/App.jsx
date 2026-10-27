@@ -11,13 +11,15 @@ export default function App() {
   return (
     <>
       <Hero />
-      <About />
-      <Lotus size={36} className={appStyles.dividerLotus} />
-      <Services />
-      <Lotus size={36} className={appStyles.dividerLotus} />
-      <Reviews />
-      <Lotus size={36} className={appStyles.dividerLotus} />
-      <Contact />
+      <main>
+        <About />
+        <Lotus size={36} className={appStyles.dividerLotus} />
+        <Services />
+        <Lotus size={36} className={appStyles.dividerLotus} />
+        <Reviews />
+        <Lotus size={36} className={appStyles.dividerLotus} />
+        <Contact />
+      </main>
       <Footer />
     </>
   )
