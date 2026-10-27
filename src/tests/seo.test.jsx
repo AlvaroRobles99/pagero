@@ -248,7 +248,7 @@ describe('index.html — JSON-LD structured data', () => {
     expect(organization.logo, 'Organization node needs a logo').toBe('/images/logo.png')
   })
 
-  it('keeps sameAs in sync with src/data/social.js, in both directions', () => {
+  it('keeps sameAs in sync with src/data/social.ts, in both directions', () => {
     expect(jsonLdRaw, 'script[type="application/ld+json"] not found').toBeTruthy()
     const nodes = JSON.parse(jsonLdRaw)['@graph']
     const declared = nodes.flatMap((node) => node.sameAs ?? [])
