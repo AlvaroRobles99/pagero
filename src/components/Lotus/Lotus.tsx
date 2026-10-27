@@ -1,6 +1,13 @@
 import styles from './Lotus.module.css'
 
-export default function Lotus({ size = 48, className = '' }) {
+export interface LotusProps {
+  /** Pixel size of the square SVG. Defaults to 48. */
+  size?: number
+  /** Extra class appended to the wrapper, used by the section dividers. */
+  className?: string
+}
+
+export default function Lotus({ size = 48, className = '' }: LotusProps) {
   return (
     <div className={`${styles.wrapper} ${className}`} aria-hidden="true">
       <svg
