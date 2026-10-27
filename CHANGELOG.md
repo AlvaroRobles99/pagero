@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.2](https://github.com/AlvaroRobles99/pagero/compare/v0.1.1...v0.1.2) (2026-10-27)
+
+
+### Bug Fixes
+
+* **a11y:** use an AA-safe accent for text on light backgrounds ([78f5bec](https://github.com/AlvaroRobles99/pagero/commit/78f5bec019384eec06697fac768c8b10b9a9300b))
+* **a11y:** use an AA-safe accent for text on light backgrounds ([51e4b77](https://github.com/AlvaroRobles99/pagero/commit/51e4b77a49114ab92afc44a8b44f75f5da4c675b))
+
 ## [0.1.1](https://github.com/AlvaroRobles99/pagero/compare/v0.1.0...v0.1.1) (2026-10-27)
 
 
