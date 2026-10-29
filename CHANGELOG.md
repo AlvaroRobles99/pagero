@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.0](https://github.com/AlvaroRobles99/pagero/compare/v0.1.3...v0.2.0) (2026-10-29)
+
+
+### Features
+
+* **hero:** float the brand logo in a slow ambient loop ([56626f4](https://github.com/AlvaroRobles99/pagero/commit/56626f47f68f1e8c8238f1405bf40a9881d96ed8))
+* **hero:** float the brand logo in a slow ambient loop ([6c4393d](https://github.com/AlvaroRobles99/pagero/commit/6c4393d68c9be235ed05d1f474362fcc2c35a1a4))
+
 ## [0.1.3](https://github.com/AlvaroRobles99/pagero/compare/v0.1.2...v0.1.3) (2026-10-27)
 
 
