@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import reviews from '../../data/reviews'
+import reviews, { TESTIMONIALS_HIGHLIGHT } from '../../data/reviews'
 import appStyles from '../../App.module.css'
 import styles from './Reviews.module.css'
 
@@ -14,10 +14,6 @@ export default function Reviews() {
 
   const prev = useCallback(() => {
     setCurrent((c) => (c - 1 + reviews.length) % reviews.length)
-  }, [])
-
-  const goTo = useCallback((index: number) => {
-    setCurrent(index)
   }, [])
 
   const stopTimer = useCallback(() => {
@@ -42,7 +38,7 @@ export default function Reviews() {
   return (
     <section className={`${appStyles.section} ${styles.reviews}`} id="reviews">
       <div className={appStyles.container}>
-        <h2>Reseñas</h2>
+        <h2>Testimonios</h2>
 
         <div
           className={styles.carousel}
@@ -53,12 +49,12 @@ export default function Reviews() {
           onBlur={startTimer}
           role="region"
           aria-roledescription="carousel"
-          aria-label="Reseñas de clientas"
+          aria-label="Testimonios de clientas"
         >
           <button
             className={styles.arrow}
             onClick={prev}
-            aria-label="Reseña anterior"
+            aria-label="Testimonio anterior"
             type="button"
           >
             ◀
@@ -75,13 +71,14 @@ export default function Reviews() {
                   className={styles.slide}
                   role="group"
                   aria-roledescription="slide"
-                  aria-label={`Reseña ${i + 1} de ${reviews.length}`}
+                  aria-label={`Testimonio ${i + 1} de ${reviews.length}`}
                   aria-hidden={i !== current}
                 >
                   <div className={styles.card}>
-                    <div className={styles.stars}>{'\u2605\u2605\u2605\u2605\u2605'}</div>
                     <p>&ldquo;{review.text}&rdquo;</p>
-                    <span className={styles.author}>&mdash; {review.author}</span>
+                    <div className={styles.heart} aria-hidden="true">
+                      {'\u2665'}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -91,26 +88,27 @@ export default function Reviews() {
           <button
             className={`${styles.arrow} ${styles.arrowNext}`}
             onClick={next}
-            aria-label="Reseña siguiente"
+            aria-label="Testimonio siguiente"
             type="button"
           >
             ▶
           </button>
         </div>
 
-        <div className={styles.dots} role="tablist" aria-label="Navegación de reseñas">
-          {reviews.map((review, i) => (
-            <button
-              key={review.id}
-              className={`${styles.dot} ${i === current ? styles.dotActive : ''}`}
-              onClick={() => goTo(i)}
-              role="tab"
-              aria-selected={i === current}
-              aria-label={`Ir a reseña ${i + 1}`}
-              type="button"
-            />
-          ))}
+        {/* Las etiquetas de cada slide ya anuncian la posición: el número
+            visible queda fuera del árbol de accesibilidad para no repetirla. */}
+        <div className={styles.counter} aria-hidden="true">
+          {`${current + 1} / ${reviews.length}`}
         </div>
+
+        <a
+          className={styles.moreLink}
+          href={TESTIMONIALS_HIGHLIGHT}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Ver más testimonios en Instagram
+        </a>
       </div>
     </section>
   )

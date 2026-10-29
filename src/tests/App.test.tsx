@@ -9,7 +9,7 @@ describe('App', () => {
       screen.getByRole('heading', { level: 2, name: /Un espacio para volver a vos/i })
     ).toBeInTheDocument()
     expect(screen.getByText('Servicios')).toBeInTheDocument()
-    expect(screen.getByText('Reseñas')).toBeInTheDocument()
+    expect(screen.getByText('Testimonios')).toBeInTheDocument()
     expect(screen.getByText('Contacto')).toBeInTheDocument()
   })
 
