@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.0](https://github.com/AlvaroRobles99/pagero/compare/v0.2.0...v0.3.0) (2026-10-29)
+
+
+### Features
+
+* **reviews:** publish the real testimonials with a larger card ([bf29144](https://github.com/AlvaroRobles99/pagero/commit/bf29144b6f50194ddc969d6e305bc341b3b28a17))
+* **reviews:** publish the real testimonials with a larger card ([2f5ed1c](https://github.com/AlvaroRobles99/pagero/commit/2f5ed1c2845a29f5fb616400a0bc334108ea5388))
+
 ## [0.2.0](https://github.com/AlvaroRobles99/pagero/compare/v0.1.3...v0.2.0) (2026-10-29)
 
 
