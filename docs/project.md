@@ -44,7 +44,7 @@ pageRo/
 │   ├── shared.module.css       ← .btnPrimary (botón reutilizable)
 │   ├── data/
 │   │   ├── services.ts          ← Array de servicios (id, title, description, fullDescription)
-│   │   ├── reviews.ts           ← Array de reseñas (id, text, author)
+│   │   ├── reviews.ts           ← Array de testimonios reales (id, text) + `TESTIMONIALS_HIGHLIGHT`
 │   │   ├── contact.ts           ← Constantes del número de WhatsApp + helper `whatsappLink()`
 │   │   └── social.ts            ← Array `SOCIAL_LINKS` (id, name, url, icon) de las tres redes
 │   ├── components/
@@ -156,13 +156,16 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - `prefers-reduced-motion` respetado
 
 ### Reviews
-- Datos importados desde `src/data/reviews.ts` (id, text, author)
-- **Las tres reseñas actuales son de ejemplo.** Para poner las reales alcanza con editar `src/data/reviews.ts`: cada objeto lleva `text` (la cita) y `author` (el nombre que aparece después del guion), y el `id` solo tiene que ser único. El carrusel y los puntos se ajustan solos al número de reseñas, y `Reviews.test.tsx` lee del mismo archivo, así que no hay que tocar ningún test.
-- Carrusel horizontal que muestra una reseña a la vez
-- Navegación con flechas ◀ ▶ y dots inferiores
+- Título de la sección: "Testimonios"
+- Datos importados desde `src/data/reviews.ts` (id, text)
+- **Los doce testimonios son reales:** mensajes que Rocío recibió por WhatsApp, publicados con una edición mínima (tipeos, puntuación, sin emojis ni "jajaja" repetidos) y sin nombres, porque las capturas originales tampoco los tenían. Para agregar o quitar uno alcanza con editar `src/data/reviews.ts`: cada objeto lleva `text` (la cita publicada) y un `id` único; el carrusel, el contador y `Reviews.test.tsx` se ajustan solos.
+- Cada card cierra con un corazón rosa debajo de la cita (antes eran cinco estrellas doradas arriba)
+- Carrusel horizontal que muestra un testimonio a la vez, con card ancha (lectura cómoda) y `min-height` para que la sección no cambie de alto entre una cita corta y una larga
+- Navegación con flechas ◀ ▶ y un contador `N / total` debajo (reemplazó a los puntos: doce dots no entraban en mobile)
 - Auto-avance cada 6s, pausa en hover/focus
 - Track con `transform: translateX` animado (cubic-bezier 0.4, 0, 0.2, 1)
-- `aria-roledescription="carousel"`, `aria-hidden` en slides no visibles, `role="tab"` en dots
+- `aria-roledescription="carousel"`, `aria-hidden` en slides no visibles; el contador va con `aria-hidden` porque la etiqueta de cada slide ya anuncia la posición
+- Link al pie "Ver más testimonios en Instagram", con el href de `TESTIMONIALS_HIGHLIGHT` (única fuente de verdad), `target="_blank"` y `rel="noopener noreferrer"`
 - `prefers-reduced-motion` respetado
 - Flechas ocultas en mobile (≤600px)
 

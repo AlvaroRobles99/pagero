@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import Reviews from '../components/Reviews/Reviews'
-import reviews from '../data/reviews'
+import reviews, { TESTIMONIALS_HIGHLIGHT } from '../data/reviews'
 
 function getActiveSlide(container: HTMLElement) {
   return container.querySelector('[aria-hidden="false"]')
@@ -16,29 +16,34 @@ function reviewAt(index: number) {
 describe('Reviews', () => {
   it('renderiza el título', () => {
     render(<Reviews />)
-    expect(screen.getByText('Reseñas')).toBeInTheDocument()
+    expect(screen.getByText('Testimonios')).toBeInTheDocument()
+  })
+
+  it('marca cada testimonio con un corazón y ya no con estrellas', () => {
+    const { container } = render(<Reviews />)
+    const slide = getActiveSlide(container)
+    expect(slide).toHaveTextContent('\u2665')
+    expect(slide).not.toHaveTextContent('\u2605')
   })
 
   it('muestra la primera reseña por defecto', () => {
     const { container } = render(<Reviews />)
     const slide = getActiveSlide(container)
     expect(slide).toHaveTextContent(reviewAt(0).text)
-    expect(slide).toHaveTextContent(reviewAt(0).author)
   })
 
   it('navega a la siguiente reseña con el botón ▶', () => {
     const { container } = render(<Reviews />)
-    const nextBtn = screen.getByLabelText('Reseña siguiente')
+    const nextBtn = screen.getByLabelText('Testimonio siguiente')
     fireEvent.click(nextBtn)
     const slide = getActiveSlide(container)
     expect(slide).toHaveTextContent(reviewAt(1 % reviews.length).text)
-    expect(slide).toHaveTextContent(reviewAt(1 % reviews.length).author)
   })
 
   it('navega a la reseña anterior con el botón ◀', () => {
     const { container } = render(<Reviews />)
-    const nextBtn = screen.getByLabelText('Reseña siguiente')
-    const prevBtn = screen.getByLabelText('Reseña anterior')
+    const nextBtn = screen.getByLabelText('Testimonio siguiente')
+    const prevBtn = screen.getByLabelText('Testimonio anterior')
 
     fireEvent.click(nextBtn)
     fireEvent.click(nextBtn)
@@ -50,22 +55,24 @@ describe('Reviews', () => {
     expect(slide).toHaveTextContent(reviewAt(1 % reviews.length).text)
   })
 
-  it('cambia de reseña al hacer clic en un dot', () => {
-    const { container } = render(<Reviews />)
-    const dots = screen.getAllByRole('tab')
+  it('muestra el contador de posición y lo actualiza al avanzar', () => {
+    render(<Reviews />)
 
-    const dot = dots[2 % reviews.length]
-    if (!dot) throw new Error(`Missing dot at index ${2 % reviews.length}`)
-    fireEvent.click(dot)
-    const slide = getActiveSlide(container)
-    expect(slide).toHaveTextContent(reviewAt(2 % reviews.length).text)
-    expect(slide).toHaveTextContent(reviewAt(2 % reviews.length).author)
+    expect(screen.getByText(`1 / ${reviews.length}`)).toBeInTheDocument()
+
+    fireEvent.click(screen.getByLabelText('Testimonio siguiente'))
+
+    expect(screen.getByText(`2 / ${reviews.length}`)).toBeInTheDocument()
   })
 
-  it('renderiza un dot por cada reseña', () => {
+  it('enlaza a la historia destacada de Instagram en una pestaña nueva', () => {
     render(<Reviews />)
-    const dots = screen.getAllByRole('tab')
-    expect(dots).toHaveLength(reviews.length)
+
+    const link = screen.getByRole('link', { name: /ver más testimonios en instagram/i })
+    expect(link).toHaveAttribute('href', TESTIMONIALS_HIGHLIGHT)
+    expect(link).toHaveAttribute('target', '_blank')
+    expect(link.getAttribute('rel')).toContain('noopener')
+    expect(link.getAttribute('rel')).toContain('noreferrer')
   })
 
   it('no duplica el auto-avance cuando se reanuda dos veces', () => {
@@ -73,7 +80,7 @@ describe('Reviews', () => {
 
     try {
       const { container } = render(<Reviews />)
-      const carousel = screen.getByRole('region', { name: 'Reseñas de clientas' })
+      const carousel = screen.getByRole('region', { name: 'Testimonios de clientas' })
 
       // El puntero sale del carrusel mientras un elemento interno pierde el foco:
       // los dos handlers de reanudación corren seguidos y antes dejaban dos
