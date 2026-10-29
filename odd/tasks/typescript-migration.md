@@ -1,6 +1,6 @@
 # TypeScript migration — the app is TypeScript
 
-Status: phase 4 done, merged in #18 · phase 5 (F3) implemented, pending PR · Branch: `refactor/typescript-tests` · Started: 2026-10-27
+Status: migration complete · PR #19 green · phase 6 (tooling) on `refactor/typescript-tooling`, stacked on #19 · Started: 2026-10-27
 
 ## Objective
 
@@ -33,11 +33,12 @@ WhatsApp number is the site's only conversion path.
 - **F2 — components.** Every component, `App` and `main` → `.tsx`; `allowJs` off for the app project.
 - **F4 — CI gate.** `bun run typecheck` inside the already-required `Verify` job.
 - **F3 — tests.** New `tsconfig.test.json` (DOM + Node); `src/tests/**` → `.tsx`; `setup.js` → `setup.ts`.
+- **F5 — tooling.** `vite.config`, `vitest.config` and `scripts/generate-og` → `.ts`; `allowJs` off everywhere.
 
 ## Not done (deliberate)
 
-- F5: `scripts/generate-og` to TS, typed CSS Modules.
-- The three `.js` of the tooling project are still included but not checked (`checkJs: false`).
+- Typed CSS Modules: `*.module.css` stays untyped. It was the second half of the original F5 and it
+  buys editor autocompletion only, at the cost of a declaration per module.
 
 ## Constraints
 
@@ -207,6 +208,38 @@ One deviation worth naming: `seo.test.tsx` validates the JSON-LD script at modul
 `<script type="application/ld+json">` now fails during collection instead of producing about eighteen
 assertion failures. Same red suite, earlier and clearer message.
 
+### Phase 6 — tooling to TypeScript (done)
+
+| ID | Task | Route | State |
+|---|---|---|---|
+| T1 | `vite.config.js` → `.ts`; `vitest.config.js` → `.ts`, with `defineConfig` imported from `vitest/config` — the only signature that knows the `test` key | delegated | done |
+| T2 | `scripts/generate-og.mjs` → `.ts`; the `generate:og` script and the project `include` updated | delegated | done |
+| T3 | `tsconfig.node.json` drops `allowJs` and `checkJs`, so the third project becomes a gate instead of a file list | delegated | done |
+
+This is the end of the thread: `allowJs` disappears from the repo and `bun run typecheck` stops
+reporting files it never checked.
+
+The OG generator is the one place with a byte-level oracle. `bun run generate:og` must leave
+`public/images/og-image.png` untouched, because the output is deterministic by design — if the
+migrated script changes a single byte, the port is wrong.
+
+What the port actually cost: `vite.config.ts` is byte-identical to the old `.js` (same blob),
+`vitest.config.ts` changes one import specifier, and `generate-og.ts` gains four return annotations.
+`types: ["bun"]` stayed as it was, because `bun-types` already pulls `@types/node` into the program,
+so `process`, `node:fs` and `Buffer` resolve without adding the `node` types.
+
+Evidence, re-run by the parent:
+
+| Check | Result |
+|---|---|
+| `bun run typecheck` | 14 app + 3 node + 25 tests, exit 0 |
+| `bun run test` | 11 files / 103 tests, exit 0 |
+| `bun run build` | 38 modules, exit 0 — so `vite.config.ts` is the config being loaded |
+| `bun run generate:og` | exit 0, and `git status public/images/og-image.png` empty: same 301,010 bytes |
+| `bun check -p tsconfig.node.json --listFiles` | 3 files, no `.js` / `.mjs` |
+| Negative probe | `const __probe: number = 'not a number'` in `generate-og.ts` → `TS2322`, `checked 3 files`, exit 1; reverted, green again |
+| Leftover JavaScript | no `.js`, `.jsx`, `.mjs` or `.cjs` outside `node_modules/` and `dist/` |
+
 ## Delivery forecast
 
 At the phase 4 code commit (`851d664`) the branch measures **471 authored lines** (405 insertions +
@@ -269,7 +302,10 @@ Findings from the independent verifier, resolved before the docs commit:
 | F3 config | `084e826 build(typescript): add a project for the test suite` |
 | F3 files | `a9f387e test(typescript): migrate the test suite to TypeScript` |
 | Docs (phase 5) | `7b039bd docs: document the test project and the three-project gate` |
-| Task doc (phase 5) | this commit |
+| Task doc (phase 5) | `d60306e docs(odd): record the phase 5 evidence and close the test migration` |
+| T1 + T2 + T3 | `052e3f6 build(tooling): migrate the tooling project to TypeScript` |
+| Docs (phase 6) | `b7bf687 docs: update the tooling paths and the three-project gate` |
+| Task doc (phase 6) | this commit |
 
 ## Progress log
 
@@ -289,13 +325,19 @@ Findings from the independent verifier, resolved before the docs commit:
 - 2026-10-27: F3 implemented by one worker on `refactor/typescript-tests`. Risk `medium`,
   `under_budget`. Five of the eleven suites are byte-identical renames; the rest add types and
   guards only. The parent re-ran typecheck, tests and build over the finished diff before committing.
+- 2026-10-28: phase 6 on `refactor/typescript-tooling`, stacked on the F3 branch. The worker ported
+  the three files; the parent re-ran typecheck, build, the full suite and the OG generator, and used
+  a `TS2322` probe to prove the node project now checks instead of listing. The regenerated PNG is
+  byte-identical, which is the strongest signal available that the port changed nothing.
 
 ## Next step
 
-What is left is the tooling: `vite.config.js`, `vitest.config.js` and `scripts/generate-og.mjs` are
-included by `tsconfig.node.json` but unchecked, because `checkJs` is off. Migrating them is what
-closes the last `allowJs`.
+The migration is closed: no `.js`, `.jsx`, `.mjs` or `.cjs` is left outside `node_modules/`, and
+`allowJs` is off in all three projects.
 
-Typed CSS Modules — the rest of F5 — stays deliberately out of the migration.
+What remains is out of scope by decision: typed CSS Modules (`*.module.css` declarations). It buys
+editor autocomplete only.
 
-This branch still needs its PR: `bun check -p tsconfig.test.json` has only ever run locally.
+Operationally, two PRs are open and stacked: #19 (tests) holds phase 5, and this branch holds phase 6
+on top of it, so its base is `refactor/typescript-tests`. Once #19 merges, GitHub retargets this PR
+to `main` on its own.

@@ -13,7 +13,7 @@ bun install
 bun run dev          # Servidor de desarrollo
 bun run build        # Compilación producción
 bun run test         # Tests (Vitest)
-bun run typecheck    # Chequeo de tipos (app + tooling)
+bun run typecheck    # Chequeo de tipos (app + tests + tooling)
 bun run generate:og  # Regenera public/images/og-image.png
 ```
 
@@ -22,8 +22,8 @@ bun run generate:og  # Regenera public/images/og-image.png
 ```
 src/components/   → 8 componentes (Hero, About, Lotus, Services, ServiceModal, Reviews, Contact, Footer)
 src/data/         → services.ts, reviews.ts, contact.ts (WhatsApp), social.ts (redes)
-src/tests/        → 11 suites de test + setup.js
-scripts/          → generate-og.mjs (imagen de compartir 1200×630)
+src/tests/        → 11 suites de test + setup.ts
+scripts/          → generate-og.ts (imagen de compartir 1200×630)
 public/           → favicons, site.webmanifest, imágenes estáticas
 docs/project.md   → Documentación completa del proyecto
 ```

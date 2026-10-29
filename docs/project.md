@@ -34,7 +34,7 @@ pageRo/
 │   ├── apple-touch-icon.png    ← Icono 180×180 para iOS (iOS no acepta SVG aquí)
 │   └── site.webmanifest        ← Manifest PWA: marca, colores #1f0f14, íconos android
 ├── scripts/
-│   ├── generate-og.mjs         ← Genera la imagen OG (SVG en memoria → PNG con resvg)
+│   ├── generate-og.ts          ← Genera la imagen OG (SVG en memoria → PNG con resvg)
 │   └── fonts/                  ← TTFs de marca, usados solo por el generador OG
 ├── src/
 │   ├── main.tsx                ← Entry point de React
@@ -86,7 +86,7 @@ pageRo/
 ├── AGENTS.md                    ← Instrucciones para agentes de opencode
 ├── release-please-config.json   ← Config de release-please (changelog + versión)
 ├── .release-please-manifest.json ← Versión publicada; la mantiene release-please
-├── vitest.config.js             ← Config de Vitest
+├── vitest.config.ts             ← Config de Vitest
 └── package.json
 ```
 
@@ -204,7 +204,7 @@ El script arma el SVG en memoria (degradado de marca `#1f0f14` → `#c73a5a`, wo
 
 El PNG está versionado y `@resvg/resvg-js` es una devDependency, así que producción nunca necesita la herramienta.
 
-> El diseño se edita en `scripts/generate-og.mjs`, nunca en el PNG.
+> El diseño se edita en `scripts/generate-og.ts`, nunca en el PNG.
 
 ### Paso de deploy: URLs absolutas
 
@@ -264,7 +264,7 @@ tres, y cada uno tiene su mundo de tipos:
 |---|---|
 | `tsconfig.json` | App: `src/` menos `src/tests`, `lib` con DOM y `types: ["vite/client"]`. Sin Node, así que `process` o `node:fs` no pueden entrar al código del navegador |
 | `tsconfig.test.json` | Tests: `src/tests`, con `types: ["vite/client", "vitest/globals", "node"]`. Es el único lugar donde DOM y Node conviven, porque el test de SEO lee `index.html` del disco |
-| `tsconfig.node.json` | Tooling: `scripts/` y los configs de Vite y Vitest, `types: ["bun"]`, sin DOM, con `allowJs` |
+| `tsconfig.node.json` | Tooling: `scripts/` y los configs de Vite y Vitest, `types: ["bun"]`, sin DOM. `@types/bun` arrastra `@types/node`, así que `process`, `node:fs` y `Buffer` resuelven |
 
 ```bash
 bun run typecheck   # los tres proyectos, vía `bun check`
@@ -274,10 +274,10 @@ bun run typecheck   # los tres proyectos, vía `bun check`
 todos los núcleos. `typescript` vive en `devDependencies` porque es una herramienta de desarrollo de
 la app, no una dependencia que se publique.
 
-Ojo con leer el resultado: el proyecto de tooling incluye sus tres `.js` con `checkJs` apagado, así
-que aparecen en el conteo pero no se chequean. Los otros dos sí son gate real: la app (14 archivos:
-los cuatro `.ts` de `src/data/`, los nueve `.tsx` de componentes y `src/main.tsx`) y los tests (25
-archivos: los 12 de `src/tests` más los 13 de la app que importan).
+Los tres son gate real, y el conteo dice qué cubre cada uno: la app 14 archivos (los cuatro `.ts` de
+`src/data/`, los nueve `.tsx` de componentes y `src/main.tsx`), los tests 25 (los 12 de `src/tests`
+más los 13 de la app que importan) y el tooling 3 (`vite.config.ts`, `vitest.config.ts` y
+`scripts/generate-og.ts`).
 
 La primera capa migrada fue `src/data/`: exporta las interfaces `Service`, `Review` y `SocialLink`,
 y `whatsappLink(message?: string): string`. Después se sumaron todos los componentes. Los que tienen
@@ -290,9 +290,14 @@ JSX. Confundirlos compila mal: son tipos distintos con el mismo nombre.
 falla con un error explícito en vez de con un `null` de casualidad. Por eso el entry point no
 necesita un `!`.
 
-> `allowJs` + `checkJs: false` sigue siendo el estado de transición del **tooling**, nada más: la app
-> y los tests ya son TypeScript puro. Cuando esos tres `.js` pasen a `.ts`, el gate cubre también los
-> configs y los scripts.
+`allowJs` está apagado en los tres proyectos: no queda un solo `.js` en el repo, y el tooling dejó de
+aportar archivos al conteo sin chequearlos.
+
+Dos detalles del port del tooling valen la pena. `vitest.config.ts` importa `defineConfig` de
+`vitest/config`, no de `vite`, porque la firma de Vite no conoce la clave `test`. Y `generate-og.ts`
+solo necesitó cuatro anotaciones de retorno: el generador es la única parte del repo con oráculo byte
+a byte, así que correr `bun run generate:og` después del port tiene que dejar
+`public/images/og-image.png` intacto.
 
 `bun run typecheck` corre en CI como paso del job `Verify` (ver abajo), así que los tipos no se
 degradan sin que nadie se entere.
@@ -307,7 +312,7 @@ degradan sin que nadie se entere.
 | `push` a `main` | Después de cada merge |
 | `workflow_dispatch` | Manual desde la pestaña Actions |
 
-Pasos del job `Verify`: **test → build**. Si cualquiera falla, el check queda en rojo.
+Pasos del job `Verify`: **install → typecheck → test → build**. Si cualquiera falla, el check queda en rojo.
 
 No hay paso de lint porque el proyecto todavía no tiene linter configurado. Si se agrega uno, se suma un paso más antes de los tests.
 
@@ -360,7 +365,7 @@ También hay que habilitar **Settings → Actions → General → Allow GitHub A
 | `@dev` | Inicia servidor de desarrollo Vite |
 | `@build` | Compila para producción |
 | `@testRo` | Ejecuta `bun run test` |
-| `bun run generate:og` | Regenera `public/images/og-image.png` desde `scripts/generate-og.mjs` |
+| `bun run generate:og` | Regenera `public/images/og-image.png` desde `scripts/generate-og.ts` |
 
 ## Número de WhatsApp
 

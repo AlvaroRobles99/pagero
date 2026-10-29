@@ -17,7 +17,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 - `bun run preview` — preview production build
 - `bun run test` — run all tests (Vitest)
 - `bun run test:watch` — run tests in watch mode
-- `bun run generate:og` — regenerate `public/images/og-image.png` from `scripts/generate-og.mjs`
+- `bun run generate:og` — regenerate `public/images/og-image.png` from `scripts/generate-og.ts`
 - `bun run typecheck` — type-check the app, the tests and the Node tooling (`bun check`, TypeScript 7)
 
 ## Structure
@@ -26,7 +26,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 |---|---|
 | `docs/project.md` | Full project documentation |
 | `index.html` | Vite entry HTML |
-| `vite.config.js` | Vite config |
+| `vite.config.ts` | Vite config |
 | `src/main.tsx` | React entry point |
 | `src/App.tsx` | Layout — renders all sections |
 | `src/index.css` | Global reset + CSS variables |
@@ -40,7 +40,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `src/components/Footer/` | Footer with year + module CSS |
 | `src/data/contact.ts` | WhatsApp number constants + `whatsappLink()` helper (single source of truth) |
 | `src/tests/` | Vitest suites, one per component + `seo.test.tsx` for the `index.html` meta and `whatsapp.test.tsx` for the link format |
-| `scripts/generate-og.mjs` | Builds the 1200×630 share image (inline SVG → PNG via resvg) |
+| `scripts/generate-og.ts` | Builds the 1200×630 share image (inline SVG → PNG via resvg) |
 | `scripts/fonts/` | Brand TTFs, used only by the OG generator |
 | `public/images/` | Static assets (`banner.svg`, `logo.png`, generated `og-image.png`) |
 | `public/favicon.ico`, `public/favicon-16x16.png`, `public/favicon-32x32.png`, `public/android-chrome-192x192.png`, `public/android-chrome-512x512.png` | Tab/PWA icon set — static files supplied as-is, not generated |
@@ -52,7 +52,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 - Meta lives in `index.html` only — canonical, Open Graph, Twitter card, `theme-color`, `robots`, and a JSON-LD `@graph` (Organization, LocalBusiness, Person, WebSite).
 - `src/tests/seo.test.tsx` reads `index.html` from disk and asserts the whole contract, so a removed tag fails the suite.
 - URLs are intentionally **relative** until a domain is chosen. See the deploy-time step in `docs/project.md`.
-- `og-image.png` is generated, not hand-drawn. Change `scripts/generate-og.mjs`, then run `bun run generate:og`.
+- `og-image.png` is generated, not hand-drawn. Change `scripts/generate-og.ts`, then run `bun run generate:og`.
 
 ## MCP
 
