@@ -78,7 +78,7 @@ const PETALS = [
 /** Places the 200x200 lotus space into canvas coordinates. */
 const LOTUS_TRANSFORM = 'translate(910 470) scale(1.9) translate(-100 -175)'
 
-function petals() {
+function petals(): string {
   return PETALS.map(
     ({ rotate, scale }) =>
       `<path d="${PETAL_PATH}" transform="rotate(${rotate} 100 175) translate(100 175) scale(${scale}) translate(-100 -175)" />`,
@@ -86,7 +86,7 @@ function petals() {
 }
 
 /** Returns the share card as an SVG string. */
-export function buildOgSvg() {
+export function buildOgSvg(): string {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${OG_WIDTH}" height="${OG_HEIGHT}" viewBox="0 0 ${OG_WIDTH} ${OG_HEIGHT}">
   <defs>
     <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
@@ -119,7 +119,7 @@ export function buildOgSvg() {
 }
 
 /** Rasterizes the share card with the brand fonts. */
-export function renderOgPng(svg = buildOgSvg()) {
+export function renderOgPng(svg: string = buildOgSvg()) {
   return new Resvg(svg, {
     fitTo: { mode: 'width', value: OG_WIDTH },
     font: {
@@ -133,7 +133,7 @@ export function renderOgPng(svg = buildOgSvg()) {
 }
 
 /** Writes the share card to public/images/og-image.png. */
-export function writeOgImage() {
+export function writeOgImage(): string {
   mkdirSync(new URL('../public/images/', import.meta.url), { recursive: true })
   const png = renderOgPng()
   writeFileSync(OG_OUTPUT_PATH, png)
