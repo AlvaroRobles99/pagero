@@ -53,7 +53,7 @@ pageRo/
 │   │   ├── Lotus/               ← SVG decorativo de loto con rotación animada
 │   │   ├── Services/            ← Grid de 7 cards clickeables con stagger reveal + apertura de modal
 │   │   ├── ServiceModal/        ← Modal a pantalla completa con detalle del servicio y CTA WhatsApp
-│   │   ├── Reviews/             ← Grid de reseñas con estrellas y reveal animation
+│   │   ├── Reviews/             ← Carrusel de testimonios con corazón y contador
 │   │   ├── Contact/             ← Sección con botón de WhatsApp
 │   │   └── Footer/              ← Footer con copyright y año dinámico
 │   └── tests/
@@ -102,7 +102,7 @@ Definidas en `src/index.css` y usadas en todos los módulos CSS via `var(--nombr
 | `--color-primary` | `#c73a5a` | Títulos h2, botones, acentos |
 | `--color-light` | `#fef0f5` | Fondos alternados (About, Reviews) |
 | `--color-accent` | `#c99a4a` | Tagline, líneas y bordes decorativos |
-| `--color-accent-deep` | `#8f661d` | Acento como texto sobre fondos claros (eyebrow de About, estrellas de reseñas) |
+| `--color-accent-deep` | `#8f661d` | Acento como texto sobre fondos claros (eyebrow de About, contador de testimonios) |
 | `--color-text` | `#3a1f28` | Texto sobre fondos claros |
 | `--color-warm-white` | `#fffafc` | Fondo principal (Services, Contact) |
 | `--font-display` | `'Cormorant Garamond', Georgia, serif` | Títulos, hero, tagline |
