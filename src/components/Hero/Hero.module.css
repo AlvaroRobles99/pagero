@@ -34,6 +34,21 @@
   width: clamp(92px, 24vw, 168px);
   margin-bottom: clamp(0.75rem, 2vw, 1.25rem);
   filter: drop-shadow(0 6px 24px rgba(0, 0, 0, 0.45));
+  /* The float starts only after the 1s fadeInUp of .heroContent, so the two
+     movements never overlap and the logo settles before it drifts. */
+  animation: float 7s ease-in-out 1s infinite;
+}
+
+/* Ambient levitation: a gentle 10px drift with a whisper of scale, so it reads
+   as breathing rather than bobbing. */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.012);
+  }
 }
 
 .title {

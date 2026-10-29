@@ -123,6 +123,7 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - Header full viewport con `banner.svg` de fondo
 - Overlay con `radial-gradient` spotlight (centro más claro, bordes oscuros)
 - Logo de marca (`images/logo.png`) sobre el título, como imagen decorativa (`alt=""`) con `drop-shadow`
+- El logo flota en bucle (`float`, 7s): deriva 10px hacia arriba con un `scale(1.012)` apenas perceptible, y arranca con 1s de retraso para que no se superponga al `fadeInUp` de entrada. `prefers-reduced-motion` la anula por la regla global de `index.css`
 - Título, subtítulo, tagline, botón CTA
 - Animación `fadeInUp` en el contenido al cargar
 
