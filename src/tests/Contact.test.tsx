@@ -4,7 +4,7 @@ import { WHATSAPP_NUMBER } from '../data/contact'
 import { SOCIAL_LINKS } from '../data/social'
 
 describe('Contact', () => {
-  it('renderiza el título', () => {
+  it('renderiza la etiqueta "Contacto"', () => {
     render(<Contact />)
     expect(screen.getByText('Contacto')).toBeInTheDocument()
   })
@@ -54,6 +54,42 @@ describe('Contact', () => {
         expect(link).toHaveAttribute('target', '_blank')
         expect(link).toHaveAttribute('rel', 'noopener noreferrer')
       })
+    })
+  })
+
+  describe('encabezado de la sección', () => {
+    it('titula la sección con "Agenda tu turno"', () => {
+      render(<Contact />)
+      expect(
+        screen.getByRole('heading', { level: 2, name: 'Agenda tu turno' }),
+      ).toBeInTheDocument()
+    })
+
+    it('deja "Contacto" como etiqueta chica, no como encabezado', () => {
+      render(<Contact />)
+      expect(screen.getByText('Contacto').tagName).toBe('P')
+      expect(screen.queryByRole('heading', { name: 'Contacto' })).not.toBeInTheDocument()
+    })
+  })
+
+  describe('imagen de la agenda', () => {
+    const image = () =>
+      screen.getByRole('img', { name: /Agenda abierta con cuarzos de amatista/i })
+
+    it('apunta al WebP optimizado, no al master sin pérdida', () => {
+      render(<Contact />)
+      expect(image()).toHaveAttribute('src', '/images/agenda-cuarzos.webp')
+    })
+
+    it('declara width y height para no mover el layout al cargar', () => {
+      render(<Contact />)
+      expect(image()).toHaveAttribute('width', '1128')
+      expect(image()).toHaveAttribute('height', '785')
+    })
+
+    it('carga diferida porque vive debajo del pliegue', () => {
+      render(<Contact />)
+      expect(image()).toHaveAttribute('loading', 'lazy')
     })
   })
 })
