@@ -45,7 +45,26 @@
   margin: 0;
   width: 100%;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.agenda {
+  margin: 0;
+  width: 100%;
+  display: flex;
   justify-content: center;
+}
+
+/* The brand mark that used to sit above the hero title now signs the section,
+   right under the agenda: the person you are writing to, then the object that
+   stands for the appointment. */
+.mark {
+  display: block;
+  width: clamp(64px, 14vw, 92px);
+  height: auto;
+  filter: drop-shadow(0 10px 22px rgba(58, 31, 40, 0.18));
 }
 
 /* The object levitates: 10px of drift on the same 7s rhythm as the hero logo,

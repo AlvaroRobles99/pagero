@@ -22,17 +22,31 @@ export default function Contact() {
               Escribir por WhatsApp
             </a>
           </div>
-          <figure className={styles.figure}>
+          <div className={styles.figure}>
+            <figure className={styles.agenda}>
+              <img
+                src="/images/agenda-cuarzos.webp"
+                alt="Agenda abierta con cuarzos de amatista y una lapicera"
+                width={1128}
+                height={785}
+                loading="lazy"
+                decoding="async"
+                className={styles.image}
+              />
+            </figure>
+            {/* The brand mark moved here from the hero: over the photographs it
+                competed with the face, while next to the agenda it works as the
+                seal of the person you are writing to. */}
             <img
-              src="/images/agenda-cuarzos.webp"
-              alt="Agenda abierta con cuarzos de amatista y una lapicera"
-              width={1128}
-              height={785}
+              src="/images/logo.png"
+              alt=""
+              width={512}
+              height={512}
               loading="lazy"
               decoding="async"
-              className={styles.image}
+              className={styles.mark}
             />
-          </figure>
+          </div>
           <div className={styles.social}>
             <span className={styles.socialRule} aria-hidden="true" />
             <p className={styles.socialLabel}>Ver mi contenido</p>

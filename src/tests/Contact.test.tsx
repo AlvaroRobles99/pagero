@@ -92,4 +92,24 @@ describe('Contact', () => {
       expect(image()).toHaveAttribute('loading', 'lazy')
     })
   })
+
+  describe('marca junto a la agenda', () => {
+    it('renderiza el logo como imagen decorativa debajo de la agenda', () => {
+      // The mark left the hero because it competed with the face over the
+      // photographs; here it signs the section instead.
+      const { container } = render(<Contact />)
+      const mark = container.querySelector('img[src="/images/logo.png"]')
+      expect(mark).toBeInTheDocument()
+      expect(mark).toHaveAttribute('alt', '')
+    })
+
+    it('la agenda aparece antes que el logo en el documento', () => {
+      const { container } = render(<Contact />)
+      const agenda = container.querySelector('img[src="/images/agenda-cuarzos.webp"]')
+      const mark = container.querySelector('img[src="/images/logo.png"]')
+      if (!agenda || !mark) throw new Error('Both images must exist to compare them')
+      const FOLLOWS = Node.DOCUMENT_POSITION_FOLLOWING
+      expect(agenda.compareDocumentPosition(mark) & FOLLOWS).toBe(FOLLOWS)
+    })
+  })
 })

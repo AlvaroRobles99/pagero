@@ -1,23 +1,67 @@
 .hero {
-  background: url('/images/banner.svg') center / cover no-repeat;
+  position: relative;
+  isolation: isolate;
   min-height: 100dvh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   text-align: center;
   padding: 1.5rem;
-  position: relative;
+  overflow: hidden;
+  background: var(--color-deep);
 }
 
+/* The client's photographs replace the illustrated banner. Three frames sit
+   behind the content as one continuous scene: the middle one is wider because
+   it carries the gesture (the cards in her hand), and a hairline marks the
+   joins instead of a gap, so nothing reads as a pasted collage. */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1.25fr 1fr;
+}
+
+.panel {
+  margin: 0;
+  overflow: hidden;
+}
+
+.panel + .panel {
+  border-left: 1px solid rgba(255, 250, 252, 0.09);
+}
+
+.panel img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The cards in hand sits in the lower half of its frame; biasing the crop to
+   the left keeps both cards inside the column instead of cutting one away. */
+.panelCenter img {
+  object-position: 44% 50%;
+}
+
+/* The veil is not decoration. Both beach shots have a blown-out sky and the
+   card shot is mid-key, so white type needs a real layer to stay legible: a
+   vertical gradient darkens the top and the foot, while the radial edge keeps
+   the middle from flattening into a grey sheet. */
 .overlay {
   position: absolute;
   inset: 0;
   background:
+    linear-gradient(
+      180deg,
+      rgba(31, 15, 20, 0.74) 0%,
+      rgba(31, 15, 20, 0.44) 28%,
+      rgba(31, 15, 20, 0.52) 60%,
+      rgba(31, 15, 20, 0.88) 100%
+    ),
     radial-gradient(
-      ellipse at center 40%,
-      transparent 0%,
-      rgba(31, 15, 20, 0.3) 50%,
-      rgba(31, 15, 20, 0.6) 100%
+      ellipse at center,
+      rgba(31, 15, 20, 0.16) 0%,
+      rgba(31, 15, 20, 0.5) 100%
     );
 }
 
@@ -25,30 +69,6 @@
   position: relative;
   z-index: 1;
   animation: fadeInUp 1s ease-out;
-}
-
-/* Brand mark above the h1 — decorative, the h1 carries the site name. */
-.logo {
-  display: block;
-  margin: 0 auto;
-  width: clamp(92px, 24vw, 168px);
-  margin-bottom: clamp(0.75rem, 2vw, 1.25rem);
-  filter: drop-shadow(0 6px 24px rgba(0, 0, 0, 0.45));
-  /* The float starts only after the 1s fadeInUp of .heroContent, so the two
-     movements never overlap and the logo settles before it drifts. */
-  animation: float 7s ease-in-out 1s infinite;
-}
-
-/* Ambient levitation: a gentle 10px drift with a whisper of scale, so it reads
-   as breathing rather than bobbing. */
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-10px) scale(1.012);
-  }
 }
 
 .title {
@@ -89,6 +109,31 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Tablet keeps the two frames that tell the story — she reads the cards, then
+   she sits with you — and drops the standing beach shot, which loses the least.
+   The hidden panel is display:none, so its lazy image is never requested. */
+@media (max-width: 899px) {
+  .backdrop {
+    grid-template-columns: 1.15fr 1fr;
+  }
+
+  .panelLeft {
+    display: none;
+  }
+}
+
+/* A phone carries one face. The cards in hand is the gesture that names the
+   service, so it is the frame that survives. */
+@media (max-width: 599px) {
+  .backdrop {
+    grid-template-columns: 1fr;
+  }
+
+  .panelRight {
+    display: none;
   }
 }
 
