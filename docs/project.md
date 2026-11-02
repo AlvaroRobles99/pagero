@@ -23,6 +23,7 @@ pageRo/
 │   └── project.md              ← Esta documentación
 ├── public/
 │   ├── images/
+│   │   ├── agenda-cuarzos.webp ← Foto de la agenda con cuarzos (Contact: 1128×785, WebP lossy con alfa, 52 KB)
 │   │   ├── banner.svg          ← Hero background (paisaje espiritual con montañas, mar, loto)
 │   │   ├── logo.png            ← Marca de la marca (Hero + logo JSON-LD)
 │   │   └── og-image.png        ← Imagen de compartir 1200×630 (generada, no editar a mano)
@@ -170,8 +171,13 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - Flechas ocultas en mobile (≤600px)
 
 ### Contact
-- Sección con fondo `--color-warm-white`
-- Loto semi-transparente como marca de agua de fondo (vía `::before`)
+- Sección con fondo `--color-warm-white`, ancla `#contact` (se conserva aunque el título visible cambie)
+- Encabezado en dos niveles: la etiqueta chica `Contacto` en mayúsculas doradas (`.eyebrow`, mismo tratamiento que About) y el `h2` real **Agenda tu turno**
+- Dos columnas a partir de 900px: a la izquierda el encabezado, el texto y el CTA; a la derecha la foto de la agenda con cuarzos
+- En mobile se apila en el orden encabezado → texto → CTA → foto → bloque social, así el botón queda primero y el objeto refuerza lo que el botón hace
+- La foto es `public/images/agenda-cuarzos.webp` (1128×785, WebP lossy con alfa, 52 KB). Se muestra con `filter: drop-shadow` en lugar de un marco, porque el recorte es transparente
+- Levita: `@keyframes levitate` la desplaza 10px hacia arriba en 7s, `infinite alternate`, el mismo ritmo que el logo del Hero. La regla global de `prefers-reduced-motion` de `index.css` la reduce a un solo cuadro
+- **No** lleva el loto de marca de agua en `::before`: se transparentaba a través del recorte de la foto y se leía como una mancha detrás del CTA
 - Texto de invitación cálido + botón WhatsApp que abre `wa.me` vía `whatsappLink()`
 - Bloque "Ver mi contenido" al final, debajo del CTA: regla dorada + 3 botones circulares (52px, borde dorado) con ícono SVG inline que abren Instagram, Facebook y TikTok en pestaña nueva — los links viven en `src/data/social.ts` (única fuente de verdad)
 

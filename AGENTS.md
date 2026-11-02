@@ -42,7 +42,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `src/tests/` | Vitest suites, one per component + `seo.test.tsx` for the `index.html` meta and `whatsapp.test.tsx` for the link format |
 | `scripts/generate-og.ts` | Builds the 1200×630 share image (inline SVG → PNG via resvg) |
 | `scripts/fonts/` | Brand TTFs, used only by the OG generator |
-| `public/images/` | Static assets (`banner.svg`, `logo.png`, generated `og-image.png`) |
+| `public/images/` | Static assets (`agenda-cuarzos.webp`, `banner.svg`, `logo.png`, generated `og-image.png`) |
 | `public/favicon.ico`, `public/favicon-16x16.png`, `public/favicon-32x32.png`, `public/android-chrome-192x192.png`, `public/android-chrome-512x512.png` | Tab/PWA icon set — static files supplied as-is, not generated |
 | `public/apple-touch-icon.png` | 180×180 iOS home-screen icon (iOS does not accept SVG here); static file |
 | `public/site.webmanifest` | PWA manifest: brand name, deep theme/background `#1f0f14`, android icons |
