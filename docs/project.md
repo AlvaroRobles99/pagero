@@ -23,10 +23,12 @@ pageRo/
 │   └── project.md              ← Esta documentación
 ├── public/
 │   ├── images/
-│   │   ├── agenda-cuarzos.webp ← Foto de la agenda con cuarzos (Contact: 1128×785, WebP lossy con alfa, 52 KB)
-│   │   ├── banner.svg          ← Hero background (paisaje espiritual con montañas, mar, loto)
-│   │   ├── logo.png            ← Marca de la marca (Hero + logo JSON-LD)
-│   │   └── og-image.png        ← Imagen de compartir 1200×630 (generada, no editar a mano)
+│   │   ├── agenda-cuarzos.webp  ← Foto de la agenda con cuarzos (Contact: 1128×785, WebP lossy con alfa, 52 KB)
+│   │   ├── logo.png             ← Marca de la marca (Contact + logo JSON-LD)
+│   │   ├── meditacion-playa.webp ← Rocío meditando en la playa (Hero derecha: 960×1280, WebP q75, 102 KB)
+│   │   ├── og-image.png         ← Imagen de compartir 1200×630 (generada, no editar a mano)
+│   │   ├── rocio-oraculos.webp  ← Retrato de Rocío con las cartas en la mano (Hero centro: 960×966, WebP q75, 81 KB)
+│   │   └── rocio-playa.webp     ← Rocío de pie en la playa (Hero izquierda: 960×966, WebP q75, 40 KB)
 │   ├── favicon.ico             ← Favicon de pestaña (formato ICO, sizes any)
 │   ├── favicon-16x16.png       ← Favicon de pestaña 16×16 (estático, no generado)
 │   ├── favicon-32x32.png       ← Favicon de pestaña 32×32 (estático, no generado)
@@ -49,7 +51,7 @@ pageRo/
 │   │   ├── contact.ts           ← Constantes del número de WhatsApp + helper `whatsappLink()`
 │   │   └── social.ts            ← Array `SOCIAL_LINKS` (id, name, url, icon) de las tres redes
 │   ├── components/
-│   │   ├── Hero/                ← Header full-viewport con banner SVG + CTA
+│   │   ├── Hero/                ← Header full-viewport con tríptico de fotos + CTA
 │   │   ├── About/               ← Sección "Sobre mí" con texto de presentación
 │   │   ├── Lotus/               ← SVG decorativo de loto con rotación animada
 │   │   ├── Services/            ← Grid de 7 cards clickeables con stagger reveal + apertura de modal
@@ -121,12 +123,14 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 ## Componentes
 
 ### Hero
-- Header full viewport con `banner.svg` de fondo
-- Overlay con `radial-gradient` spotlight (centro más claro, bordes oscuros)
-- Logo de marca (`images/logo.png`) sobre el título, como imagen decorativa (`alt=""`) con `drop-shadow`
-- El logo flota en bucle (`float`, 7s): deriva 10px hacia arriba con un `scale(1.012)` apenas perceptible, y arranca con 1s de retraso para que no se superponga al `fadeInUp` de entrada. `prefers-reduced-motion` la anula por la regla global de `index.css`
+- Header full viewport con **tres fotos reales** de fondo, en lugar del banner ilustrado: `rocio-playa.webp` (de pie, a la izquierda), `rocio-oraculos.webp` (con las cartas en la mano, al centro y más ancha) y `meditacion-playa.webp` (meditando, a la derecha)
+- El responsive recorta el tríptico: 3 columnas desde 900px, 2 en tablet (cartas + meditando) y 1 en mobile (las cartas). Los paneles ocultos son `display: none`, así que su `loading="lazy"` evita descargarlos
+- La foto central es la candidata a LCP: `fetchPriority="high"` y sin lazy; las laterales van con `fetchPriority="low"`
+- Overlay de marca obligatorio, no decorativo: las fotos de playa tienen el cielo quemado y la de las cartas es de clave media. Un `linear-gradient` vertical oscurece arriba y abajo, y un `radial-gradient` evita que el centro se aplane
+- `object-position: 44%` en la foto central para que las dos cartas entren en la columna, que recorta el ancho
 - Título, subtítulo, tagline, botón CTA
 - Animación `fadeInUp` en el contenido al cargar
+- **Sin logo:** el logo flotaba sobre las caras y competía con ellas; ahora firma la sección de Contacto (ver abajo)
 
 ### About
 - Sección con fondo `--color-light`
@@ -176,7 +180,8 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - Dos columnas a partir de 900px: a la izquierda el encabezado, el texto y el CTA; a la derecha la foto de la agenda con cuarzos
 - En mobile se apila en el orden encabezado → texto → CTA → foto → bloque social, así el botón queda primero y el objeto refuerza lo que el botón hace
 - La foto es `public/images/agenda-cuarzos.webp` (1128×785, WebP lossy con alfa, 52 KB). Se muestra con `filter: drop-shadow` en lugar de un marco, porque el recorte es transparente
-- Levita: `@keyframes levitate` la desplaza 10px hacia arriba en 7s, `infinite alternate`, el mismo ritmo que el logo del Hero. La regla global de `prefers-reduced-motion` de `index.css` la reduce a un solo cuadro
+- Levita: `@keyframes levitate` la desplaza 10px hacia arriba en 7s, `infinite alternate`, el mismo ritmo que tenía el logo del Hero. La regla global de `prefers-reduced-motion` de `index.css` la reduce a un solo cuadro
+- Debajo de la agenda firma el **logo de la marca** (`images/logo.png`, `clamp(64px, 14vw, 92px)`, decorativo). Vivía en el Hero, pero ahí flotaba sobre las caras y competía con ellas; acá funciona como el sello de la persona a la que le escribís
 - **No** lleva el loto de marca de agua en `::before`: se transparentaba a través del recorte de la foto y se leía como una mancha detrás del CTA
 - Texto de invitación cálido + botón WhatsApp que abre `wa.me` vía `whatsappLink()`
 - Bloque "Ver mi contenido" al final, debajo del CTA: regla dorada + 3 botones circulares (52px, borde dorado) con ícono SVG inline que abren Instagram, Facebook y TikTok en pestaña nueva — los links viven en `src/data/social.ts` (única fuente de verdad)
