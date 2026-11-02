@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.0](https://github.com/AlvaroRobles99/pagero/compare/v0.3.0...v0.4.0) (2026-11-02)
+
+
+### Features
+
+* **contact:** add the levitating agenda photo and retitle the section ([59a128b](https://github.com/AlvaroRobles99/pagero/commit/59a128b2ab0d72e50523a05d662762a6de8b07be))
+* **contact:** add the levitating agenda photo and retitle the section ([3c9b480](https://github.com/AlvaroRobles99/pagero/commit/3c9b480fa2faa19bab6ddcbf35f9686298d52a31))
+
 ## [0.3.0](https://github.com/AlvaroRobles99/pagero/compare/v0.2.0...v0.3.0) (2026-10-29)
 
 
