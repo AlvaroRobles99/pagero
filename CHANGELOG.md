@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.0](https://github.com/AlvaroRobles99/pagero/compare/v0.4.0...v0.5.0) (2026-11-02)
+
+
+### Features
+
+* **hero:** replace the illustrated banner with the client's photographs ([1c55593](https://github.com/AlvaroRobles99/pagero/commit/1c55593bbf873f846e0a8a785da3fd445229f2d8))
+* **hero:** replace the illustrated banner with the client's photographs ([2e3104d](https://github.com/AlvaroRobles99/pagero/commit/2e3104dc6521fb4e1656133711faf3a600239e4a))
+
 ## [0.4.0](https://github.com/AlvaroRobles99/pagero/compare/v0.3.0...v0.4.0) (2026-11-02)
 
 
