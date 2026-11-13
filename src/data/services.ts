@@ -4,6 +4,13 @@
  * `description` is the short line on the card, `fullDescription` is the modal
  * body (blank lines become separate paragraphs). There are no prices, no
  * duration and no "includes" list on purpose — those facts are not decided yet.
+ *
+ * The copy sticks to what the brand actually says about each service: no
+ * promises, no technique details nobody confirmed.
+ *
+ * Copy rule: never use the word "trabajo" or its derivatives in this file.
+ * Use synonyms (labor, proceso, práctica, objetivo); `src/tests/copy.test.tsx`
+ * guards it.
  */
 
 export interface Service {
@@ -20,51 +27,58 @@ const services: readonly Service[] = [
   {
     id: 'tarot-angelical',
     title: 'Tarot Angelical',
-    description: 'Preguntas concretas y una lectura que ordena. Vemos qué energías están jugando en tu situación.',
+    description: 'A través de las cartas conectamos con tus ángeles.',
     fullDescription:
-      'Avanzamos con preguntas concretas. A través de las cartas miramos qué energías están presentes, qué emociones se están moviendo y qué vínculos están en juego.\n\nNo es un pronóstico cerrado: es una forma de ver tu momento con más claridad para que puedas decidir con calma. Si hay algo que te tiene dando vueltas, traelo a la sesión.',
+      'A través de las cartas conectamos con tus ángeles. La lectura ayuda a encontrar respuestas a tus preguntas, para tener más claridad o tomar decisiones.',
   },
   {
     id: 'registros-akashicos',
     title: 'Registros Akáshicos',
-    description: 'Una mirada profunda a los patrones que se repiten en tu vida y a lo que hoy los sostiene.',
+    description: 'La puerta a tu autoconocimiento.',
     fullDescription:
-      'Un espacio de lectura y escucha. Miramos experiencias, aprendizajes y patrones que se repiten para entender de dónde vienen y cómo siguen influyendo en tu presente.\n\nNo se trata de buscar culpables ni de revivir el pasado. Se trata de reconocer lo que está pidiendo un cambio y de darte una mirada nueva sobre tu propio proceso.',
+      'Los registros akáshicos son la puerta a tu autoconocimiento: podemos ver toda la información de tu alma.',
   },
   {
     id: 'limpiezas-energeticas',
     title: 'Limpiezas Energéticas',
-    description: 'Para cuando el cansancio no se explica y sentís que algo se estancó.',
+    description: 'Para liberar la pesadez y la mala energía.',
     fullDescription:
-      'Una práctica para soltar lo que se fue acumulando: energías pesadas, cansancio que no tiene una razón clara, sensaciones de bloqueo.\n\nLa intención es renovar la energía y volver a sentirte en equilibrio. Muchas personas se van con una sensación de descanso y de orden. Suele ser un buen punto de partida antes de un proceso más largo.',
+      'La limpieza energética ayuda a liberar la pesadez y la mala energía, y trae paz mental y bienestar.',
   },
   {
     id: 'velomancia',
     title: 'Velomancia Angelical',
-    description: 'La vela como mapa: lo que aparece en ella habla de tu proceso.',
+    description: 'Una labor con los ángeles, según tu situación.',
     fullDescription:
-      'La vela se enciende y se observa mientras arde. Su llama, sus formas y su comportamiento se interpretan como un mapa simbólico del momento que estás atravesando.\n\nSirve para confirmar lo que ya intuías, para entender qué está pidiendo atención y para llevarte una orientación clara.',
+      'Es una labor con los ángeles. Dependiendo de tu situación hay varios encendidos: amor propio, corte de escasez, corte de enfermedad, corte de lazos tóxicos y corte transgeneracional de escasez.',
   },
   {
     id: 'abre-caminos',
     title: 'Abre Caminos',
-    description: 'Para esas situaciones que llevan tiempo trabadas y no terminan de destrabarse.',
+    description: 'Para liberar el bloqueo que te frena.',
     fullDescription:
-      'Un proceso energético pensado para mover lo que está estancado: decisiones que no salen, puertas que parecen cerradas, procesos que no arrancan.\n\nLa idea no es forzar nada, sino despejar el terreno para que lo que tenga que suceder encuentre su lugar. Se suele elegir en momentos de cambio o justo antes de empezarlos.',
+      'Ayuda a liberar el bloqueo que tenés para avanzar: un proyecto, un puesto laboral, la venta de una casa y muchas cosas más.',
   },
   {
     id: 'chakras',
     title: 'Armonización de Chakras',
-    description: 'Recorremos los centros energéticos para devolverle el equilibrio al sistema.',
+    description: 'Los chakras son vórtices donde fluye tu energía.',
     fullDescription:
-      'Recorremos los principales centros energéticos, uno por uno, mirando cuáles están más cargados y cuáles más apagados. El objetivo es volver a sentir el cuerpo y la energía en orden.\n\nEs una sesión tranquila, con silencio y respiración. Suele elegirse después de una etapa de exigencia o cuando sentís que perdiste tu centro.',
+      'Los chakras son vórtices energéticos donde fluye nuestra energía. Por diferentes situaciones pueden desarmonizarse o bloquearse, y eso nos trae problemas o hasta enfermedades.',
   },
   {
     id: 'constelaciones',
     title: 'Constelaciones Familiares',
-    description: 'Otra forma de mirar lo que se repite en tu familia y de dónde viene.',
+    description: 'Poner un orden en el árbol genealógico y sanarlo.',
     fullDescription:
-      'Miramos el sistema familiar como lo que es: una red de vínculos donde cada persona ocupa un lugar. Desde ahí se entienden muchas repeticiones y lealtades que no se ven a simple vista.\n\nLa sesión abre una perspectiva nueva sobre el patrón: qué lo sostiene, qué se heredó y qué se puede empezar a soltar.',
+      'Constelar es poner un orden en el árbol genealógico y sanarlo.',
+  },
+  {
+    id: 'limpiezas-ambientales',
+    title: 'Limpiezas Ambientales',
+    description: 'Para armonizar y limpiar tus espacios.',
+    fullDescription:
+      'Nuestros hogares, emprendimientos y autos necesitan armonizarse, limpiarse y sacar todo lo que no pertenece.',
   },
 ]
 

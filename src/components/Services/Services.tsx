@@ -68,9 +68,6 @@ export default function Services() {
     <section className={`${appStyles.section} ${styles.services}`} id="services">
       <div className={appStyles.container}>
         <h2>Servicios</h2>
-        <p className={styles.lead}>
-          Cada proceso es distinto. Abrí cada servicio para ver cómo funciona y si es lo que estás buscando.
-        </p>
         <div className={styles.cards}>
           {services.map((s, i) => (
             <ServiceCard service={s} index={i} key={s.id} onSelect={setSelected} />

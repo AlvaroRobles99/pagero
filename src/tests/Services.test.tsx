@@ -7,7 +7,7 @@ describe('Services', () => {
     expect(screen.getByText('Servicios')).toBeInTheDocument()
   })
 
-  it('renderiza las 7 cards de servicio', () => {
+  it('renderiza las 8 cards de servicio', () => {
     render(<Services />)
     expect(screen.getByText('Tarot Angelical')).toBeInTheDocument()
     expect(screen.getByText('Registros Akáshicos')).toBeInTheDocument()
@@ -16,7 +16,8 @@ describe('Services', () => {
     expect(screen.getByText('Abre Caminos')).toBeInTheDocument()
     expect(screen.getByText('Armonización de Chakras')).toBeInTheDocument()
     expect(screen.getByText('Constelaciones Familiares')).toBeInTheDocument()
-    expect(screen.getAllByRole('button')).toHaveLength(7)
+    expect(screen.getByText('Limpiezas Ambientales')).toBeInTheDocument()
+    expect(screen.getAllByRole('button')).toHaveLength(8)
   })
 
   it('no renderiza precios', () => {

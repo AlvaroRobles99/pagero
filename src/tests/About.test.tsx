@@ -29,7 +29,7 @@ describe('About', () => {
     expect(container.textContent).toContain(
       'El valor de la evaluación viene siempre incluido en todas las sesiones'
     )
-    expect(container.textContent).toContain('presenciales o remotas')
+    expect(container.textContent).toContain('online, vía WhatsApp')
   })
 
   it('renderiza el blockquote', () => {
