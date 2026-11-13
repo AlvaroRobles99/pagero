@@ -56,7 +56,7 @@ pageRo/
 │   │   ├── Hero/                ← Header full-viewport con tríptico de fotos + CTA
 │   │   ├── About/               ← Sección "Sobre mí" con texto de presentación
 │   │   ├── Lotus/               ← SVG decorativo de loto con rotación animada
-│   │   ├── Services/            ← Grid de 7 cards clickeables con stagger reveal + apertura de modal
+│   │   ├── Services/            ← Grid de 8 cards clickeables con stagger reveal + apertura de modal
 │   │   ├── ServiceModal/        ← Modal a pantalla completa con detalle del servicio y CTA WhatsApp
 │   │   ├── Reviews/             ← Carrusel de testimonios con corazón y contador
 │   │   ├── Contact/             ← Sección con botón de WhatsApp
@@ -140,7 +140,7 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - Sección con fondo `--color-light`
 - Loto decorativo arriba del título
 - Loto semi-transparente como marca de agua de fondo (vía `::before` con SVG inline y radial-gradient)
-- Bio de presentación (origen, Reiki en 2018, anhelo y comunidad) con la edad y los años de dedicación calculados en `src/data/about.ts` —nunca escritos a mano—, cómo empieza el proceso (consulta con nombre completo y fecha de nacimiento, evaluación energética incluida en el valor de las sesiones, sesiones presenciales o remotas), qué se busca en el proceso, cita inspiradora y CTA con WhatsApp
+- Bio de presentación (origen, Reiki en 2018, anhelo y comunidad) con la edad y los años de dedicación calculados en `src/data/about.ts` —nunca escritos a mano—, cómo empieza el proceso (consulta con nombre completo y fecha de nacimiento, evaluación energética incluida en el valor de las sesiones, sesiones online vía WhatsApp), qué se busca en el proceso, cita inspiradora y CTA con WhatsApp
 - «Seguime» cierra la bio como link al Instagram, con `INSTAGRAM_URL` de `src/data/social.ts` (única fuente de verdad de las tres redes)
 
 ### Lotus
@@ -151,12 +151,12 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 
 ### Services
 - Datos importados desde `src/data/services.ts` (id, título, resumen corto para la card, texto completo para el modal) — sin precios, sin `includes`, sin duración, sin íconos
-- 7 cards clickeables (`role="button"`, `tabIndex={0}`, `onClick`, `onKeyDown Enter`)
+- 8 cards clickeables (`role="button"`, `tabIndex={0}`, `onClick`, `onKeyDown Enter`)
 - Borde izquierdo decorativo por card en ciclo de 3: gold (`3n+1`), rose (`3n+2`), gold→rose gradiente (`3n+3`)
 - Fondo: `public/images/abanico-cartas.webp` como marca de agua de cada card vía `::before`, a 32% de opacidad y con un degradado de máscara que lo despeja detrás del título y del pie
 - Texto "Ver cómo es →" al pie de cada card, siempre en `--color-primary-deep` (6.10:1 sobre el fondo de la card, AA); el subrayado aparece en hover desktop
 - Al hacer clic abre `ServiceModal` con el texto completo del servicio
-- Animación stagger via `IntersectionObserver` (delay `index × 120ms`), que se limpia a `0ms` al terminar la entrada: el hover arranca igual en las siete cards
+- Animación stagger via `IntersectionObserver` (delay `index × 120ms`), que se limpia a `0ms` al terminar la entrada: el hover arranca igual en las ocho cards
 
 ### ServiceModal
 - Portal a `document.body` para superponerse a toda la página
