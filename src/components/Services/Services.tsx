@@ -39,12 +39,16 @@ interface ServiceCardProps {
 function ServiceCard({ service, index, onSelect }: ServiceCardProps) {
   const ref = useRef<HTMLDivElement | null>(null)
   const visible = useOnScreen(ref)
+  const [settled, setSettled] = useState(false)
 
   return (
     <div
       ref={ref}
       className={`${styles.card} ${visible ? styles.cardVisible : ''}`}
-      style={{ transitionDelay: `${index * 120}ms` }}
+      style={{ transitionDelay: settled ? '0ms' : `${index * 120}ms` }}
+      onTransitionEnd={(e) => {
+        if (!settled && e.propertyName === 'opacity') setSettled(true)
+      }}
       onClick={() => onSelect(service)}
       onKeyDown={(e) => e.key === 'Enter' && onSelect(service)}
       role="button"
