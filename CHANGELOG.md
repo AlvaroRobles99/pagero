@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.1](https://github.com/AlvaroRobles99/pagero/compare/v0.6.0...v0.6.1) (2026-11-13)
+
+
+### Bug Fixes
+
+* **services:** raise the card hint contrast to pass AA ([4231885](https://github.com/AlvaroRobles99/pagero/commit/423188591495b0d715a8f5f6ccb0c379bb745fdf))
+* **services:** raise the card hint contrast to pass AA ([363c057](https://github.com/AlvaroRobles99/pagero/commit/363c057cb210ffe952773ddef93e9ca957fbcdc7))
+
 ## [0.6.0](https://github.com/AlvaroRobles99/pagero/compare/v0.5.0...v0.6.0) (2026-11-13)
 
 
