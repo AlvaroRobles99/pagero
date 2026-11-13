@@ -109,6 +109,7 @@ Definidas en `src/index.css` y usadas en todos los módulos CSS via `var(--nombr
 | `--color-light` | `#fef0f5` | Fondos alternados (About, Reviews) |
 | `--color-accent` | `#c99a4a` | Tagline, líneas y bordes decorativos |
 | `--color-accent-deep` | `#8f661d` | Acento como texto sobre fondos claros (eyebrow de About, contador de testimonios) |
+| `--color-primary-deep` | `#a82c47` | Rosa como texto chico sobre fondos claros: hint «Ver cómo es» de las cards de Services (6.10:1 sobre `--color-light`) |
 | `--color-text` | `#3a1f28` | Texto sobre fondos claros |
 | `--color-warm-white` | `#fffafc` | Fondo principal (Services, Contact) |
 | `--font-display` | `'Cormorant Garamond', Georgia, serif` | Títulos, hero, tagline |
@@ -153,7 +154,7 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - 7 cards clickeables (`role="button"`, `tabIndex={0}`, `onClick`, `onKeyDown Enter`)
 - Borde izquierdo decorativo por card en ciclo de 3: gold (`3n+1`), rose (`3n+2`), gold→rose gradiente (`3n+3`)
 - Fondo: `public/images/abanico-cartas.webp` como marca de agua de cada card vía `::before`, a 32% de opacidad y con un degradado de máscara que lo despeja detrás del título y del pie
-- Texto "Ver cómo es →" al pie de cada card, visible en hover desktop
+- Texto "Ver cómo es →" al pie de cada card, siempre en `--color-primary-deep` (6.10:1 sobre el fondo de la card, AA); el subrayado aparece en hover desktop
 - Al hacer clic abre `ServiceModal` con el texto completo del servicio
 - Animación stagger via `IntersectionObserver` (delay `index × 120ms`), que se limpia a `0ms` al terminar la entrada: el hover arranca igual en las siete cards
 
