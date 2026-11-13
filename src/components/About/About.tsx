@@ -2,9 +2,15 @@ import appStyles from '../../App.module.css'
 import styles from './About.module.css'
 import sharedStyles from '../../shared.module.css'
 import { whatsappLink } from '../../data/contact'
+import { INSTAGRAM_URL } from '../../data/social'
+import { ageOn, yearsOfPracticeOn } from '../../data/about'
 import Lotus from '../Lotus/Lotus'
 
 export default function About() {
+  const now = new Date()
+  const age = ageOn(now)
+  const years = yearsOfPracticeOn(now)
+
   return (
     <section className={`${appStyles.section} ${styles.about}`} id="about">
       <div className={appStyles.container}>
@@ -12,47 +18,55 @@ export default function About() {
         <div className={styles.eyebrow}>Sanarse · Terapias holísticas</div>
         <h2>Un espacio para volver a vos</h2>
         <p className={styles.intro}>
-          Soy Rocío. Acompaño a personas que están en un momento de cambio y necesitan claridad, calma o, simplemente, un lugar donde hablar sin sentirse juzgadas.
+          Me llamo Rocío, tengo {age} años y empecé hace {years} años a dedicarme de tiempo completo a las terapias holísticas.
         </p>
         <p className={styles.intro}>
-          Trabajo con tarot, limpieza energética y otras herramientas que se adaptan a lo que cada persona trae. Creo en mirar lo que te pasa con honestidad, sin fórmulas mágicas ni respuestas cerradas.
+          Desde muy chica empecé a sentir una conexión con lo espiritual.
         </p>
         <p className={styles.intro}>
-          En las sesiones vas a encontrar presencia, respeto y confidencialidad. Mi trabajo no es decirte qué hacer: es ayudarte a escuchar lo que ya sabés.
+          En el 2018 conocí el Reiki gracias a una situación delicada de salud de un familiar y me di cuenta lo importante que es sanarnos internamente para no atraer problemas de salud.
+        </p>
+        <p className={styles.intro}>
+          Mi mayor anhelo es poder llegar a cada uno y ayudarles a sanar con mis dones cada parte de ustedes que está lastimada.
+        </p>
+        <p className={styles.intro}>
+          En las sesiones vas a encontrar presencia, respeto y confidencialidad. Mi labor no es decirte qué hacer: es ayudarte a escuchar lo que ya sabés.
+        </p>
+        <p className={styles.intro}>
+          Por eso, los invito a que sean parte de esta comunidad.{' '}
+          <a
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.inlineLink}
+            aria-label="Seguime en Instagram"
+          >
+            Seguime
+          </a>{' '}
+          para enterarte sobre este hermoso mundo.
         </p>
 
-        <section className={styles.subsection} aria-labelledby="pilares-title">
-          <h3 id="pilares-title" className={styles.subheading}>
-            Con qué trabajo
+        <section className={styles.subsection} aria-labelledby="inicio-title">
+          <h3 id="inicio-title" className={styles.subheading}>
+            Cómo empieza el proceso
           </h3>
           <p className={styles.subintro}>
-            Cada sesión se arma según lo que necesites. Estas son las herramientas que más uso:
+            Comienzo con la consulta: con tu nombre completo y fecha de nacimiento hago una evaluación energética para saber qué labor se debe realizar, qué tipo de terapia necesitás y cuántas sesiones.
           </p>
-          <ul className={styles.pillarsList}>
-            <li className={styles.pillarItem}>
-              <strong className={styles.pillarTerm}>Tarot Terapéutico</strong>
-              {' — '}
-              Preguntas concretas y una lectura que ordena. Sirve para ver tu situación desde afuera y decidir con más calma.
-            </li>
-            <li className={styles.pillarItem}>
-              <strong className={styles.pillarTerm}>Limpieza Energética</strong>
-              {' — '}
-              Para cuando el cansancio no se explica y sentís que algo se estancó. Se trabaja para soltar y renovar.
-            </li>
-            <li className={styles.pillarItem}>
-              <strong className={styles.pillarTerm}>Escucha sin Juicio</strong>
-              {' — '}
-              Un espacio para hablar de lo que no contás en otro lado, sin miedo a que te corrijan ni a que te juzguen.
-            </li>
-          </ul>
+          <p className={styles.subintro}>
+            El valor de la evaluación viene siempre incluido en todas las sesiones.
+          </p>
+          <p className={styles.subintro}>
+            Las sesiones son presenciales o remotas, con un acompañamiento continuo en tu proceso de sanación.
+          </p>
         </section>
 
-        <section className={styles.subsection} aria-labelledby="trabajo-title">
-          <h3 id="trabajo-title" className={styles.subheading}>
+        <section className={styles.subsection} aria-labelledby="proceso-title">
+          <h3 id="proceso-title" className={styles.subheading}>
             Qué buscamos en el proceso
           </h3>
           <p className={styles.subintro}>
-            Cada proceso es distinto, pero el trabajo apunta siempre a lo mismo:
+            Cada proceso es distinto, pero el objetivo es siempre el mismo:
           </p>
           <ol className={styles.orderedList}>
             <li>Reconocer los patrones que se repiten, para poder elegir distinto.</li>
@@ -62,7 +76,7 @@ export default function About() {
         </section>
 
         <blockquote className={styles.quote}>
-          El camino de la sanación te pertenece, pero no tenés que recorrerlo en soledad.
+          El camino de la sanación nunca es lineal y te pertenece, pero no tenés que recorrerlo en soledad.
         </blockquote>
 
         <p className={styles.invitation}>¿Sentís que es tu momento?</p>
