@@ -38,6 +38,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `src/components/Reviews/` | Reviews section + module CSS |
 | `src/components/Contact/` | Contact section + module CSS |
 | `src/components/Footer/` | Footer with year + module CSS |
+| `src/data/about.ts` | Fechas personales (cumpleaños y año de inicio) + `ageOn()` / `yearsOfPracticeOn()` para el copy de About |
 | `src/data/contact.ts` | WhatsApp number constants + `whatsappLink()` helper (single source of truth) |
 | `src/tests/` | Vitest suites, one per component + `seo.test.tsx` for the `index.html` meta and `whatsapp.test.tsx` for the link format |
 | `scripts/generate-og.ts` | Builds the 1200×630 share image (inline SVG → PNG via resvg) |
@@ -58,6 +59,14 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 
 - Context7 MCP server is configured (`opencode.json`) with API key for up-to-date library docs and code examples.
 - When the user asks to plan or research something for the project, use Context7 to fetch current documentation.
+
+## Copy
+
+- El copy visible **nunca usa la palabra «trabajo»** ni sus derivados (`trabajos`, `trabajar`, `trabaja`, `trabajamos`). Usá sinónimos: `labor`, `proceso`, `acompañamiento`, `práctica`, `sesión`, `objetivo`.
+- La única excepción es `src/data/reviews.ts`: son citas textuales de clientas reales, publicadas palabra por palabra, así que no se reescriben.
+- El copy va **sin emojis**: la página no usa ninguno. Los símbolos tipográficos (`✕` del modal, `★`, `◀`, `▶`, `❤`) no son emojis y se conservan a propósito.
+- `src/tests/copy.test.tsx` es el guard: si la palabra vuelve al copy de marca, la suite falla.
+- La edad y los años de dedicación **se calculan**, no se escriben: viven en `src/data/about.ts` (`ageOn()`, `yearsOfPracticeOn()`) y About los lee en cada render. No hardcodees "26 años" ni "4 años" en el copy.
 
 ## Brand
 
