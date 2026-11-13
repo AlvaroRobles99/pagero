@@ -1,6 +1,10 @@
 :root {
   --color-deep: #1f0f14;
   --color-primary: #c73a5a;
+  /* Variante oscura del rosa para texto chico sobre fondos claros: #c73a5a
+     queda en 4.53:1 sobre --color-light, justo en el límite, y esta llega a
+     6.10:1. La usa el hint de las cards de Services. */
+  --color-primary-deep: #a82c47;
   --color-light: #fef0f5;
   --color-accent: #c99a4a;
   /* Variante oscura del acento para texto sobre fondos claros: #c99a4a
