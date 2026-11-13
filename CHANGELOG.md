@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.7.0](https://github.com/AlvaroRobles99/pagero/compare/v0.6.1...v0.7.0) (2026-11-13)
+
+
+### Features
+
+* **about:** sessions are online, via WhatsApp ([0ddd6d4](https://github.com/AlvaroRobles99/pagero/commit/0ddd6d474021747d73c601bc15166c8fefda9087))
+* **services:** rewrite the eight service cards with the brand copy ([f5b315b](https://github.com/AlvaroRobles99/pagero/commit/f5b315b62d0abadfb94f7af3cd181b79cb1392a5))
+* **services:** rewrite the eight service cards with the brand copy ([fd742a1](https://github.com/AlvaroRobles99/pagero/commit/fd742a1a35c702403c3655d07041445f82b83f6d))
+
 ## [0.6.1](https://github.com/AlvaroRobles99/pagero/compare/v0.6.0...v0.6.1) (2026-11-13)
 
 
