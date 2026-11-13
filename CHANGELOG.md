@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.6.0](https://github.com/AlvaroRobles99/pagero/compare/v0.5.0...v0.6.0) (2026-11-13)
+
+
+### Features
+
+* **about:** rewrite the bio and calculate the age and years of practice ([1dc3706](https://github.com/AlvaroRobles99/pagero/commit/1dc37060ae92e0c3e387fd3fcb4eae24c672c64a))
+* **about:** rewrite the bio, add the process section and the copy rule ([47502d7](https://github.com/AlvaroRobles99/pagero/commit/47502d7c2b88ae537fc7490590adfb63f6c67e84))
+* **copy:** ban the word trabajo from the brand copy ([b5b44b7](https://github.com/AlvaroRobles99/pagero/commit/b5b44b7a6b35acadccb1d4537cb75c05ff65b15e))
+* **services:** use the card fan as a watermark on the service cards ([7e6e0d4](https://github.com/AlvaroRobles99/pagero/commit/7e6e0d4d6ee13dc8ba2f3fe357df5c6615e6bfe8))
+
 ## [0.5.0](https://github.com/AlvaroRobles99/pagero/compare/v0.4.0...v0.5.0) (2026-11-02)
 
 
