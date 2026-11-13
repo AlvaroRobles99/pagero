@@ -23,6 +23,7 @@ pageRo/
 │   └── project.md              ← Esta documentación
 ├── public/
 │   ├── images/
+│   │   ├── abanico-cartas.webp  ← Abanico de cinco cartas, fondo de las cards de Services (900×466, WebP q85, 48 KB)
 │   │   ├── agenda-cuarzos.webp  ← Foto de la agenda con cuarzos (Contact: 1128×785, WebP lossy con alfa, 52 KB)
 │   │   ├── logo.png             ← Marca de la marca (Contact + logo JSON-LD)
 │   │   ├── meditacion-playa.webp ← Rocío meditando en la playa (Hero derecha: 960×1280, WebP q75, 102 KB)
@@ -46,6 +47,7 @@ pageRo/
 │   ├── index.css               ← CSS reset + variables globales (colores, fuentes, prefers-reduced-motion)
 │   ├── shared.module.css       ← .btnPrimary (botón reutilizable)
 │   ├── data/
+│   │   ├── about.ts            ← Fechas personales + `ageOn()` / `yearsOfPracticeOn()` del copy de About
 │   │   ├── services.ts          ← Array de servicios (id, title, description, fullDescription)
 │   │   ├── reviews.ts           ← Array de testimonios reales (id, text) + `TESTIMONIALS_HIGHLIGHT`
 │   │   ├── contact.ts           ← Constantes del número de WhatsApp + helper `whatsappLink()`
@@ -70,7 +72,8 @@ pageRo/
 │       ├── Contact.test.tsx
 │       ├── Footer.test.tsx
 │       ├── Lotus.test.tsx
-│       └── whatsapp.test.tsx    ← Guard del formato del link de WhatsApp
+│       ├── whatsapp.test.tsx    ← Guard del formato del link de WhatsApp
+│       └── copy.test.tsx        ← Guard de la regla de copy: sin la palabra «trabajo»
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml               ← GitHub Actions: tests y build en cada PR
@@ -136,7 +139,8 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - Sección con fondo `--color-light`
 - Loto decorativo arriba del título
 - Loto semi-transparente como marca de agua de fondo (vía `::before` con SVG inline y radial-gradient)
-- Presentación, herramientas de trabajo (Tarot Terapéutico, Limpieza Energética, Escucha sin Juicio), qué se busca en el proceso, cita inspiradora y CTA con WhatsApp
+- Bio de presentación (origen, Reiki en 2018, anhelo y comunidad) con la edad y los años de dedicación calculados en `src/data/about.ts` —nunca escritos a mano—, cómo empieza el proceso (consulta con nombre completo y fecha de nacimiento, evaluación energética incluida en el valor de las sesiones, sesiones presenciales o remotas), qué se busca en el proceso, cita inspiradora y CTA con WhatsApp
+- «Seguime» cierra la bio como link al Instagram, con `INSTAGRAM_URL` de `src/data/social.ts` (única fuente de verdad de las tres redes)
 
 ### Lotus
 - SVG de loto estilizado (6 pétalos + centro)
@@ -148,9 +152,10 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - Datos importados desde `src/data/services.ts` (id, título, resumen corto para la card, texto completo para el modal) — sin precios, sin `includes`, sin duración, sin íconos
 - 7 cards clickeables (`role="button"`, `tabIndex={0}`, `onClick`, `onKeyDown Enter`)
 - Borde izquierdo decorativo por card en ciclo de 3: gold (`3n+1`), rose (`3n+2`), gold→rose gradiente (`3n+3`)
+- Fondo: `public/images/abanico-cartas.webp` como marca de agua de cada card vía `::before`, a 32% de opacidad y con un degradado de máscara que lo despeja detrás del título y del pie
 - Texto "Ver cómo es →" al pie de cada card, visible en hover desktop
 - Al hacer clic abre `ServiceModal` con el texto completo del servicio
-- Animación stagger via `IntersectionObserver` (delay `index × 120ms`)
+- Animación stagger via `IntersectionObserver` (delay `index × 120ms`), que se limpia a `0ms` al terminar la entrada: el hover arranca igual en las siete cards
 
 ### ServiceModal
 - Portal a `document.body` para superponerse a toda la página
@@ -289,9 +294,9 @@ bun run typecheck   # los tres proyectos, vía `bun check`
 todos los núcleos. `typescript` vive en `devDependencies` porque es una herramienta de desarrollo de
 la app, no una dependencia que se publique.
 
-Los tres son gate real, y el conteo dice qué cubre cada uno: la app 14 archivos (los cuatro `.ts` de
-`src/data/`, los nueve `.tsx` de componentes y `src/main.tsx`), los tests 25 (los 12 de `src/tests`
-más los 13 de la app que importan) y el tooling 3 (`vite.config.ts`, `vitest.config.ts` y
+Los tres son gate real, y el conteo dice qué cubre cada uno: la app 15 archivos (los cinco `.ts` de
+`src/data/`, los nueve `.tsx` de componentes y `src/main.tsx`), los tests 27 (los 13 de `src/tests`
+más los 14 de la app que importan) y el tooling 3 (`vite.config.ts`, `vitest.config.ts` y
 `scripts/generate-og.ts`).
 
 La primera capa migrada fue `src/data/`: exporta las interfaces `Service`, `Review` y `SocialLink`,
