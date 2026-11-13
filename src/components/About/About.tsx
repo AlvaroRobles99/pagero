@@ -57,7 +57,7 @@ export default function About() {
             El valor de la evaluación viene siempre incluido en todas las sesiones.
           </p>
           <p className={styles.subintro}>
-            Las sesiones son presenciales o remotas, con un acompañamiento continuo en tu proceso de sanación.
+            Las sesiones son online, vía WhatsApp, con un acompañamiento continuo en tu proceso de sanación.
           </p>
         </section>
 
