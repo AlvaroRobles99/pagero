@@ -29,6 +29,7 @@ pageRo/
 │   │   ├── meditacion-playa.webp ← Rocío meditando en la playa (Hero derecha: 960×1280, WebP q75, 102 KB)
 │   │   ├── og-image.png         ← Imagen de compartir 1200×630 (generada, no editar a mano)
 │   │   ├── rocio-oraculos.webp  ← Retrato de Rocío con las cartas en la mano (Hero centro: 960×966, WebP q75, 81 KB)
+│   │   ├── rocio-tarot.webp     ← Rocío con las cartas en las manos sobre el mantel de tarot (card de Bio: 900×900, WebP q75, 78 KB)
 │   │   └── rocio-playa.webp     ← Rocío de pie en la playa (Hero izquierda: 960×966, WebP q75, 40 KB)
 │   ├── favicon.ico             ← Favicon de pestaña (formato ICO, sizes any)
 │   ├── favicon-16x16.png       ← Favicon de pestaña 16×16 (estático, no generado)
@@ -42,19 +43,20 @@ pageRo/
 │   └── fonts/                  ← TTFs de marca, usados solo por el generador OG
 ├── src/
 │   ├── main.tsx                ← Entry point de React
-│   ├── App.tsx                 ← Layout principal: landmark `<main>` con todas las secciones + divisores Lotus, entre el header (Hero) y el footer
+│   ├── App.tsx                 ← Layout principal: Hero, y en `<main>` About → Testimonios → Servicios → Bio → Contacto, con divisores Lotus; después el footer
 │   ├── App.module.css          ← Estilos de layout compartidos (.section, .container, h2)
 │   ├── index.css               ← CSS reset + variables globales (colores, fuentes, prefers-reduced-motion)
 │   ├── shared.module.css       ← .btnPrimary (botón reutilizable)
 │   ├── data/
-│   │   ├── about.ts            ← Fechas personales + `ageOn()` / `yearsOfPracticeOn()` del copy de About
+│   │   ├── about.ts            ← Fechas personales + `ageOn()` / `yearsOfPracticeOn()` del copy de Bio
 │   │   ├── services.ts          ← Array de servicios (id, title, description, fullDescription)
 │   │   ├── reviews.ts           ← Array de testimonios reales (id, text) + `TESTIMONIALS_HIGHLIGHT`
 │   │   ├── contact.ts           ← Constantes del número de WhatsApp + helper `whatsappLink()`
 │   │   └── social.ts            ← Array `SOCIAL_LINKS` (id, name, url, icon) de las tres redes
 │   ├── components/
 │   │   ├── Hero/                ← Header full-viewport con tríptico de fotos + CTA
-│   │   ├── About/               ← Sección "Sobre mí" con texto de presentación
+│   │   ├── About/               ← Sección "Sobre mí": cómo empieza el proceso y qué se busca
+│   │   ├── Bio/                 ← Card horizontal con el retrato y la historia de Rocío
 │   │   ├── Lotus/               ← SVG decorativo de loto con rotación animada
 │   │   ├── Services/            ← Grid de 8 cards clickeables con stagger reveal + apertura de modal
 │   │   ├── ServiceModal/        ← Modal a pantalla completa con detalle del servicio y CTA WhatsApp
@@ -67,6 +69,7 @@ pageRo/
 │       ├── App.test.tsx
 │       ├── Hero.test.tsx
 │       ├── About.test.tsx
+│       ├── Bio.test.tsx
 │       ├── Services.test.tsx
 │       ├── Reviews.test.tsx
 │       ├── Contact.test.tsx
@@ -137,11 +140,20 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - **Sin logo:** el logo flotaba sobre las caras y competía con ellas; ahora firma la sección de Contacto (ver abajo)
 
 ### About
-- Sección con fondo `--color-light`
+- Sección con fondo `--color-warm-white` (cambió desde `--color-light` al reordenarse: ahora Testimonios toma el fondo claro y las dos secciones no se funden)
 - Loto decorativo arriba del título
 - Loto semi-transparente como marca de agua de fondo (vía `::before` con SVG inline y radial-gradient)
-- Bio de presentación (origen, Reiki en 2018, anhelo y comunidad) con la edad y los años de dedicación calculados en `src/data/about.ts` —nunca escritos a mano—, cómo empieza el proceso (consulta con nombre completo y fecha de nacimiento, evaluación energética incluida en el valor de las sesiones, sesiones online vía WhatsApp), qué se busca en el proceso, cita inspiradora y CTA con WhatsApp
-- «Seguime» cierra la bio como link al Instagram, con `INSTAGRAM_URL` de `src/data/social.ts` (única fuente de verdad de las tres redes)
+- Ya **no** lleva la bio de presentación: esa historia vive en la card de `Bio`, debajo de Servicios. Acá queda cómo empieza el proceso (consulta con nombre completo y fecha de nacimiento, evaluación energética incluida en el valor de las sesiones, sesiones online vía WhatsApp), qué se busca en el proceso, la cita inspiradora y el CTA con WhatsApp
+
+### Bio
+- Card horizontal debajo de Servicios con el retrato y la historia de Rocío: la intro que antes abría About, textual y sin recortes
+- Sección con fondo `--color-deep` y dos radial-gradients de marca (rosa arriba, dorado abajo a la derecha): es la única sección oscura del cuerpo de la página y hace que el fondo rojo de la foto se funda con el fondo en lugar de recortarse contra otro crema
+- La card es `--color-warm-white` con borde dorado hairline, radio 20px y sombra profunda; adentro, un marco dorado de 1px inset sobre la foto, guiño al borde de una carta de tarot
+- Grid a dos columnas desde 880px (`minmax(300px, 380px) 1fr`): foto a la izquierda a sangre, texto a la derecha y centrado vertical. En mobile se apila con la foto cuadrada arriba
+- Foto `public/images/rocio-tarot.webp` (900×900, WebP q75, 78 KB), `loading="lazy"`, `decoding="async"`, `width`/`height` declarados
+- La edad y los años de dedicación se calculan con `ageOn()` / `yearsOfPracticeOn()` de `src/data/about.ts`, igual que antes: nada hardcodeado
+- «Seguime» cierra la historia como link al Instagram, con `INSTAGRAM_URL` de `src/data/social.ts` (única fuente de verdad de las tres redes)
+- El `h2` de la card es "Mi historia"; la regla dorada que `App.module.css` centra bajo cada `h2` se alinea a la izquierda dentro de la card (selector `.card .body h2::after`, con especificidad suficiente para ganarle a la regla global)
 
 ### Lotus
 - SVG de loto estilizado (6 pétalos + centro)

@@ -28,22 +28,23 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `index.html` | Vite entry HTML |
 | `vite.config.ts` | Vite config |
 | `src/main.tsx` | React entry point |
-| `src/App.tsx` | Layout — renders all sections |
+| `src/App.tsx` | Layout — Hero, then About → Reviews → Services → Bio → Contact |
 | `src/index.css` | Global reset + CSS variables |
 | `src/shared.module.css` | Shared styles (btn-primary) |
 | `src/components/Lotus/` | Animated lotus SVG divider |
 | `src/components/Hero/` | Hero section + module CSS |
-| `src/components/About/` | About section + module CSS |
+| `src/components/About/` | About section: how the process starts + module CSS |
+| `src/components/Bio/` | Horizontal bio card with Rocío's portrait and story + module CSS |
 | `src/components/Services/` | Services cards + module CSS |
 | `src/components/Reviews/` | Reviews section + module CSS |
 | `src/components/Contact/` | Contact section + module CSS |
 | `src/components/Footer/` | Footer with year + module CSS |
-| `src/data/about.ts` | Fechas personales (cumpleaños y año de inicio) + `ageOn()` / `yearsOfPracticeOn()` para el copy de About |
+| `src/data/about.ts` | Fechas personales (cumpleaños y año de inicio) + `ageOn()` / `yearsOfPracticeOn()` para el copy de Bio |
 | `src/data/contact.ts` | WhatsApp number constants + `whatsappLink()` helper (single source of truth) |
 | `src/tests/` | Vitest suites, one per component + `seo.test.tsx` for the `index.html` meta and `whatsapp.test.tsx` for the link format |
 | `scripts/generate-og.ts` | Builds the 1200×630 share image (inline SVG → PNG via resvg) |
 | `scripts/fonts/` | Brand TTFs, used only by the OG generator |
-| `public/images/` | Static assets (`agenda-cuarzos.webp`, `logo.png`, the three hero photographs, generated `og-image.png`) |
+| `public/images/` | Static assets (`agenda-cuarzos.webp`, `logo.png`, the three hero photographs, `rocio-tarot.webp` for the bio card, generated `og-image.png`) |
 | `public/favicon.ico`, `public/favicon-16x16.png`, `public/favicon-32x32.png`, `public/android-chrome-192x192.png`, `public/android-chrome-512x512.png` | Tab/PWA icon set — static files supplied as-is, not generated |
 | `public/apple-touch-icon.png` | 180×180 iOS home-screen icon (iOS does not accept SVG here); static file |
 | `public/site.webmanifest` | PWA manifest: brand name, deep theme/background `#1f0f14`, android icons |
@@ -66,7 +67,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 - La única excepción es `src/data/reviews.ts`: son citas textuales de clientas reales, publicadas palabra por palabra, así que no se reescriben.
 - El copy va **sin emojis**: la página no usa ninguno. Los símbolos tipográficos (`✕` del modal, `★`, `◀`, `▶`, `❤`) no son emojis y se conservan a propósito.
 - `src/tests/copy.test.tsx` es el guard: si la palabra vuelve al copy de marca, la suite falla.
-- La edad y los años de dedicación **se calculan**, no se escriben: viven en `src/data/about.ts` (`ageOn()`, `yearsOfPracticeOn()`) y About los lee en cada render. No hardcodees "26 años" ni "4 años" en el copy.
+- La edad y los años de dedicación **se calculan**, no se escriben: viven en `src/data/about.ts` (`ageOn()`, `yearsOfPracticeOn()`) y Bio los lee en cada render. No hardcodees "26 años" ni "4 años" en el copy.
 
 ## Brand
 

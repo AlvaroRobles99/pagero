@@ -19,4 +19,13 @@ describe('App', () => {
     expect(screen.getByRole('banner')).toBeInTheDocument()
     expect(screen.getByRole('contentinfo')).toBeInTheDocument()
   })
+
+  it('ordena Testimonios antes de Servicios y la bio debajo de Servicios', () => {
+    const { container } = render(<App />)
+    const ids = Array.from(container.querySelectorAll('main section[id]')).map(
+      (section) => section.id
+    )
+
+    expect(ids).toEqual(['about', 'reviews', 'services', 'sobre-mi', 'contact'])
+  })
 })
