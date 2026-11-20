@@ -5,6 +5,7 @@ import Services from './components/Services/Services'
 import Bio from './components/Bio/Bio'
 import Contact from './components/Contact/Contact'
 import Footer from './components/Footer/Footer'
+import WhatsAppFab from './components/WhatsAppFab/WhatsAppFab'
 import Lotus from './components/Lotus/Lotus'
 import appStyles from './App.module.css'
 
@@ -24,6 +25,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
+      <WhatsAppFab />
     </>
   )
 }

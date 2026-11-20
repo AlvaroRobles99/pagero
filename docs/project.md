@@ -62,6 +62,7 @@ pageRo/
 │   │   ├── ServiceModal/        ← Modal a pantalla completa con detalle del servicio y CTA WhatsApp
 │   │   ├── Reviews/             ← Carrusel de testimonios con corazón y contador
 │   │   ├── Contact/             ← Sección con botón de WhatsApp
+│   │   ├── WhatsAppFab/         ← Botón flotante de WhatsApp fijo en pantalla
 │   │   └── Footer/              ← Footer con copyright y año dinámico
 │   └── tests/
 │       ├── setup.ts             ← Setup global (@testing-library/jest-dom + mock IntersectionObserver)
@@ -74,6 +75,7 @@ pageRo/
 │       ├── Reviews.test.tsx
 │       ├── Contact.test.tsx
 │       ├── Footer.test.tsx
+│       ├── WhatsAppFab.test.tsx
 │       ├── Lotus.test.tsx
 │       ├── whatsapp.test.tsx    ← Guard del formato del link de WhatsApp
 │       └── copy.test.tsx        ← Guard de la regla de copy: sin la palabra «trabajo»
@@ -203,6 +205,15 @@ Cargadas desde Google Fonts en `index.html` con preconnect.
 - **No** lleva el loto de marca de agua en `::before`: se transparentaba a través del recorte de la foto y se leía como una mancha detrás del CTA
 - Texto de invitación cálido + botón WhatsApp que abre `wa.me` vía `whatsappLink()`
 - Bloque "Ver mi contenido" al final, debajo del CTA: regla dorada + 3 botones circulares (52px, borde dorado) con ícono SVG inline que abren Instagram, Facebook y TikTok en pestaña nueva — los links viven en `src/data/social.ts` (única fuente de verdad)
+
+### WhatsApp flotante
+- `WhatsAppFab` vive fuera de `<main>` y del `<footer>`, al final del árbol: un `<a>` fijo abajo a la derecha que sigue al lector mientras scrollea
+- Círculo de 56px en mobile y 60px desde 768px, con `env(safe-area-inset-*)` para que no lo tape el notch ni la barra gestual
+- Rosa de marca (`--color-primary`) con glifo blanco y hairline dorado, no el verde de WhatsApp: en una página crema, rosa y dorada un punto verde sería el único elemento fuera de la paleta, y el glifo ya carga el reconocimiento
+- `z-index: 900`: siempre debajo del `ServiceModal` (1000), así una card abierta lo tapa en lugar de mezclarse
+- Hover: se eleva 2px y oscurece el fondo; foco visible con doble anillo (crema + `--color-primary-deep`) porque un solo outline dorado no llega a AA ni sobre crema ni sobre el fondo profundo
+- Abre `wa.me` con `whatsappLink()` de `src/data/contact.ts`, en pestaña nueva con `rel="noopener noreferrer"`, y lleva `aria-label` porque el ícono es decorativo
+- La regla global de `prefers-reduced-motion` de `index.css` ya anula su transición
 
 ### Footer
 - Copyright dinámico con `new Date().getFullYear()`
