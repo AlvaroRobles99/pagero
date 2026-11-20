@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.0](https://github.com/AlvaroRobles99/pagero/compare/v0.8.0...v0.9.0) (2026-11-20)
+
+
+### Features
+
+* **whatsapp:** pin a floating WhatsApp button to the viewport ([589d7a4](https://github.com/AlvaroRobles99/pagero/commit/589d7a43025312d7fa4a3544510ecbe9d5bcb0d4))
+* **whatsapp:** pin a floating WhatsApp button to the viewport ([a3c462e](https://github.com/AlvaroRobles99/pagero/commit/a3c462ee0fe1786a342c96d7454f741aff2302aa))
+
 ## [0.8.0](https://github.com/AlvaroRobles99/pagero/compare/v0.7.0...v0.8.0) (2026-11-20)
 
 
