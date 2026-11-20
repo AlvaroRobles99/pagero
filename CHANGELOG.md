@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.8.0](https://github.com/AlvaroRobles99/pagero/compare/v0.7.0...v0.8.0) (2026-11-20)
+
+
+### Features
+
+* **bio:** move the story into a horizontal card below Services ([94c23fb](https://github.com/AlvaroRobles99/pagero/commit/94c23fb2ebc553661f0914c643875f1b6600a206))
+* **bio:** move the story into a horizontal card below Services ([5c05904](https://github.com/AlvaroRobles99/pagero/commit/5c0590400858d4942d1a919c6e6f3f66755def75))
+
 ## [0.7.0](https://github.com/AlvaroRobles99/pagero/compare/v0.6.1...v0.7.0) (2026-11-13)
 
 
