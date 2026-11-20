@@ -1,3 +1,36 @@
+/* Brand fonts, self-hosted. The three files in public/fonts/ are variable, and
+   the `font-weight` range below is the contract: a weight outside it gets
+   synthesised by the browser instead of loaded. Regenerating a file means
+   renaming it, because /fonts/* is served as immutable (see vercel.json).
+
+   Only the latin subset ships, and it covers this copy entirely: U+0000-00FF
+   carries á é í ó ú ñ, and U+2000-206F carries the em dash and the middle dot.
+   `font-display: swap` keeps first paint off the critical path — the fallback
+   paints immediately and the real face replaces it. */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/cormorant-garamond-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('/fonts/cormorant-garamond-italic-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url('/fonts/figtree-latin.woff2') format('woff2');
+}
+
 :root {
   --color-deep: #1f0f14;
   --color-primary: #c73a5a;
