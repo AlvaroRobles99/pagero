@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react'
 import { render } from '@testing-library/react'
 import About from '../components/About/About'
+import Bio from '../components/Bio/Bio'
 import Contact from '../components/Contact/Contact'
 import Footer from '../components/Footer/Footer'
 import Hero from '../components/Hero/Hero'
@@ -19,6 +20,7 @@ const FORBIDDEN = /trabaj/i
 
 const sections: ReadonlyArray<{ name: string; Section: () => ReactElement }> = [
   { name: 'Sobre mí', Section: About },
+  { name: 'Biografía', Section: Bio },
   { name: 'Servicios', Section: Services },
   { name: 'Contacto', Section: Contact },
   { name: 'Hero', Section: Hero },

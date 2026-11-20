@@ -1,0 +1,140 @@
+/* The only deep stage on the page: the photograph's own backdrop is the same
+   burgundy as the brand, so the section dissolves into the portrait instead of
+   framing it against another cream band. */
+.bio {
+  background: var(--color-deep);
+  position: relative;
+  overflow: hidden;
+}
+
+.bio::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse 70% 60% at 50% -10%,
+      rgba(199, 58, 90, 0.28) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 45% 45% at 100% 110%,
+      rgba(201, 154, 74, 0.14) 0%,
+      transparent 70%
+    );
+  pointer-events: none;
+}
+
+.bio > * {
+  position: relative;
+  z-index: 1;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 1fr;
+  background: var(--color-warm-white);
+  border: 1px solid rgba(201, 154, 74, 0.35);
+  border-radius: 20px;
+  overflow: hidden;
+  text-align: left;
+  box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.7);
+}
+
+.portrait {
+  position: relative;
+}
+
+/* Hairline gold frame inset in the photograph: the border of a tarot card,
+   kept as the single decorative gesture of the section. */
+.portrait::after {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(201, 154, 74, 0.45);
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: 50% 40%;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem 1.5rem;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-accent-deep);
+}
+
+/* App.module.css centers the gold rule under every section h2; inside a
+   left-aligned card it has to start with the title. */
+.card .body h2::after {
+  margin: 0.6rem 0 0;
+}
+
+.text {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--color-text);
+}
+
+.inlineLink {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-decoration-color: rgba(199, 58, 90, 0.4);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.inlineLink:hover {
+  text-decoration-color: currentColor;
+}
+
+.inlineLink:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (min-width: 768px) {
+  .body {
+    gap: 1.15rem;
+    padding: 2.75rem 2.5rem;
+  }
+
+  .text {
+    font-size: 1.05rem;
+  }
+}
+
+@media (min-width: 880px) {
+  .card {
+    grid-template-columns: minmax(300px, 380px) 1fr;
+  }
+
+  .portrait {
+    height: 100%;
+  }
+
+  .image {
+    height: 100%;
+    aspect-ratio: auto;
+    object-position: 50% 45%;
+  }
+}
