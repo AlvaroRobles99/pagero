@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.9.1](https://github.com/AlvaroRobles99/pagero/compare/v0.9.0...v0.9.1) (2026-11-21)
+
+
+### Bug Fixes
+
+* ship the variable Cormorant file, not a static instance ([8f81bee](https://github.com/AlvaroRobles99/pagero/commit/8f81bee69bfc7a46f0346c58d3b70eab2bf2a024))
+
+
+### Performance Improvements
+
+* cache build output and fonts as immutable ([0a68bb5](https://github.com/AlvaroRobles99/pagero/commit/0a68bb5c35ffd053412eb96290a8513576582605))
+* self-host the brand fonts ([bebdcbd](https://github.com/AlvaroRobles99/pagero/commit/bebdcbd85dcf0ed53132a1b67b802c141b0280a2))
+* self-host the brand fonts and cache build output as immutable ([2149db9](https://github.com/AlvaroRobles99/pagero/commit/2149db9b6f48d2afdfb8549acd20a5adba99dcb4))
+
 ## [0.9.0](https://github.com/AlvaroRobles99/pagero/compare/v0.8.0...v0.9.0) (2026-11-20)
 
 
