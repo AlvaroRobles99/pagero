@@ -24,7 +24,7 @@ S6. The regression guard is a test, not a comment. `src/tests/fonts.test.tsx` re
 - an `@font-face` loses `font-display: swap`;
 - a preload target does not resolve to an existing file.
 
-S7. The font payload must not grow beyond the status quo. Baseline measured against the live Google CSS: 58,880 B across three files. Shipped: 82,832 B (`23,416` roman + `39,260` italic + `20,156` Figtree). The +23 KB buys an explicit `font-weight` range per file — the italic keeps a real 400–500 axis instead of a static 400 instance — and is recorded here instead of being an accident. The 780 ms of render-blocking this removes is the trade.
+S7. The font payload must not grow beyond what the request needs. Baseline measured against the live Google CSS: 58,880 B across three files. Shipped: 97,056 B (`37,640` roman + `39,260` italic + `20,156` Figtree), all three genuinely variable. The larger files are the point: a smaller one is a single static instance, and declaring a `font-weight` range on top of it makes the browser synthesise bold from that one weight. That failure is silent in CSS and obvious on screen — the headings render thicker and darker than any real Cormorant weight — so `fonts.test.tsx` refuses a file small enough to be a static instance.
 
 ## Tasks
 
@@ -33,6 +33,7 @@ S7. The font payload must not grow beyond the status quo. Baseline measured agai
 | T1 | S1-S4, S6, S7 | inline | done | `bebdcbd` |
 | T2 | S5 | inline | done | `0a68bb5` |
 | T3 | S1-S7 (docs) | inline | done | docs commit |
+| T4 | S7 (correction) | inline | done | `fix: ship the variable Cormorant file` |
 
 ## Log
 
@@ -78,3 +79,18 @@ L7 — Verification evidence.
 | Third-party gone | grep of the served HTML | no `googleapis`, both `rel="preload"` present |
 
 Gap, stated rather than hidden: jsdom does not load fonts, so no automated check proves the glyphs render. The structural proofs are that each file is a real WOFF2 (`wOF2` signature, > 5 KB) and that the declaration matches the range the file was generated for. A visual pass in a browser before merging is the remaining human step, together with a re-run of PageSpeed against the deployed preview to confirm the 780 ms is gone.
+
+L8 — User-reported regression, reproduced and fixed. The user sent two screenshots: headings that were delicate and light, and headings that were heavy and dark, asking for the previous tone back. My first read was that no colour had changed, which was true and useless: `git diff` proves the `--color-*` variables are byte-identical, so the colour was never the variable.
+
+Reproduced with headless Chrome instead of argued about. Three probes settled it:
+1. `document.fonts` reported all three faces `status=loaded` and `check()` true, so the files were reachable. That ruled out the 404/path theory.
+2. An A/B of the same string at the same size, my file against the live Google CSS, showed mine rendering bold and Google's rendering delicate — at 600 and at 700.
+3. A weight sweep (400 / 600 / 700) showed my file rendering 600 and 700 identically bold, while the 37,640 B candidate rendered all three like Google.
+
+Cause: Google serves a **static single instance** (23,416 B) when the CSS asks for one weight, and a **variable file** (37,640 B) when it asks for a range. My `wght@400..700` request returned the static one, and declaring `font-weight: 400 700` on top of it made Chromium use that single weight for everything and **synthesise bold** for 600 and 700. A synthesised bold is thicker and darker than any real Cormorant weight, which is exactly the "los títulos están más oscuros" report. The colour was never touched; the ink coverage was.
+
+Fix: replace the roman file with the variable one and declare its real range, `300 700`, for both roman and italic. Verified with the same probe against the live Google reference: the `var(--font-display)` h2, the hero `h1`, the italic tagline and Figtree at 400/600 now match Google's rendering.
+
+Guard added: `fonts.test.tsx` refuses a file small enough to be a static instance, because the failure is invisible in CSS and only shows on screen.
+
+Correction to L5: the table there records `wght@400..700 → variable 400-700 (23,416)`. It was not variable. Asking for a range whose files Google had already generated as statics returns the static; only `0,300..700` returned the real variable file.

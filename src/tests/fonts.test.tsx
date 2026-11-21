@@ -93,6 +93,29 @@ describe('fonts — files on disk', () => {
       expect(statSync(path).size, `${href} looks truncated`).toBeGreaterThan(5_000)
     }
   })
+
+  it('ships the variable file, not a single static instance', () => {
+    // Google serves a small static instance when the CSS asks for ONE weight, and
+    // a much larger variable file when it asks for a RANGE. Declaring a wide
+    // font-weight range on top of a static file makes the browser synthesise bold:
+    // that is how the headings silently turned heavy once already, because a
+    // synthesised bold is darker and thicker than any real Cormorant weight.
+    const MINIMUM: Record<string, number> = {
+      'cormorant-garamond-latin.woff2': 30_000,
+      'cormorant-garamond-italic-latin.woff2': 30_000,
+      'figtree-latin.woff2': 15_000,
+    }
+
+    for (const href of declaredFontPaths) {
+      const name = href.replace('/fonts/', '')
+      const floor = MINIMUM[name]
+      if (floor === undefined) continue
+      expect(
+        statSync(onDisk(href)).size,
+        `${name} is too small to be a variable font: a static instance was downloaded, and every weight above its own would be synthesised`,
+      ).toBeGreaterThan(floor)
+    }
+  })
 })
 
 describe('fonts — preloads', () => {

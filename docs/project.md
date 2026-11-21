@@ -32,8 +32,8 @@ pageRo/
 │   │   ├── rocio-tarot.webp     ← Rocío con las cartas en las manos sobre el mantel de tarot (card de Bio: 900×900, WebP q75, 78 KB)
 │   │   └── rocio-playa.webp     ← Rocío de pie en la playa (Hero izquierda: 960×966, WebP q75, 40 KB)
 │   ├── fonts/                  ← Fuentes de marca self-hosted (WOFF2 variable, subset latin — ver "Tipografía")
-│   │   ├── cormorant-garamond-latin.woff2        ← Cormorant Garamond 400–700 (23.416 B)
-│   │   ├── cormorant-garamond-italic-latin.woff2 ← Cormorant Garamond itálica 400–500 (39.260 B)
+│   │   ├── cormorant-garamond-latin.woff2        ← Cormorant Garamond variable 300–700 (37.640 B)
+│   │   ├── cormorant-garamond-italic-latin.woff2 ← Cormorant Garamond itálica variable 300–700 (39.260 B)
 │   │   └── figtree-latin.woff2                   ← Figtree 300–600 (20.156 B)
 │   ├── favicon.ico             ← Favicon de pestaña (formato ICO, sizes any)
 │   ├── favicon-16x16.png       ← Favicon de pestaña 16×16 (estático, no generado)
@@ -131,9 +131,9 @@ Definidas en `src/index.css` y usadas en todos los módulos CSS via `var(--nombr
 
 | Rol | Fuente | Rango declarado | Archivo |
 |---|---|---|---|
-| Display | Cormorant Garamond | 400–700 | `public/fonts/cormorant-garamond-latin.woff2` |
-| Display itálica | Cormorant Garamond | 400–500 | `public/fonts/cormorant-garamond-italic-latin.woff2` |
-| Body | Figtree | 300–600 | `public/fonts/figtree-latin.woff2` |
+| Display | Cormorant Garamond | 300–700 variable | `public/fonts/cormorant-garamond-latin.woff2` |
+| Display itálica | Cormorant Garamond | 300–700 variable | `public/fonts/cormorant-garamond-italic-latin.woff2` |
+| Body | Figtree | 300–600 variable | `public/fonts/figtree-latin.woff2` |
 
 Los tres archivos son **variables y self-hosted**: viven en `public/fonts/`, se declaran con `@font-face` al principio de `src/index.css` y se sirven desde el propio origen. Antes venían de Google Fonts, y ese `<link>` bloqueaba el render de **toda** la página —no solo del texto— mientras encadenaba dos DNS/TLS antes de pedir el archivo: ~780 ms de bloqueo en el perfil mobile de Lighthouse.
 

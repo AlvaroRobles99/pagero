@@ -84,7 +84,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 
 | Token | Value |
 |---|---|
-| Display font | Cormorant Garamond — self-hosted, variable 400–700 (+ italic 400–500) |
+| Display font | Cormorant Garamond — self-hosted, variable 300–700 (roman + italic) |
 | Body font | Figtree — self-hosted, variable 300–600 |
 | Deep background | `#1f0f14` |
 | Primary rose | `#c73a5a` |
