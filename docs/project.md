@@ -31,6 +31,10 @@ pageRo/
 │   │   ├── rocio-oraculos.webp  ← Retrato de Rocío con las cartas en la mano (Hero centro: 960×966, WebP q75, 81 KB)
 │   │   ├── rocio-tarot.webp     ← Rocío con las cartas en las manos sobre el mantel de tarot (card de Bio: 900×900, WebP q75, 78 KB)
 │   │   └── rocio-playa.webp     ← Rocío de pie en la playa (Hero izquierda: 960×966, WebP q75, 40 KB)
+│   ├── fonts/                  ← Fuentes de marca self-hosted (WOFF2 variable, subset latin — ver "Tipografía")
+│   │   ├── cormorant-garamond-latin.woff2        ← Cormorant Garamond variable 300–700 (37.640 B)
+│   │   ├── cormorant-garamond-italic-latin.woff2 ← Cormorant Garamond itálica variable 300–700 (39.260 B)
+│   │   └── figtree-latin.woff2                   ← Figtree 300–600 (20.156 B)
 │   ├── favicon.ico             ← Favicon de pestaña (formato ICO, sizes any)
 │   ├── favicon-16x16.png       ← Favicon de pestaña 16×16 (estático, no generado)
 │   ├── favicon-32x32.png       ← Favicon de pestaña 32×32 (estático, no generado)
@@ -45,7 +49,7 @@ pageRo/
 │   ├── main.tsx                ← Entry point de React
 │   ├── App.tsx                 ← Layout principal: Hero, y en `<main>` About → Testimonios → Servicios → Bio → Contacto, con divisores Lotus; después el footer
 │   ├── App.module.css          ← Estilos de layout compartidos (.section, .container, h2)
-│   ├── index.css               ← CSS reset + variables globales (colores, fuentes, prefers-reduced-motion)
+│   ├── index.css               ← CSS reset + variables globales (colores, fuentes, prefers-reduced-motion) + los `@font-face` self-hosted
 │   ├── shared.module.css       ← .btnPrimary (botón reutilizable)
 │   ├── data/
 │   │   ├── about.ts            ← Fechas personales + `ageOn()` / `yearsOfPracticeOn()` del copy de Bio
@@ -78,6 +82,8 @@ pageRo/
 │       ├── WhatsAppFab.test.tsx
 │       ├── Lotus.test.tsx
 │       ├── whatsapp.test.tsx    ← Guard del formato del link de WhatsApp
+│       ├── fonts.test.tsx       ← Guard de la entrega de fuentes: sin terceros, swap, archivos WOFF2 reales, preloads
+│       ├── deploy.test.tsx      ← Guard de `vercel.json`: qué se cachea immutable y qué no
 │       └── copy.test.tsx        ← Guard de la regla de copy: sin la palabra «trabajo»
 ├── .github/
 │   └── workflows/
@@ -94,6 +100,7 @@ pageRo/
 ├── tsconfig.test.json           ← Proyecto TS de los tests (`src/tests`, DOM + Node)
 ├── tsconfig.node.json           ← Proyecto TS del tooling (`scripts/` + configs de Vite, Bun/Node)
 ├── opencode.json                ← Config de opencode (MCP Context7 + instrucciones)
+├── vercel.json                  ← Headers de caché `immutable` para `/assets` y `/fonts` (ver "Caché y entrega")
 ├── AGENTS.md                    ← Instrucciones para agentes de opencode
 ├── release-please-config.json   ← Config de release-please (changelog + versión)
 ├── .release-please-manifest.json ← Versión publicada; la mantiene release-please
@@ -122,12 +129,23 @@ Definidas en `src/index.css` y usadas en todos los módulos CSS via `var(--nombr
 
 ### Tipografía
 
-| Rol | Fuente | Pesos usados |
-|---|---|---|
-| Display | Cormorant Garamond | 400, 500, 600, 700 (regular + itálica) |
-| Body | Figtree | 300, 400, 500, 600 |
+| Rol | Fuente | Rango declarado | Archivo |
+|---|---|---|---|
+| Display | Cormorant Garamond | 300–700 variable | `public/fonts/cormorant-garamond-latin.woff2` |
+| Display itálica | Cormorant Garamond | 300–700 variable | `public/fonts/cormorant-garamond-italic-latin.woff2` |
+| Body | Figtree | 300–600 variable | `public/fonts/figtree-latin.woff2` |
 
-Cargadas desde Google Fonts en `index.html` con preconnect.
+Los tres archivos son **variables y self-hosted**: viven en `public/fonts/`, se declaran con `@font-face` al principio de `src/index.css` y se sirven desde el propio origen. Antes venían de Google Fonts, y ese `<link>` bloqueaba el render de **toda** la página —no solo del texto— mientras encadenaba dos DNS/TLS antes de pedir el archivo: ~780 ms de bloqueo en el perfil mobile de Lighthouse.
+
+Tres reglas sostienen esto:
+
+1. **El rango `font-weight` del `@font-face` es el contrato.** Un peso fuera del rango lo sintetiza el navegador en lugar de bajarlo. Si el diseño necesita un peso nuevo, se regenera el archivo.
+2. **Reemplazar un archivo de fuente obliga a renombrarlo.** `/fonts/*` se sirve con caché `immutable` de un año (ver "Caché y entrega"), así que el mismo nombre con bytes nuevos nunca llega a quien ya visitó el sitio.
+3. **Solo viaja el subset latin**, y alcanza: `U+0000-00FF` cubre á é í ó ú ñ, y `U+2000-206F` el guion largo y el punto medio que usa el copy.
+
+`index.html` precarga solo dos caras, las que necesita la primera pantalla: Cormorant (el `h1` del Hero) y Figtree (todo el cuerpo de texto). La itálica no se precarga porque es una sola línea de tagline y competiría con la foto del Hero, que es el elemento LCP. El `crossorigin` del `preload` es obligatorio **aunque sea el mismo origen**: las fuentes siempre se piden en modo CORS, y sin él el navegador baja cada archivo dos veces.
+
+`src/tests/fonts.test.tsx` es el guard: falla si vuelve un host de terceros, si un archivo declarado no existe o no es un WOFF2 real, si un `@font-face` pierde `font-display: swap`, o si un `preload` apunta a la nada.
 
 ## Componentes
 
@@ -401,6 +419,19 @@ Para evitarlo, crea un fine-grained PAT con acceso al repo y permisos `Contents:
 También hay que habilitar **Settings → Actions → General → Allow GitHub Actions to create and approve pull requests** para que el PR se pueda abrir.
 
 > release-please no toca `bun.lock`: la versión de la app no vive en el lockfile, así que `bun install --frozen-lockfile` sigue funcionando en el PR de release.
+
+## Caché y entrega
+
+El deploy es Vercel, y su default es `cache-control: public, max-age=0, must-revalidate` para todo lo estático —verificado contra el sitio publicado, donde incluso el CSS con hash en `/assets/` revalidaba en cada visita. `vercel.json` lo corrige para las dos únicas rutas donde el nombre cambia cuando cambia el contenido:
+
+| Ruta | Header | Por qué es seguro |
+|---|---|---|
+| `/assets/(.*)` | `public, max-age=31536000, immutable` | Vite le pone hash al nombre: contenido nuevo, nombre nuevo. |
+| `/fonts/(.*)` | `public, max-age=31536000, immutable` | Nombre estable a propósito, para que el `preload` pueda nombrarlo. **Reemplazar una fuente exige renombrarla.** |
+
+`public/images/*` queda en el default a propósito: los nombres son estables y reemplazar una foto tiene que notarse en la visita siguiente, no dentro de un año. Por la misma razón tampoco hay una regla catch-all: una regla demasiado amplia (`/.*`) sería la forma más rápida de servir un bundle viejo durante un año, y como `main` se despliega en cada merge, eso dejaría a la gente con una versión congelada.
+
+`src/tests/deploy.test.tsx` fija el contrato: solo esas dos rutas, y ninguna regla que toque `images`.
 
 ## Comandos opencode
 

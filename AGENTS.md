@@ -29,7 +29,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `vite.config.ts` | Vite config |
 | `src/main.tsx` | React entry point |
 | `src/App.tsx` | Layout — Hero, then About → Reviews → Services → Bio → Contact |
-| `src/index.css` | Global reset + CSS variables |
+| `src/index.css` | Global reset + CSS variables + the self-hosted `@font-face` blocks |
 | `src/shared.module.css` | Shared styles (btn-primary) |
 | `src/components/Lotus/` | Animated lotus SVG divider |
 | `src/components/Hero/` | Hero section + module CSS |
@@ -42,13 +42,23 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `src/components/WhatsAppFab/` | Fixed WhatsApp button pinned to the viewport corner + module CSS |
 | `src/data/about.ts` | Fechas personales (cumpleaños y año de inicio) + `ageOn()` / `yearsOfPracticeOn()` para el copy de Bio |
 | `src/data/contact.ts` | WhatsApp number constants + `whatsappLink()` helper (single source of truth) |
-| `src/tests/` | Vitest suites, one per component + `seo.test.tsx` for the `index.html` meta and `whatsapp.test.tsx` for the link format |
+| `src/tests/` | Vitest suites, one per component + `seo.test.tsx` for the `index.html` meta, `whatsapp.test.tsx` for the link format, `fonts.test.tsx` for font delivery and `deploy.test.tsx` for `vercel.json` |
 | `scripts/generate-og.ts` | Builds the 1200×630 share image (inline SVG → PNG via resvg) |
 | `scripts/fonts/` | Brand TTFs, used only by the OG generator |
+| `public/fonts/` | Self-hosted brand fonts, WOFF2 variable + latin subset (`cormorant-garamond-latin.woff2`, `cormorant-garamond-italic-latin.woff2`, `figtree-latin.woff2`) |
 | `public/images/` | Static assets (`agenda-cuarzos.webp`, `logo.png`, the three hero photographs, `rocio-tarot.webp` for the bio card, generated `og-image.png`) |
 | `public/favicon.ico`, `public/favicon-16x16.png`, `public/favicon-32x32.png`, `public/android-chrome-192x192.png`, `public/android-chrome-512x512.png` | Tab/PWA icon set — static files supplied as-is, not generated |
 | `public/apple-touch-icon.png` | 180×180 iOS home-screen icon (iOS does not accept SVG here); static file |
 | `public/site.webmanifest` | PWA manifest: brand name, deep theme/background `#1f0f14`, android icons |
+| `vercel.json` | Deploy headers: `immutable` caching for `/assets` and `/fonts` only (see "Fonts" below) |
+
+## Fonts
+
+- The brand fonts are **self-hosted**, never loaded from Google Fonts. A third-party stylesheet blocks the first paint of the whole page; removing it reclaimed ~780 ms on Lighthouse's mobile profile. `src/tests/fonts.test.tsx` fails if a `fonts.googleapis.com` or `fonts.gstatic.com` reference comes back.
+- Three WOFF2 files in `public/fonts/`, declared in `src/index.css` with `font-display: swap`. The `font-weight` range in each `@font-face` is a contract: a weight outside it is synthesised, not downloaded.
+- **Replacing a font file requires renaming it.** `/fonts/*` is served `immutable` for a year, so new bytes under the same name never reach a returning visitor.
+- `index.html` preloads only the two faces the first screen needs (Cormorant for the hero `h1`, Figtree for body copy), each with `crossorigin` — fonts are always fetched in CORS mode, and without it the browser downloads every file twice.
+- Only the latin subset ships, and it covers the copy: `U+0000-00FF` has á é í ó ú ñ, `U+2000-206F` has the em dash and middle dot.
 
 ## SEO + Social
 
@@ -74,8 +84,8 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 
 | Token | Value |
 |---|---|
-| Display font | Cormorant Garamond (Google Fonts) |
-| Body font | Figtree (Google Fonts) |
+| Display font | Cormorant Garamond — self-hosted, variable 300–700 (roman + italic) |
+| Body font | Figtree — self-hosted, variable 300–600 |
 | Deep background | `#1f0f14` |
 | Primary rose | `#c73a5a` |
 | Light rose | `#fef0f5` |
