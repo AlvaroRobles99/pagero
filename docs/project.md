@@ -11,7 +11,7 @@ Sanarse es la marca de terapias holísticas de **Rocío Durazno** (tarot, limpie
 | Framework | React 19 |
 | Bundler | Vite 8 |
 | Estilos | CSS Modules |
-| Tipografía | Cormorant Garamond (display) + Figtree (body) — Google Fonts |
+| Tipografía | Cormorant Garamond (display) + Figtree (body) — self-hosted WOFF2 en `public/fonts/` |
 | Tests | Vitest + React Testing Library + jsdom |
 | Runtime | Bun 1.3 |
 
