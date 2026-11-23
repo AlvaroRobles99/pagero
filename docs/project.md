@@ -56,6 +56,7 @@ pageRo/
 │   │   ├── services.ts          ← Array de servicios (id, title, description, fullDescription)
 │   │   ├── reviews.ts           ← Array de testimonios reales (id, text) + `TESTIMONIALS_HIGHLIGHT`
 │   │   ├── contact.ts           ← Constantes del número de WhatsApp + helper `whatsappLink()`
+│   │   ├── hero.ts              ← Array `HERO_PHOTOS` del tríptico + `LCP_PHOTO` (la foto que el preload de `index.html` debe nombrar)
 │   │   └── social.ts            ← Array `SOCIAL_LINKS` (id, name, url, icon) de las tres redes
 │   ├── components/
 │   │   ├── Hero/                ← Header full-viewport con tríptico de fotos + CTA
@@ -84,6 +85,7 @@ pageRo/
 │       ├── whatsapp.test.tsx    ← Guard del formato del link de WhatsApp
 │       ├── fonts.test.tsx       ← Guard de la entrega de fuentes: sin terceros, swap, archivos WOFF2 reales, preloads
 │       ├── deploy.test.tsx      ← Guard de `vercel.json`: qué se cachea immutable y qué no
+│       ├── lcp.test.tsx         ← Guard del LCP: el preload de imagen coincide con `LCP_PHOTO` y no lleva `crossorigin`
 │       └── copy.test.tsx        ← Guard de la regla de copy: sin la palabra «trabajo»
 ├── .github/
 │   └── workflows/
@@ -153,6 +155,8 @@ Tres reglas sostienen esto:
 - Header full viewport con **tres fotos reales** de fondo, en lugar del banner ilustrado: `rocio-playa.webp` (de pie, a la izquierda), `rocio-oraculos.webp` (con las cartas en la mano, al centro y más ancha) y `meditacion-playa.webp` (meditando, a la derecha)
 - El responsive recorta el tríptico: 3 columnas desde 900px, 2 en tablet (cartas + meditando) y 1 en mobile (las cartas). Los paneles ocultos son `display: none`, así que su `loading="lazy"` evita descargarlos
 - La foto central es la candidata a LCP: `fetchPriority="high"` y sin lazy; las laterales van con `fetchPriority="low"`
+- **Pero lo que de verdad la hace descubrible es un `<link rel="preload" as="image">` en `index.html`.** La página es una SPA: el `<img>` no existe hasta que se parsea el bundle y React renderiza, así que `fetchPriority` y `loading="eager"` llegan tarde y Lighthouse marca «la solicitud se puede descubrir en el documento inicial» en rojo. Medido en local: sin el preload la foto sale en el request #8 (después del JS), con el preload sale en el #7 (antes).
+- Dos detalles rompen ese preload si cambian: **no lleva `crossorigin`** (a diferencia de las fuentes, que sí lo necesitan; en una imagen cambiaría el modo de la request y el `<img>` la bajaría de nuevo), y su `href` tiene que ser **idéntico** al `src`. El array de fotos vive en `src/data/hero.ts` justamente para que haya una sola fuente de verdad, y `src/tests/lcp.test.tsx` falla si el preload se despega de la foto marcada `priority: true`.
 - Overlay de marca obligatorio, no decorativo: las fotos de playa tienen el cielo quemado y la de las cartas es de clave media. Un `linear-gradient` vertical oscurece arriba y abajo, y un `radial-gradient` evita que el centro se aplane
 - `object-position: 44%` en la foto central para que las dos cartas entren en la columna, que recorta el ancho
 - Título, subtítulo, tagline, botón CTA

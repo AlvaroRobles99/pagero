@@ -42,7 +42,8 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `src/components/WhatsAppFab/` | Fixed WhatsApp button pinned to the viewport corner + module CSS |
 | `src/data/about.ts` | Fechas personales (cumpleaños y año de inicio) + `ageOn()` / `yearsOfPracticeOn()` para el copy de Bio |
 | `src/data/contact.ts` | WhatsApp number constants + `whatsappLink()` helper (single source of truth) |
-| `src/tests/` | Vitest suites, one per component + `seo.test.tsx` for the `index.html` meta, `whatsapp.test.tsx` for the link format, `fonts.test.tsx` for font delivery and `deploy.test.tsx` for `vercel.json` |
+| `src/data/hero.ts` | `HERO_PHOTOS` (the hero tríptico) + `LCP_PHOTO`, the frame the `index.html` image preload must name |
+| `src/tests/` | Vitest suites, one per component + `seo.test.tsx` for the `index.html` meta, `whatsapp.test.tsx` for the link format, `fonts.test.tsx` for font delivery, `deploy.test.tsx` for `vercel.json` and `lcp.test.tsx` for the LCP image preload |
 | `scripts/generate-og.ts` | Builds the 1200×630 share image (inline SVG → PNG via resvg) |
 | `scripts/fonts/` | Brand TTFs, used only by the OG generator |
 | `public/fonts/` | Self-hosted brand fonts, WOFF2 variable + latin subset (`cormorant-garamond-latin.woff2`, `cormorant-garamond-italic-latin.woff2`, `figtree-latin.woff2`) |
@@ -66,6 +67,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 - `src/tests/seo.test.tsx` reads `index.html` from disk and asserts the whole contract, so a removed tag fails the suite.
 - URLs are intentionally **relative** until a domain is chosen. See the deploy-time step in `docs/project.md`.
 - `og-image.png` is generated, not hand-drawn. Change `scripts/generate-og.ts`, then run `bun run generate:og`.
+- The LCP photograph is preloaded from `index.html` (`<link rel="preload" as="image">`). This is a client-rendered SPA, so the `<img>` does not exist until the bundle runs; `fetchpriority` alone is too late and Lighthouse reports the request as undiscoverable. Two rules: the preload carries **no** `crossorigin` (an image preload with it forces a second download), and its `href` must match `LCP_PHOTO.src` from `src/data/hero.ts`. `src/tests/lcp.test.tsx` fails if either drifts.
 
 ## MCP
 
