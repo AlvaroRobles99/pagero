@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react'
 import Hero from './components/Hero/Hero'
 import About from './components/About/About'
 import Reviews from './components/Reviews/Reviews'
@@ -26,6 +27,7 @@ export default function App() {
       </main>
       <Footer />
       <WhatsAppFab />
+      <Analytics />
     </>
   )
 }
