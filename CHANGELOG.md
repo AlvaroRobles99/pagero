@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.9.2](https://github.com/AlvaroRobles99/pagero/compare/v0.9.1...v0.9.2) (2026-11-23)
+
+
+### Performance Improvements
+
+* inline the stylesheet so it is not render-blocking ([2890920](https://github.com/AlvaroRobles99/pagero/commit/289092073e759da9a7b787e191b5b5412d7c99ab))
+* inline the stylesheet so it is not render-blocking ([bb01ff5](https://github.com/AlvaroRobles99/pagero/commit/bb01ff5d67319bb0062bfd5d116e727fff8665a4))
+* preload the LCP photograph from the initial document ([11801b4](https://github.com/AlvaroRobles99/pagero/commit/11801b459fa20c936538bae944e4bd30a171647c))
+* preload the LCP photograph from the initial document ([c202c38](https://github.com/AlvaroRobles99/pagero/commit/c202c389e0cdcfb61e9fc7e03b16130daf8f482b))
+
 ## [0.9.1](https://github.com/AlvaroRobles99/pagero/compare/v0.9.0...v0.9.1) (2026-11-21)
 
 
