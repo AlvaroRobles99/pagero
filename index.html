@@ -92,6 +92,27 @@
     <link rel="preload" href="/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     <!--
+      The LCP element is the middle hero photograph, and this is the only way the
+      browser can start fetching it: the page is a client-rendered SPA, so the
+      <img> does not exist until the module script below is parsed and React
+      renders. Without this preload Lighthouse reports "the request can be
+      discovered in the initial document" as failed, with every other LCP hint
+      already green, because eager + high priority arrive too late.
+
+      Two details break it if they change:
+        1. NO crossorigin. An image preload with crossorigin forks the request
+           mode, so the <img> afterwards cannot reuse it and the file downloads
+           twice. This is the exact opposite of the font preloads above.
+        2. The href must match the <img src> byte for byte. src/data/hero.ts is
+           the single source of truth for that path, and src/tests/lcp.test.tsx
+           fails if this line drifts from the photo marked priority: true.
+
+      The middle frame is the correct target at every viewport: .panelLeft is
+      hidden below 900px and .panelRight below 600px, but .panelCenter never is.
+    -->
+    <link rel="preload" as="image" href="/images/rocio-oraculos.webp" fetchpriority="high" />
+
+    <!--
       Structured data. Declares the practitioner's telephone in the
       international form schema.org expects. Deliberately omits address, geo,
       areaServed, priceCurrency, offers and openingHours: those facts are not
