@@ -43,8 +43,9 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `src/data/about.ts` | Fechas personales (cumpleaños y año de inicio) + `ageOn()` / `yearsOfPracticeOn()` para el copy de Bio |
 | `src/data/contact.ts` | WhatsApp number constants + `whatsappLink()` helper (single source of truth) |
 | `src/data/hero.ts` | `HERO_PHOTOS` (the hero tríptico) + `LCP_PHOTO`, the frame the `index.html` image preload must name |
-| `src/tests/` | Vitest suites, one per component + `seo.test.tsx` for the `index.html` meta, `whatsapp.test.tsx` for the link format, `fonts.test.tsx` for font delivery, `deploy.test.tsx` for `vercel.json` and `lcp.test.tsx` for the LCP image preload |
+| `src/tests/` | Vitest suites, one per component + `seo.test.tsx` for the `index.html` meta, `whatsapp.test.tsx` for the link format, `fonts.test.tsx` for font delivery, `deploy.test.tsx` for `vercel.json`, `lcp.test.tsx` for the LCP image preload and `inline-css.test.ts` for the inlined stylesheet |
 | `scripts/generate-og.ts` | Builds the 1200×630 share image (inline SVG → PNG via resvg) |
+| `scripts/inline-css.ts` | Vite build plugin: inlines the single stylesheet into the HTML `<style>` and stops emitting the file, so the CSS is not a render-blocking request |
 | `scripts/fonts/` | Brand TTFs, used only by the OG generator |
 | `public/fonts/` | Self-hosted brand fonts, WOFF2 variable + latin subset (`cormorant-garamond-latin.woff2`, `cormorant-garamond-italic-latin.woff2`, `figtree-latin.woff2`) |
 | `public/images/` | Static assets (`agenda-cuarzos.webp`, `logo.png`, the three hero photographs, `rocio-tarot.webp` for the bio card, generated `og-image.png`) |

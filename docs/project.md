@@ -44,6 +44,7 @@ pageRo/
 │   └── site.webmanifest        ← Manifest PWA: marca, colores #1f0f14, íconos android
 ├── scripts/
 │   ├── generate-og.ts          ← Genera la imagen OG (SVG en memoria → PNG con resvg)
+│   ├── inline-css.ts           ← Plugin de build: mete la hoja de estilos en el HTML y no la emite como archivo
 │   └── fonts/                  ← TTFs de marca, usados solo por el generador OG
 ├── src/
 │   ├── main.tsx                ← Entry point de React
@@ -77,6 +78,7 @@ pageRo/
 │       ├── About.test.tsx
 │       ├── Bio.test.tsx
 │       ├── Services.test.tsx
+│       ├── ServiceModal.test.tsx
 │       ├── Reviews.test.tsx
 │       ├── Contact.test.tsx
 │       ├── Footer.test.tsx
@@ -86,6 +88,7 @@ pageRo/
 │       ├── fonts.test.tsx       ← Guard de la entrega de fuentes: sin terceros, swap, archivos WOFF2 reales, preloads
 │       ├── deploy.test.tsx      ← Guard de `vercel.json`: qué se cachea immutable y qué no
 │       ├── lcp.test.tsx         ← Guard del LCP: el preload de imagen coincide con `LCP_PHOTO` y no lleva `crossorigin`
+│       ├── inline-css.test.ts   ← Guard del CSS inline: el `<link>` se reemplaza por `<style>` y el plugin sigue enchufado en Vite
 │       └── copy.test.tsx        ← Guard de la regla de copy: sin la palabra «trabajo»
 ├── .github/
 │   └── workflows/
@@ -340,10 +343,10 @@ bun run typecheck   # los tres proyectos, vía `bun check`
 todos los núcleos. `typescript` vive en `devDependencies` porque es una herramienta de desarrollo de
 la app, no una dependencia que se publique.
 
-Los tres son gate real, y el conteo dice qué cubre cada uno: la app 15 archivos (los cinco `.ts` de
-`src/data/`, los nueve `.tsx` de componentes y `src/main.tsx`), los tests 27 (los 13 de `src/tests`
-más los 14 de la app que importan) y el tooling 3 (`vite.config.ts`, `vitest.config.ts` y
-`scripts/generate-og.ts`).
+Los tres son gate real, y el conteo dice qué cubre cada uno: la app 18 archivos (los seis `.ts` de
+`src/data/`, los diez `.tsx` de componentes, `App.tsx` y `src/main.tsx`), los tests 37 (los 19 de
+`src/tests` más los de la app que importan) y el tooling 4 (`vite.config.ts`, `vitest.config.ts`,
+`scripts/generate-og.ts` y `scripts/inline-css.ts`).
 
 La primera capa migrada fue `src/data/`: exporta las interfaces `Service`, `Review` y `SocialLink`,
 y `whatsappLink(message?: string): string`. Después se sumaron todos los componentes. Los que tienen
@@ -436,6 +439,16 @@ El deploy es Vercel, y su default es `cache-control: public, max-age=0, must-rev
 `public/images/*` queda en el default a propósito: los nombres son estables y reemplazar una foto tiene que notarse en la visita siguiente, no dentro de un año. Por la misma razón tampoco hay una regla catch-all: una regla demasiado amplia (`/.*`) sería la forma más rápida de servir un bundle viejo durante un año, y como `main` se despliega en cada merge, eso dejaría a la gente con una versión congelada.
 
 `src/tests/deploy.test.tsx` fija el contrato: solo esas dos rutas, y ninguna regla que toque `images`.
+
+### El CSS viaja dentro del HTML
+
+`vite.config.ts` registra el plugin `scripts/inline-css.ts`, que al compilar reemplaza el `<link rel="stylesheet">` por un `<style>` con la hoja completa y deja de emitirla como archivo. Después de un build, `dist/assets/` contiene el JS y nada más.
+
+La hoja pesa ~19 KB crudos (4.8 KB gzip), así que entra inline sin discusión. Como request aparte era **render-blocking** y se descubría recién detrás del documento: Lighthouse lo medía en 160 ms de ahorro y lo dibujaba como un nodo extra del camino crítico (documento → JS → CSS). Inline no cuesta bytes —los mismos viajan dentro del HTML que ya se descargaba— y borra esa RTT.
+
+El tradeoff, escrito para que nadie lo descubra por sorpresa: el CSS deja de cachearse por separado con `immutable`. En un sitio de una sola página no cambia nada, porque el HTML se revalida en cada visita (normalmente un 304 sin cuerpo) y la hoja cambia con el bundle igual. Si algún día el sitio crece a varias páginas con CSS compartido, esto se revisa.
+
+`src/tests/inline-css.test.ts` cubre el reemplazo —incluido que un `$` dentro del CSS no se interprete como token de `String.replace`— y falla si alguien desenchufa el plugin de `vite.config.ts`.
 
 ## Comandos opencode
 
