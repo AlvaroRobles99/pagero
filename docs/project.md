@@ -41,7 +41,9 @@ pageRo/
 │   ├── android-chrome-192x192.png ← Ícono Android 192×192 (vía site.webmanifest)
 │   ├── android-chrome-512x512.png ← Ícono Android 512×512 (vía site.webmanifest)
 │   ├── apple-touch-icon.png    ← Icono 180×180 para iOS (iOS no acepta SVG aquí)
-│   └── site.webmanifest        ← Manifest PWA: marca, colores #1f0f14, íconos android
+│   ├── robots.txt              ← Reglas de rastreo: permite todo y declara el sitemap absoluto
+│   ├── site.webmanifest        ← Manifest PWA: marca, colores #1f0f14, íconos android
+│   └── sitemap.xml             ← Única URL canónica: la home (el sitio es una sola página)
 ├── scripts/
 │   ├── generate-og.ts          ← Genera la imagen OG (SVG en memoria → PNG con resvg)
 │   ├── inline-css.ts           ← Plugin de build: mete la hoja de estilos en el HTML y no la emite como archivo
@@ -254,7 +256,7 @@ Toda la metadata vive en `index.html`. React nunca la toca, y por eso el contrat
 
 | Grupo | Etiquetas |
 |---|---|
-| Canonical | `link[rel=canonical]` con `href="/"` |
+| Canonical | `link[rel=canonical]` con `href="https://www.sanarseconro.com/"` |
 | Documento | `lang="es"`, `robots` (`index, follow`), `theme-color` (`#1f0f14`) |
 | Open Graph | `og:type=website`, `og:locale=es_AR`, `og:site_name`, `og:title`, `og:description`, `og:url`, `og:image`, `og:image:width=1200`, `og:image:height=630`, `og:image:alt` |
 | Twitter | `twitter:card=summary_large_image`, `twitter:title`, `twitter:description`, `twitter:image`, `twitter:image:alt` |
@@ -277,14 +279,23 @@ El PNG está versionado y `@resvg/resvg-js` es una devDependency, así que produ
 
 > El diseño se edita en `scripts/generate-og.ts`, nunca en el PNG.
 
-### Paso de deploy: URLs absolutas
+### Dominio de producción
 
-Las URLs son relativas a propósito, porque el dominio todavía no está definido. Los previews ya funcionan con rutas relativas; volverlas absolutas solo hace falta para que la tarjeta se resuelva igual desde fuera del sitio. Cuando exista el dominio, hay que reemplazar el origen en exactamente cuatro lugares, todos señalados con un comentario en `index.html`:
+El sitio vive en **`https://www.sanarseconro.com/`**. El origen es el `www` porque Vercel responde `200` ahí y redirige el apex con un `308`: un canonical sobre `sanarseconro.com` nombraría un redirect en vez de la página.
+
+Cuatro URLs salen del documento y por eso son absolutas —una tarjeta de compartir tiene que resolver igual desde WhatsApp, Facebook o X, donde una ruta relativa no tiene contra qué resolverse:
 
 1. `link[rel=canonical]` → `href`
 2. `meta[property="og:url"]` → `content`
 3. `meta[property="og:image"]` → `content`
 4. `meta[name="twitter:image"]` → `content`
+
+`SITE_ORIGIN` en `src/tests/seo.test.tsx` es la única fuente del origen: el test exige el canonical exacto y verifica que `robots.txt` y `sitemap.xml` apunten al mismo host. Cambiar el dominio es cambiar esa constante y los valores juntos; la suite falla si uno queda atrás.
+
+### Cómo se descubre el sitio
+
+- `public/robots.txt` permite todo y declara el `Sitemap:` absoluto.
+- `public/sitemap.xml` lista una sola URL: la home canónica. El sitio es una SPA de una página, así que no hay nada más que declarar; sumar rutas que no existen empeora el rastreo en vez de mejorarlo.
 
 ## Tests
 
@@ -482,4 +493,3 @@ El mismo número tiene tres representaciones correctas, y confundirlas rompe el 
 ## Known gaps
 
 - Coordenadas exactas (`geo`) → si algún día hacen falta, se agregan al `LocalBusiness`; no se inventan. `address` y `areaServed` ya están publicados.
-- Dominio de deploy → volver absolutas `canonical`, `og:url` y `og:image` (ver "Paso de deploy").
