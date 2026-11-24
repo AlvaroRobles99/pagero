@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.10.1](https://github.com/AlvaroRobles99/pagero/compare/v0.10.0...v0.10.1) (2026-11-24)
+
+
+### Bug Fixes
+
+* remove the city from the hero subtitle ([4144ef2](https://github.com/AlvaroRobles99/pagero/commit/4144ef2c00deca41fe3520b411753db128732bdd))
+* remove the city from the hero subtitle ([fe0cd5d](https://github.com/AlvaroRobles99/pagero/commit/fe0cd5d4837e6de36946c386ada010d50d2bc9f0))
+
 ## [0.10.0](https://github.com/AlvaroRobles99/pagero/compare/v0.9.2...v0.10.0) (2026-11-24)
 
 
