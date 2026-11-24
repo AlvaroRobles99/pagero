@@ -2,6 +2,18 @@
   background: var(--color-warm-white);
 }
 
+/* Same kicker pattern as About and Contact: the line sits above the h2, so it
+   reads as body copy and does not compete with the section heading. */
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-accent-deep);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));

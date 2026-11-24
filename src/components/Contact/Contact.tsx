@@ -13,6 +13,9 @@ export default function Contact() {
             <p className={styles.eyebrow}>Contacto</p>
             <h2>Agenda tu turno</h2>
             <p>Escribime y contame qué te está pasando. Te respondo yo, sin intermediarios, y vemos si alguna de las sesiones es lo que necesitás.</p>
+            <p className={styles.place}>
+              Sesiones presenciales en San Rafael, Mendoza y a distancia por WhatsApp.
+            </p>
             <a
               href={whatsappLink()}
               className={shared.btnPrimary}
@@ -40,8 +43,8 @@ export default function Contact() {
             <img
               src="/images/logo.png"
               alt=""
-              width={512}
-              height={512}
+              width={200}
+              height={200}
               loading="lazy"
               decoding="async"
               className={styles.mark}

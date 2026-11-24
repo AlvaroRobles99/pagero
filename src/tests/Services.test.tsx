@@ -7,6 +7,15 @@ describe('Services', () => {
     expect(screen.getByText('Servicios')).toBeInTheDocument()
   })
 
+  it('antepone la línea de tarot, limpiezas y abre caminos como etiqueta chica', () => {
+    render(<Services />)
+    const eyebrow = screen.getByText('Tarot, limpiezas energéticas y abre caminos')
+    expect(eyebrow.tagName).toBe('P')
+    const heading = screen.getByRole('heading', { level: 2, name: 'Servicios' })
+    const FOLLOWS = Node.DOCUMENT_POSITION_FOLLOWING
+    expect(eyebrow.compareDocumentPosition(heading) & FOLLOWS).toBe(FOLLOWS)
+  })
+
   it('renderiza las 8 cards de servicio', () => {
     render(<Services />)
     expect(screen.getByText('Tarot Angelical')).toBeInTheDocument()

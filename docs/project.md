@@ -162,7 +162,7 @@ Tres reglas sostienen esto:
 - Dos detalles rompen ese preload si cambian: **no lleva `crossorigin`** (a diferencia de las fuentes, que sí lo necesitan; en una imagen cambiaría el modo de la request y el `<img>` la bajaría de nuevo), y su `href` tiene que ser **idéntico** al `src`. El array de fotos vive en `src/data/hero.ts` justamente para que haya una sola fuente de verdad, y `src/tests/lcp.test.tsx` falla si el preload se despega de la foto marcada `priority: true`.
 - Overlay de marca obligatorio, no decorativo: las fotos de playa tienen el cielo quemado y la de las cartas es de clave media. Un `linear-gradient` vertical oscurece arriba y abajo, y un `radial-gradient` evita que el centro se aplane
 - `object-position: 44%` en la foto central para que las dos cartas entren en la columna, que recorta el ancho
-- Título, subtítulo, tagline, botón CTA
+- El `h1` dice «Sanarse» y, debajo, «Terapeuta holística en San Rafael, Mendoza»: la ciudad vive en el `h1` por el SEO local. La tagline nombra a Rocío y la práctica, y cierra el botón CTA
 - Animación `fadeInUp` en el contenido al cargar
 - **Sin logo:** el logo flotaba sobre las caras y competía con ellas; ahora firma la sección de Contacto (ver abajo)
 
@@ -170,7 +170,7 @@ Tres reglas sostienen esto:
 - Sección con fondo `--color-warm-white` (cambió desde `--color-light` al reordenarse: ahora Testimonios toma el fondo claro y las dos secciones no se funden)
 - Loto decorativo arriba del título
 - Loto semi-transparente como marca de agua de fondo (vía `::before` con SVG inline y radial-gradient)
-- Ya **no** lleva la bio de presentación: esa historia vive en la card de `Bio`, debajo de Servicios. Acá queda cómo empieza el proceso (consulta con nombre completo y fecha de nacimiento, evaluación energética incluida en el valor de las sesiones, sesiones online vía WhatsApp), qué se busca en el proceso, la cita inspiradora y el CTA con WhatsApp
+- Ya **no** lleva la bio de presentación: esa historia vive en la card de `Bio`, debajo de Servicios. Acá queda cómo empieza el proceso (consulta con nombre completo y fecha de nacimiento, evaluación energética incluida en el valor de las sesiones, sesiones presenciales en San Rafael, Mendoza y online vía WhatsApp), qué se busca en el proceso, la cita inspiradora y el CTA con WhatsApp
 
 ### Bio
 - Card horizontal debajo de Servicios con el retrato y la historia de Rocío: la intro que antes abría About, textual y sin recortes
@@ -196,6 +196,7 @@ Tres reglas sostienen esto:
 - Texto "Ver cómo es →" al pie de cada card, siempre en `--color-primary-deep` (6.10:1 sobre el fondo de la card, AA); el subrayado aparece en hover desktop
 - Al hacer clic abre `ServiceModal` con el texto completo del servicio
 - Animación stagger via `IntersectionObserver` (delay `index × 120ms`), que se limpia a `0ms` al terminar la entrada: el hover arranca igual en las ocho cards
+- Sobre el `h2` va una etiqueta chica con «Tarot, limpiezas energéticas y abre caminos», el mismo patrón de eyebrow que About y Contacto: es texto de cuerpo, no un segundo encabezado compitiendo con el `h2`
 
 ### ServiceModal
 - Portal a `document.body` para superponerse a toda la página
@@ -222,11 +223,12 @@ Tres reglas sostienen esto:
 ### Contact
 - Sección con fondo `--color-warm-white`, ancla `#contact` (se conserva aunque el título visible cambie)
 - Encabezado en dos niveles: la etiqueta chica `Contacto` en mayúsculas doradas (`.eyebrow`, mismo tratamiento que About) y el `h2` real **Agenda tu turno**
+- Debajo de la invitación declara la modalidad: «Sesiones presenciales en San Rafael, Mendoza y a distancia por WhatsApp», antes del botón
 - Dos columnas a partir de 900px: a la izquierda el encabezado, el texto y el CTA; a la derecha la foto de la agenda con cuarzos
 - En mobile se apila en el orden encabezado → texto → CTA → foto → bloque social, así el botón queda primero y el objeto refuerza lo que el botón hace
 - La foto es `public/images/agenda-cuarzos.webp` (1128×785, WebP lossy con alfa, 52 KB). Se muestra con `filter: drop-shadow` en lugar de un marco, porque el recorte es transparente
 - Levita: `@keyframes levitate` la desplaza 10px hacia arriba en 7s, `infinite alternate`, el mismo ritmo que tenía el logo del Hero. La regla global de `prefers-reduced-motion` de `index.css` la reduce a un solo cuadro
-- Debajo de la agenda firma el **logo de la marca** (`images/logo.png`, `clamp(64px, 14vw, 92px)`, decorativo). Vivía en el Hero, pero ahí flotaba sobre las caras y competía con ellas; acá funciona como el sello de la persona a la que le escribís
+- Debajo de la agenda firma el **logo de la marca** (`images/logo.png`, 200×200, 45 KB —era 1254×1254, 314 KB—, `clamp(64px, 14vw, 92px)`, decorativo). Vivía en el Hero, pero ahí flotaba sobre las caras y competía con ellas; acá funciona como el sello de la persona a la que le escribís
 - **No** lleva el loto de marca de agua en `::before`: se transparentaba a través del recorte de la foto y se leía como una mancha detrás del CTA
 - Texto de invitación cálido + botón WhatsApp que abre `wa.me` vía `whatsappLink()`
 - Bloque "Ver mi contenido" al final, debajo del CTA: regla dorada + 3 botones circulares (52px, borde dorado) con ícono SVG inline que abren Instagram, Facebook y TikTok en pestaña nueva — los links viven en `src/data/social.ts` (única fuente de verdad)
@@ -257,7 +259,7 @@ Toda la metadata vive en `index.html`. React nunca la toca, y por eso el contrat
 | Open Graph | `og:type=website`, `og:locale=es_AR`, `og:site_name`, `og:title`, `og:description`, `og:url`, `og:image`, `og:image:width=1200`, `og:image:height=630`, `og:image:alt` |
 | Twitter | `twitter:card=summary_large_image`, `twitter:title`, `twitter:description`, `twitter:image`, `twitter:image:alt` |
 | Iconos | `link[rel=icon]` ICO (`sizes="any"`) + PNG 16×16 y 32×32, `link[rel=apple-touch-icon]` (PNG 180×180) y `link[rel=manifest]` → `site.webmanifest` |
-| Datos estructurados | JSON-LD `@graph` con `Organization` (con `sameAs` → Instagram), `LocalBusiness`, `Person` (Rocío Durazno, con `telephone` y `sameAs` → Facebook y TikTok) y `WebSite` (`inLanguage=es-AR`) |
+| Datos estructurados | JSON-LD `@graph` con `Organization` (con `sameAs` → Instagram), `LocalBusiness` (con `address` en San Rafael, Mendoza, y `areaServed` San Rafael / Mendoza / Argentina), `Person` (Rocío Durazno, con `telephone` y `sameAs` → Facebook y TikTok) y `WebSite` (`inLanguage=es-AR`) |
 
 Los textos de `og:*` y del JSON-LD están en español, igual que el resto del contenido del sitio. Las URLs de los nodos son referencias relativas (`/#organization`), y el `@context` es el IRI que exige schema.org.
 
@@ -479,5 +481,5 @@ El mismo número tiene tres representaciones correctas, y confundirlas rompe el 
 
 ## Known gaps
 
-- Ciudad o zona de servicio → `address`, `geo` y `areaServed` en el JSON-LD.
+- Coordenadas exactas (`geo`) → si algún día hacen falta, se agregan al `LocalBusiness`; no se inventan. `address` y `areaServed` ya están publicados.
 - Dominio de deploy → volver absolutas `canonical`, `og:url` y `og:image` (ver "Paso de deploy").

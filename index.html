@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sanarse — Rocío Durazno</title>
+    <title>Tarot y limpiezas energéticas en San Rafael, Mendoza | Sanarse</title>
     <meta
       name="description"
-      content="Tarot, limpieza energética y acompañamiento con Rocío Durazno. Un espacio para entender lo que te pasa y decidir con más calma. Sesiones por WhatsApp."
+      content="Tarot y limpiezas energéticas con Rocío Durazno. Sesiones presenciales en San Rafael, Mendoza, y a distancia. Un espacio para decidir con más calma."
     />
 
     <!--
@@ -40,10 +40,10 @@
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_AR" />
     <meta property="og:site_name" content="Sanarse" />
-    <meta property="og:title" content="Sanarse — Tarot, limpieza energética y acompañamiento" />
+    <meta property="og:title" content="Sanarse — Tarot y limpiezas energéticas en San Rafael, Mendoza" />
     <meta
       property="og:description"
-      content="Tarot, limpieza energética y acompañamiento con Rocío Durazno. Un espacio para entender lo que te pasa y decidir con más calma. Sesiones por WhatsApp."
+      content="Tarot y limpiezas energéticas con Rocío Durazno. Sesiones presenciales en San Rafael, Mendoza, y a distancia. Un espacio para decidir con más calma."
     />
     <meta property="og:url" content="/" />
     <meta property="og:image" content="/images/og-image.png" />
@@ -51,20 +51,20 @@
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="Sanarse — tarot, limpieza energética y acompañamiento con Rocío Durazno."
+      content="Sanarse — tarot y limpiezas energéticas en San Rafael, Mendoza con Rocío Durazno."
     />
 
     <!-- Twitter card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Sanarse — Tarot, limpieza energética y acompañamiento" />
+    <meta name="twitter:title" content="Sanarse — Tarot y limpiezas energéticas en San Rafael, Mendoza" />
     <meta
       name="twitter:description"
-      content="Tarot, limpieza energética y acompañamiento con Rocío Durazno. Un espacio para entender lo que te pasa y decidir con más calma. Sesiones por WhatsApp."
+      content="Tarot y limpiezas energéticas con Rocío Durazno. Sesiones presenciales en San Rafael, Mendoza, y a distancia. Un espacio para decidir con más calma."
     />
     <meta name="twitter:image" content="/images/og-image.png" />
     <meta
       name="twitter:image:alt"
-      content="Sanarse — tarot, limpieza energética y acompañamiento con Rocío Durazno."
+      content="Sanarse — tarot y limpiezas energéticas en San Rafael, Mendoza con Rocío Durazno."
     />
 
     <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -114,10 +114,12 @@
 
     <!--
       Structured data. Declares the practitioner's telephone in the
-      international form schema.org expects. Deliberately omits address, geo,
-      areaServed, priceCurrency, offers and openingHours: those facts are not
-      known yet and publishing invented ones would be worse than publishing
-      nothing. src/tests/seo.test.jsx locks that omission in place.
+      international form schema.org expects, and the confirmed service
+      location: sessions are in person in San Rafael, Mendoza, and also remote.
+      Deliberately omits geo, priceCurrency, offers and openingHours: those
+      facts are still unknown, and publishing invented ones would be worse than
+      publishing nothing. src/tests/seo.test.tsx locks both halves of that
+      contract in place.
     -->
     <script type="application/ld+json">
       {
@@ -139,14 +141,25 @@
             "@type": "LocalBusiness",
             "@id": "/#localbusiness",
             "name": "Sanarse",
-            "description": "Servicios de terapia holística: lectura de tarot, limpieza energética y acompañamiento espiritual.",
+            "description": "Servicios de terapia holística en San Rafael, Mendoza: lectura de tarot, limpiezas energéticas y acompañamiento espiritual, presenciales y a distancia.",
             "url": "/",
             "image": "/images/og-image.png",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "San Rafael",
+              "addressRegion": "Mendoza",
+              "addressCountry": "AR"
+            },
+            "areaServed": [
+              { "@type": "City", "name": "San Rafael" },
+              { "@type": "AdministrativeArea", "name": "Mendoza" },
+              { "@type": "Country", "name": "Argentina" }
+            ],
             "founder": { "@id": "/#person" },
             "employee": { "@id": "/#person" },
             "knowsAbout": [
               "Tarot",
-              "Limpieza energética",
+              "Limpiezas energéticas",
               "Acompañamiento espiritual",
               "Chakras"
             ]

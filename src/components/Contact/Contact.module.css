@@ -26,6 +26,14 @@
   color: var(--color-accent-deep);
 }
 
+/* Where the sessions happen answers "can I actually go?" before the visitor
+   decides to write, so it sits between the invitation and the button. The
+   extra class keeps its own spacing against the shared `.contact p` rule. */
+.lead .place {
+  margin: 0 0 1.75rem;
+  font-size: 0.95rem;
+}
+
 /* One column on mobile, and the agenda sits between the button and the social
    block: the CTA keeps the thumb zone and the object reinforces what it does.
    The lotus watermark that used to sit behind this section is gone on purpose:

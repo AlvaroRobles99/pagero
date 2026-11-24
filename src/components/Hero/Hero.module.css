@@ -82,6 +82,9 @@
 }
 
 .subtitle {
+  /* It lives inside the h1 now, so it needs to be block-level to keep the
+     stacked look it had when it was a <p>. */
+  display: block;
   font-family: var(--font-body);
   font-size: clamp(1.1rem, 4vw, 1.5rem);
   color: #fce0ec;
