@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.10.0](https://github.com/AlvaroRobles99/pagero/compare/v0.9.2...v0.10.0) (2026-11-24)
+
+
+### Features
+
+* target San Rafael and the remote modality in the local SEO ([4a30201](https://github.com/AlvaroRobles99/pagero/commit/4a3020115f7d9aff67da1180066bbe4b924443d8))
+* target San Rafael and the remote modality in the local SEO ([4cf0614](https://github.com/AlvaroRobles99/pagero/commit/4cf06141b58f7adfee97b02caea668334feb5848))
+
 ## [0.9.2](https://github.com/AlvaroRobles99/pagero/compare/v0.9.1...v0.9.2) (2026-11-23)
 
 
