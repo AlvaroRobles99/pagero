@@ -162,7 +162,7 @@ Tres reglas sostienen esto:
 - Dos detalles rompen ese preload si cambian: **no lleva `crossorigin`** (a diferencia de las fuentes, que sí lo necesitan; en una imagen cambiaría el modo de la request y el `<img>` la bajaría de nuevo), y su `href` tiene que ser **idéntico** al `src`. El array de fotos vive en `src/data/hero.ts` justamente para que haya una sola fuente de verdad, y `src/tests/lcp.test.tsx` falla si el preload se despega de la foto marcada `priority: true`.
 - Overlay de marca obligatorio, no decorativo: las fotos de playa tienen el cielo quemado y la de las cartas es de clave media. Un `linear-gradient` vertical oscurece arriba y abajo, y un `radial-gradient` evita que el centro se aplane
 - `object-position: 44%` en la foto central para que las dos cartas entren en la columna, que recorta el ancho
-- El `h1` dice «Sanarse» y, debajo, «Terapeuta holística en San Rafael, Mendoza»: la ciudad vive en el `h1` por el SEO local. La tagline nombra a Rocío y la práctica, y cierra el botón CTA
+- El `h1` dice «Sanarse» y, debajo, «Terapeuta holística»: la ciudad no va en el hero, vive en el `<title>`, las descripciones, el JSON-LD y la sección de Contacto. La tagline nombra a Rocío y la práctica, y cierra el botón CTA
 - Animación `fadeInUp` en el contenido al cargar
 - **Sin logo:** el logo flotaba sobre las caras y competía con ellas; ahora firma la sección de Contacto (ver abajo)
 
