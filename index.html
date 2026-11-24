@@ -10,28 +10,19 @@
     />
 
     <!--
-      DEPLOY-TIME EDIT POINT.
-      The site is not live yet, so every URL that will need a domain is relative.
-      When the domain is decided, replace these four values with the absolute
-      origin (for example https://sanarse.mx):
-        1. link[rel=canonical] href
-        2. meta[property="og:url"] content
-        3. meta[property="og:image"] content
-        4. meta[name="twitter:image"] content
-      Relative URLs are accepted by WhatsApp, Facebook, X and Google, so the
-      previews already work; making them absolute is only needed so the share
-      card resolves the same way from outside the site.
-    -->
-    <!--
-      vite-ignore is required WHILE THIS href IS RELATIVE. Vite's HTML plugin
-      resolves every link[href] as a build asset, and href="/" resolves to a
-      directory, which fails the build with EISDIR. Verified: removing this
-      attribute while href is relative breaks `bun run build`.
+      The site is live, so every URL that leaves the document is absolute: a
+      share card has to resolve the same way from WhatsApp, Facebook or X, where
+      a relative path has nothing to resolve against.
 
-      Once href becomes absolute at deploy time, Vite leaves external URLs
-      alone and this attribute is no longer required. It is harmless to keep.
+      The origin is www on purpose. Vercel answers 200 on
+      https://www.sanarseconro.com/ and redirects the apex to it with a 308, so
+      a canonical on the apex would name a redirect instead of the page.
+
+      src/tests/seo.test.tsx pins this origin in SITE_ORIGIN, shared with the
+      robots.txt and sitemap.xml contract: change it there and all four URLs
+      and both crawl files have to move together.
     -->
-    <link rel="canonical" href="/" vite-ignore />
+    <link rel="canonical" href="https://www.sanarseconro.com/" />
 
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#1f0f14" />
@@ -45,8 +36,8 @@
       property="og:description"
       content="Tarot y limpiezas energéticas con Rocío Durazno. Sesiones presenciales en San Rafael, Mendoza, y a distancia. Un espacio para decidir con más calma."
     />
-    <meta property="og:url" content="/" />
-    <meta property="og:image" content="/images/og-image.png" />
+    <meta property="og:url" content="https://www.sanarseconro.com/" />
+    <meta property="og:image" content="https://www.sanarseconro.com/images/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta
@@ -61,7 +52,7 @@
       name="twitter:description"
       content="Tarot y limpiezas energéticas con Rocío Durazno. Sesiones presenciales en San Rafael, Mendoza, y a distancia. Un espacio para decidir con más calma."
     />
-    <meta name="twitter:image" content="/images/og-image.png" />
+    <meta name="twitter:image" content="https://www.sanarseconro.com/images/og-image.png" />
     <meta
       name="twitter:image:alt"
       content="Sanarse — tarot y limpiezas energéticas en San Rafael, Mendoza con Rocío Durazno."

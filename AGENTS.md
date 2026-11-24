@@ -52,6 +52,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `public/favicon.ico`, `public/favicon-16x16.png`, `public/favicon-32x32.png`, `public/android-chrome-192x192.png`, `public/android-chrome-512x512.png` | Tab/PWA icon set — static files supplied as-is, not generated |
 | `public/apple-touch-icon.png` | 180×180 iOS home-screen icon (iOS does not accept SVG here); static file |
 | `public/site.webmanifest` | PWA manifest: brand name, deep theme/background `#1f0f14`, android icons |
+| `public/robots.txt`, `public/sitemap.xml` | Crawl contract: allow everything, and the single canonical URL. Both absolute and guarded by `src/tests/seo.test.tsx` |
 | `vercel.json` | Deploy headers: `immutable` caching for `/assets` and `/fonts` only (see "Fonts" below) |
 
 ## Fonts
@@ -66,7 +67,8 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 
 - Meta lives in `index.html` only — canonical, Open Graph, Twitter card, `theme-color`, `robots`, and a JSON-LD `@graph` (Organization, LocalBusiness, Person, WebSite). The LocalBusiness publishes the confirmed `address` (San Rafael, Mendoza) and `areaServed`; `geo`, `priceCurrency`, `offers` and `openingHours` stay out until they are real facts.
 - `src/tests/seo.test.tsx` reads `index.html` from disk and asserts the whole contract, so a removed tag fails the suite.
-- URLs are intentionally **relative** until a domain is chosen. See the deploy-time step in `docs/project.md`.
+- Production origin is **`https://www.sanarseconro.com/`**: Vercel answers 200 on the `www` host and 308-redirects the apex, so the canonical names `www`. `canonical`, `og:url`, `og:image` and `twitter:image` are absolute; `SITE_ORIGIN` in `src/tests/seo.test.tsx` is the single source of truth for that origin.
+- `public/robots.txt` and `public/sitemap.xml` are the crawl contract — one allow-all rule and the single canonical URL — and the same suite fails if either drifts from `SITE_ORIGIN`.
 - Local SEO: the `<title>` and descriptions pair the services with «San Rafael, Mendoza», the LocalBusiness JSON-LD publishes `address` and `areaServed`, and Contact declares the modality (presencial + a distancia). The hero stays city-free by design.
 - `og-image.png` is generated, not hand-drawn. Change `scripts/generate-og.ts`, then run `bun run generate:og`.
 - The LCP photograph is preloaded from `index.html` (`<link rel="preload" as="image">`). This is a client-rendered SPA, so the `<img>` does not exist until the bundle runs; `fetchpriority` alone is too late and Lighthouse reports the request as undiscoverable. Two rules: the preload carries **no** `crossorigin` (an image preload with it forces a second download), and its `href` must match `LCP_PHOTO.src` from `src/data/hero.ts`. `src/tests/lcp.test.tsx` fails if either drifts.

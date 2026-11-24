@@ -39,6 +39,12 @@ const jsonLdRaw =
 if (jsonLdRaw === null) throw new Error('script[type="application/ld+json"] not found in index.html')
 
 const ABSOLUTE_URL = /^https?:\/\//i
+/**
+ * The production origin. www answers 200 and the apex 308-redirects here, so
+ * this is the only correct canonical host. robots.txt and sitemap.xml must
+ * agree with it, or the site tells crawlers two different stories.
+ */
+const SITE_ORIGIN = 'https://www.sanarseconro.com'
 const ogImage = og('og:image')
 
 describe('index.html — canonical URL', () => {
@@ -47,9 +53,10 @@ describe('index.html — canonical URL', () => {
     expect(linkHref('canonical')).not.toBe('')
   })
 
-  it('keeps the canonical URL relative, since the domain is not decided yet', () => {
-    expect(linkHref('canonical'), 'link[rel=canonical] must exist to be checked').toBeTruthy()
-    expect(linkHref('canonical')).not.toMatch(ABSOLUTE_URL)
+  it('points the canonical at the live origin, with the slash the page is served at', () => {
+    expect(linkHref('canonical'), 'link[rel=canonical] must exist to be checked').toBe(
+      `${SITE_ORIGIN}/`,
+    )
   })
 })
 
@@ -82,7 +89,7 @@ describe('index.html — Open Graph', () => {
 
   it('declares og:image pointing at the generated share image', () => {
     expect(ogImage, 'meta[property="og:image"] not found').toBeTruthy()
-    expect(ogImage).toBe('/images/og-image.png')
+    expect(ogImage).toBe(`${SITE_ORIGIN}/images/og-image.png`)
   })
 
   it('declares og:image:width 1200 and og:image:height 630', () => {
@@ -104,11 +111,9 @@ describe('index.html — Open Graph', () => {
     expect(og('og:site_name'), 'meta[property="og:site_name"] not found').toBe('Sanarse')
   })
 
-  it('keeps og:url and og:image relative, since the domain is not decided yet', () => {
-    expect(og('og:url'), 'og:url must exist to be checked').toBeTruthy()
-    expect(ogImage, 'og:image must exist to be checked').toBeTruthy()
-    expect(og('og:url')).not.toMatch(ABSOLUTE_URL)
-    expect(ogImage).not.toMatch(ABSOLUTE_URL)
+  it('publishes absolute og:url and og:image so the card resolves off-site', () => {
+    expect(og('og:url'), 'og:url must exist to be checked').toBe(`${SITE_ORIGIN}/`)
+    expect(ogImage, 'og:image must exist to be checked').toMatch(ABSOLUTE_URL)
   })
 })
 
@@ -128,9 +133,10 @@ describe('index.html — Twitter card', () => {
     expect(metaName('twitter:image'), 'meta[name="twitter:image"] not found').toBeTruthy()
   })
 
-  it('keeps twitter:image relative, since the domain is not decided yet', () => {
-    expect(metaName('twitter:image'), 'twitter:image must exist to be checked').toBeTruthy()
-    expect(metaName('twitter:image')).not.toMatch(ABSOLUTE_URL)
+  it('publishes an absolute twitter:image', () => {
+    expect(metaName('twitter:image'), 'twitter:image must exist to be checked').toBe(
+      `${SITE_ORIGIN}/images/og-image.png`,
+    )
   })
 })
 
@@ -177,10 +183,11 @@ describe('index.html — document meta', () => {
 })
 
 describe('index.html — the og:image asset', () => {
-  // og:image is site-relative ("/images/og-image.png"), so drop the leading
-  // slash before joining: on Windows path.resolve would otherwise treat it as
-  // drive-absolute and look for C:\images\og-image.png.
-  const assetPath = resolve(PROJECT_ROOT, 'public', (ogImage ?? '').replace(/^\//, ''))
+  // og:image is absolute now, so the file is resolved through its pathname and
+  // the leading slash is dropped: on Windows path.resolve would otherwise treat
+  // it as drive-absolute and look for C:\images\og-image.png.
+  const ogImagePath = new URL(required(ogImage, 'meta[property="og:image"] not found')).pathname
+  const assetPath = resolve(PROJECT_ROOT, 'public', ogImagePath.replace(/^\//, ''))
 
   it('exists on disk at the path og:image points to', () => {
     expect(ogImage, 'og:image is required to resolve the asset').toBeTruthy()
@@ -228,6 +235,36 @@ describe('index.html — the favicon assets', () => {
       '/android-chrome-192x192.png',
       '/android-chrome-512x512.png',
     ])
+  })
+})
+
+describe('public — the crawl contract', () => {
+  const publicFile = (name: string) => resolve(PROJECT_ROOT, 'public', name)
+  const robots = readFileSync(publicFile('robots.txt'), 'utf8')
+  const sitemap = readFileSync(publicFile('sitemap.xml'), 'utf8')
+  const canonical = required(linkHref('canonical'), 'link[rel=canonical] not found in index.html')
+
+  it('lets every crawler in and disallows no path', () => {
+    expect(robots).toMatch(/^User-agent: \*$/m)
+    expect(robots).toMatch(/^Allow: \/$/m)
+    expect(robots).not.toMatch(/^Disallow:/m)
+  })
+
+  it('points robots.txt at the sitemap on the canonical origin', () => {
+    const declared = robots.match(/^Sitemap:\s*(\S+)$/m)?.[1]
+    expect(declared, 'robots.txt must declare a Sitemap line').toBeTruthy()
+    expect(declared).toBe(`${new URL(canonical).origin}/sitemap.xml`)
+  })
+
+  it('ships a well-formed sitemap that lists the canonical page and nothing else', () => {
+    const parsed = new DOMParser().parseFromString(sitemap, 'application/xml')
+    expect(
+      parsed.getElementsByTagName('parsererror').length,
+      'sitemap.xml is not well-formed XML',
+    ).toBe(0)
+    expect(parsed.documentElement.tagName).toBe('urlset')
+    const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1])
+    expect(locs).toEqual([canonical])
   })
 })
 
