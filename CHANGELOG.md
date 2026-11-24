@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0](https://github.com/AlvaroRobles99/pagero/compare/v0.10.1...v1.0.0) (2026-11-24)
+
+
+### Features
+
+* publish the site under its production domain ([dfe3e6a](https://github.com/AlvaroRobles99/pagero/commit/dfe3e6a13cd15771de87b3ec802662e20961381b))
+* publish the site under its production domain ([eb16a5e](https://github.com/AlvaroRobles99/pagero/commit/eb16a5e3db9deef51e60e81d06eefd4492e836e3))
+
 ## [0.10.1](https://github.com/AlvaroRobles99/pagero/compare/v0.10.0...v0.10.1) (2026-11-24)
 
 
