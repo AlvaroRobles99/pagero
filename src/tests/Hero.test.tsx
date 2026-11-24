@@ -11,16 +11,16 @@ const getPanels = (container: HTMLElement) =>
   Array.from(container.querySelectorAll<HTMLImageElement>('[aria-hidden="true"] img'))
 
 describe('Hero', () => {
-  it('renderiza el título principal con la ciudad', () => {
+  it('renderiza el título principal', () => {
     render(<Hero />)
     const heading = screen.getByRole('heading', { level: 1 })
     expect(heading).toHaveTextContent('Sanarse')
-    expect(heading).toHaveTextContent('San Rafael, Mendoza')
+    expect(heading).toHaveTextContent('Terapeuta holística')
   })
 
   it('renderiza el subtítulo dentro del h1', () => {
     render(<Hero />)
-    expect(screen.getByText('Terapeuta holística en San Rafael, Mendoza')).toBeInTheDocument()
+    expect(screen.getByText('Terapeuta holística')).toBeInTheDocument()
   })
 
   it('renderiza la tagline con el nombre', () => {
@@ -56,7 +56,7 @@ describe('Hero', () => {
       expect(getPanels(container).map((img) => img.getAttribute('src'))).toEqual(PHOTOS)
     })
 
-    it('las trata como decorativas: el texto ya nombra la práctica y la ciudad', () => {
+    it('las trata como decorativas: el texto ya nombra la práctica', () => {
       const { container } = render(<Hero />)
       for (const img of getPanels(container)) {
         expect(img).toHaveAttribute('alt', '')

@@ -26,7 +26,7 @@ export default function Hero() {
       <div className={styles.heroContent}>
         <h1 className={styles.title}>
           Sanarse{' '}
-          <span className={styles.subtitle}>Terapeuta holística en San Rafael, Mendoza</span>
+          <span className={styles.subtitle}>Terapeuta holística</span>
         </h1>
         <p className={styles.tagline}>
           Rocío Durazno — tarot, limpiezas energéticas y escucha sin juicio
