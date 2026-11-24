@@ -35,9 +35,9 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 | `src/components/Hero/` | Hero section + module CSS |
 | `src/components/About/` | About section: how the process starts + module CSS |
 | `src/components/Bio/` | Horizontal bio card with Rocío's portrait and story + module CSS |
-| `src/components/Services/` | Services cards + module CSS |
+| `src/components/Services/` | Services cards + the keyword eyebrow above the `h2` + module CSS |
 | `src/components/Reviews/` | Reviews section + module CSS |
-| `src/components/Contact/` | Contact section + module CSS |
+| `src/components/Contact/` | Contact section: invitation, location/modality line, WhatsApp CTA, social links + module CSS |
 | `src/components/Footer/` | Footer with year + module CSS |
 | `src/components/WhatsAppFab/` | Fixed WhatsApp button pinned to the viewport corner + module CSS |
 | `src/data/about.ts` | Fechas personales (cumpleaños y año de inicio) + `ageOn()` / `yearsOfPracticeOn()` para el copy de Bio |
@@ -64,9 +64,10 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 
 ## SEO + Social
 
-- Meta lives in `index.html` only — canonical, Open Graph, Twitter card, `theme-color`, `robots`, and a JSON-LD `@graph` (Organization, LocalBusiness, Person, WebSite).
+- Meta lives in `index.html` only — canonical, Open Graph, Twitter card, `theme-color`, `robots`, and a JSON-LD `@graph` (Organization, LocalBusiness, Person, WebSite). The LocalBusiness publishes the confirmed `address` (San Rafael, Mendoza) and `areaServed`; `geo`, `priceCurrency`, `offers` and `openingHours` stay out until they are real facts.
 - `src/tests/seo.test.tsx` reads `index.html` from disk and asserts the whole contract, so a removed tag fails the suite.
 - URLs are intentionally **relative** until a domain is chosen. See the deploy-time step in `docs/project.md`.
+- Local SEO: the `h1` names the city («Terapeuta holística en San Rafael, Mendoza»), the `<title>` and descriptions pair the services with «San Rafael, Mendoza», and Contact declares the modality (presencial + a distancia).
 - `og-image.png` is generated, not hand-drawn. Change `scripts/generate-og.ts`, then run `bun run generate:og`.
 - The LCP photograph is preloaded from `index.html` (`<link rel="preload" as="image">`). This is a client-rendered SPA, so the `<img>` does not exist until the bundle runs; `fetchpriority` alone is too late and Lighthouse reports the request as undiscoverable. Two rules: the preload carries **no** `crossorigin` (an image preload with it forces a second download), and its `href` must match `LCP_PHOTO.src` from `src/data/hero.ts`. `src/tests/lcp.test.tsx` fails if either drifts.
 

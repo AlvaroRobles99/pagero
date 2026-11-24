@@ -67,6 +67,7 @@ export default function Services() {
   return (
     <section className={`${appStyles.section} ${styles.services}`} id="services">
       <div className={appStyles.container}>
+        <p className={styles.eyebrow}>Tarot, limpiezas energéticas y abre caminos</p>
         <h2>Servicios</h2>
         <div className={styles.cards}>
           {services.map((s, i) => (

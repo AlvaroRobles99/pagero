@@ -24,9 +24,13 @@ export default function Hero() {
       </div>
       <div className={styles.overlay} />
       <div className={styles.heroContent}>
-        <h1 className={styles.title}>Sanarse</h1>
-        <p className={styles.subtitle}>Rocío Durazno — Terapeuta holística</p>
-        <p className={styles.tagline}>Tarot, limpieza energética y escucha sin juicio</p>
+        <h1 className={styles.title}>
+          Sanarse{' '}
+          <span className={styles.subtitle}>Terapeuta holística en San Rafael, Mendoza</span>
+        </h1>
+        <p className={styles.tagline}>
+          Rocío Durazno — tarot, limpiezas energéticas y escucha sin juicio
+        </p>
         <a href="#services" className={shared.btnPrimary}>
           Ver servicios
         </a>

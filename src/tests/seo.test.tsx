@@ -53,6 +53,17 @@ describe('index.html — canonical URL', () => {
   })
 })
 
+describe('index.html — the title', () => {
+  it('names the services, the city and the brand without overrunning the SERP', () => {
+    const title = doc.querySelector('title')?.textContent ?? ''
+    expect(title).toContain('Tarot')
+    expect(title).toContain('San Rafael')
+    expect(title).toContain('Sanarse')
+    expect(title.length).toBeGreaterThan(30)
+    expect(title.length).toBeLessThanOrEqual(65)
+  })
+})
+
 describe('index.html — Open Graph', () => {
   it('declares og:type as website', () => {
     expect(og('og:type'), 'meta[property="og:type"] not found').toBe('website')
@@ -295,9 +306,26 @@ describe('index.html — no fabricated business data', () => {
     expect(person.telephone.startsWith('+')).toBe(true)
   })
 
+  it('publishes the confirmed location and service area', () => {
+    expect(jsonLdRaw, 'script[type="application/ld+json"] not found').toBeTruthy()
+    const nodes = JSON.parse(jsonLdRaw)['@graph']
+    const business = nodes.find((node: JsonLdNode) => node['@type'] === 'LocalBusiness')
+    expect(business.address, 'LocalBusiness needs the confirmed address').toEqual({
+      '@type': 'PostalAddress',
+      addressLocality: 'San Rafael',
+      addressRegion: 'Mendoza',
+      addressCountry: 'AR',
+    })
+    expect(business.areaServed, 'LocalBusiness needs the confirmed service area').toEqual([
+      { '@type': 'City', name: 'San Rafael' },
+      { '@type': 'AdministrativeArea', name: 'Mendoza' },
+      { '@type': 'Country', name: 'Argentina' },
+    ])
+  })
+
   it('omits business facts that are still unknown', () => {
     expect(jsonLdRaw, 'script[type="application/ld+json"] not found').toBeTruthy()
-    for (const key of ['address', 'geo', 'areaServed', 'priceCurrency', 'offers', 'openingHours']) {
+    for (const key of ['geo', 'priceCurrency', 'offers', 'openingHours']) {
       expect(jsonLdRaw, `JSON-LD must not declare ${key} until it is known`).not.toContain(
         `"${key}"`,
       )

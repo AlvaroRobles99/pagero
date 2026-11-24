@@ -14,6 +14,13 @@ describe('Contact', () => {
     expect(screen.getByText(/Escribime y contame/)).toBeInTheDocument()
   })
 
+  it('declara la ciudad y la modalidad antes del botón', () => {
+    render(<Contact />)
+    const place = screen.getByText(/Sesiones presenciales en San Rafael, Mendoza/)
+    expect(place.tagName).toBe('P')
+    expect(place).toHaveTextContent('a distancia')
+  })
+
   it('renderiza el botón de WhatsApp', () => {
     render(<Contact />)
     const btn = screen.getByText(/Escribir por WhatsApp/)
@@ -101,6 +108,9 @@ describe('Contact', () => {
       const mark = container.querySelector('img[src="/images/logo.png"]')
       expect(mark).toBeInTheDocument()
       expect(mark).toHaveAttribute('alt', '')
+      // The file was resized from 1254x1254 (314 KB) to 200x200 (45 KB).
+      expect(mark).toHaveAttribute('width', '200')
+      expect(mark).toHaveAttribute('height', '200')
     })
 
     it('la agenda aparece antes que el logo en el documento', () => {
