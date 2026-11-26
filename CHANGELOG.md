@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/AlvaroRobles99/pagero/compare/v1.0.0...v1.1.0) (2026-11-26)
+
+
+### Features
+
+* point the hero CTA to the About section ([f2033db](https://github.com/AlvaroRobles99/pagero/commit/f2033dbd06381a7af8a10b5a2b6dca3b7a9d8e6c))
+* point the hero CTA to the About section ([c22e411](https://github.com/AlvaroRobles99/pagero/commit/c22e41152a4c0306da2a5db261b5b94617d6ca55))
+
 ## [1.0.0](https://github.com/AlvaroRobles99/pagero/compare/v0.10.1...v1.0.0) (2026-11-24)
 
 
