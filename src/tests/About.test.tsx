@@ -26,6 +26,11 @@ describe('About', () => {
     expect(container.textContent).toContain('online vía WhatsApp')
   })
 
+  it('declara el ancla #about que usa el CTA del hero', () => {
+    const { container } = render(<About />)
+    expect(container.querySelector('section#about')).toBeInTheDocument()
+  })
+
   it('renderiza el blockquote', () => {
     render(<About />)
     const blockquote = screen.getByText(

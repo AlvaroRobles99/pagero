@@ -31,8 +31,8 @@ export default function Hero() {
         <p className={styles.tagline}>
           Rocío Durazno — tarot, limpiezas energéticas y escucha sin juicio
         </p>
-        <a href="#services" className={shared.btnPrimary}>
-          Ver servicios
+        <a href="#about" className={shared.btnPrimary}>
+          Comenzar
         </a>
       </div>
     </header>

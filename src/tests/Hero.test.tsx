@@ -30,12 +30,12 @@ describe('Hero', () => {
     ).toBeInTheDocument()
   })
 
-  it('renderiza el botón con enlace a servicios', () => {
+  it('renderiza el botón con enlace a About', () => {
     render(<Hero />)
-    const btn = screen.getByText('Ver servicios')
+    const btn = screen.getByText('Comenzar')
     expect(btn).toBeInTheDocument()
     const link = btn.closest('a')
-    expect(link).toHaveAttribute('href', '#services')
+    expect(link).toHaveAttribute('href', '#about')
     expect(link).not.toHaveAttribute('target', '_blank')
     if (!link) throw new Error('The Hero CTA is not wrapped in a link')
     expect(link.getAttribute('href')).not.toMatch(/wa\.me/)
