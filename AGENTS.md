@@ -75,7 +75,7 @@ React SPA (Vite + CSS Modules) for "Sanarse", a holistic therapy brand (tarot, e
 
 ## MCP
 
-- Context7 MCP server is configured (`opencode.json`) with API key for up-to-date library docs and code examples.
+- Context7 MCP server is configured in the **global** opencode config (`~/.config/opencode/opencode.jsonc`) with its API key, for up-to-date library docs and code examples. This repo's `opencode.json` declares only `instructions`; agents, models and MCP are defined globally. A project config outranks the global one, so adding any of those here would shadow the global value instead of extending it.
 - When the user asks to plan or research something for the project, use Context7 to fetch current documentation.
 
 ## Copy
