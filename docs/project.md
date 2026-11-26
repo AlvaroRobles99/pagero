@@ -4,6 +4,10 @@
 
 Sanarse es la marca de terapias holísticas de **Rocío Durazno** (tarot, limpiezas energéticas, acompañamiento espiritual). Esta SPA funciona como su sitio web profesional: presenta sus servicios, muestra reseñas de clientas, y canaliza contactos a través de WhatsApp.
 
+El sitio está publicado en **https://www.sanarseconro.com/**, y la versión vigente es la de `package.json` —no se repite acá, para que no quede vieja en cada release.
+
+`README.md` es la puerta de entrada (comandos, estructura y contratos); este documento es el detalle de cada decisión.
+
 ## Stack
 
 | Capa | Tecnología |
@@ -13,14 +17,19 @@ Sanarse es la marca de terapias holísticas de **Rocío Durazno** (tarot, limpie
 | Estilos | CSS Modules |
 | Tipografía | Cormorant Garamond (display) + Figtree (body) — self-hosted WOFF2 en `public/fonts/` |
 | Tests | Vitest + React Testing Library + jsdom |
-| Runtime | Bun 1.3 |
+| Tipos | TypeScript 7, chequeado con `bun check` (ver "TypeScript") |
+| Runtime | Bun 1.4.4 |
 
 ## Estructura del proyecto
 
 ```
 pageRo/
+├── README.md                    ← Puerta de entrada: comandos, estructura y contratos
+├── CHANGELOG.md                 ← Notas de release; las escribe release-please, no se editan a mano
 ├── docs/
 │   └── project.md              ← Esta documentación
+├── odd/
+│   └── tasks/                  ← Specs y bitácora de cada feature ya publicada (formato ODD)
 ├── public/
 │   ├── images/
 │   │   ├── abanico-cartas.webp  ← Abanico de cinco cartas, fondo de las cards de Services (900×466, WebP q85, 48 KB)
@@ -106,7 +115,9 @@ pageRo/
 ├── tsconfig.json                ← Proyecto TS de la app (navegador, `src/` sin los tests)
 ├── tsconfig.test.json           ← Proyecto TS de los tests (`src/tests`, DOM + Node)
 ├── tsconfig.node.json           ← Proyecto TS del tooling (`scripts/` + configs de Vite, Bun/Node)
-├── opencode.json                ← Config de opencode (MCP Context7 + instrucciones)
+├── index.html                   ← Documento único: entry de Vite y toda la metadata SEO (ver "SEO + Social")
+├── vite.config.ts               ← Vite + React + el plugin de CSS inline (ver "Caché y entrega")
+├── opencode.json                ← Overlay local de opencode, **no versionado** (`.gitignore`): solo `instructions` (AGENTS.md + esta documentación). Agentes, modelos y MCP viven en la config global de la máquina
 ├── vercel.json                  ← Headers de caché `immutable` para `/assets` y `/fonts` (ver "Caché y entrega")
 ├── AGENTS.md                    ← Instrucciones para agentes de opencode
 ├── release-please-config.json   ← Config de release-please (changelog + versión)
@@ -296,6 +307,7 @@ Cuatro URLs salen del documento y por eso son absolutas —una tarjeta de compar
 
 - `public/robots.txt` permite todo y declara el `Sitemap:` absoluto.
 - `public/sitemap.xml` lista una sola URL: la home canónica. El sitio es una SPA de una página, así que no hay nada más que declarar; sumar rutas que no existen empeora el rastreo en vez de mejorarlo.
+- Los dos viajan al `dist/` del build, así que Vercel los sirve tal cual: en producción responden `200`, `text/plain` y `application/xml`. Ninguno de los dos necesita configuración de deploy.
 
 ## Tests
 
@@ -309,7 +321,7 @@ bun run test:watch  # Modo watch
 1. Crear `src/tests/MiComponente.test.tsx`
 2. Usar `render`, `screen`, `describe`, `it`, `expect` (globales de Vitest + testing-library)
 3. Si el componente usa `IntersectionObserver`, ya está mockeado en `setup.ts`
-4. Vitest escanea `src/tests/**/*.test.tsx` automáticamente
+4. Vitest escanea `src/tests/` solo: acepta `*.test.ts` y `*.test.tsx` (`inline-css.test.ts` es el caso de un test que no renderiza nada), así que no hay que registrarlo en ningún lado
 
 ### Test de metadata
 `src/tests/seo.test.tsx` no renderiza nada: lee `index.html` con `node:fs`, lo parsea con `DOMParser` y verifica el contrato de la sección "SEO + Social". Si se borra o cambia una etiqueta, la suite falla. Resuelve la raíz del proyecto con `process.cwd()`, que Vitest configura como cwd.
@@ -356,10 +368,9 @@ bun run typecheck   # los tres proyectos, vía `bun check`
 todos los núcleos. `typescript` vive en `devDependencies` porque es una herramienta de desarrollo de
 la app, no una dependencia que se publique.
 
-Los tres son gate real, y el conteo dice qué cubre cada uno: la app 18 archivos (los seis `.ts` de
-`src/data/`, los diez `.tsx` de componentes, `App.tsx` y `src/main.tsx`), los tests 37 (los 19 de
-`src/tests` más los de la app que importan) y el tooling 4 (`vite.config.ts`, `vitest.config.ts`,
-`scripts/generate-og.ts` y `scripts/inline-css.ts`).
+Los tres son gate real, y cada uno dice qué cubre: la app, los `.ts` de `src/data/` y los `.tsx` de
+componentes junto con `App.tsx` y `src/main.tsx`; los tests, `src/tests` más los módulos de la app que
+importan; y el tooling, `vite.config.ts`, `vitest.config.ts` y los dos scripts de `scripts/`.
 
 La primera capa migrada fue `src/data/`: exporta las interfaces `Service`, `Review` y `SocialLink`,
 y `whatsappLink(message?: string): string`. Después se sumaron todos los componentes. Los que tienen
@@ -424,9 +435,11 @@ Para editar la regla: **Settings → Branches → `main`**.
 | Archivo | Rol |
 |---|---|
 | `release-please-config.json` | Release type `node`, tags `vX.Y.Z` sin prefijo de componente, y `bootstrap-sha` |
-| `.release-please-manifest.json` | Última versión conocida. Empieza en `0.0.0` y lo actualiza release-please |
+| `.release-please-manifest.json` | Última versión publicada; la mantiene release-please, no se edita a mano |
 
-Reglas de versión: `fix:` → patch, `feat:` → minor, `!` o `BREAKING CHANGE` → major (minor mientras la versión sea `0.x`). `chore:`, `ci:`, `docs:` y `test:` no generan release.
+Reglas de versión: `fix:` → patch, `feat:` → minor, `!` o `BREAKING CHANGE` → major. `chore:`, `ci:`, `docs:` y `test:` no generan release.
+
+`bump-minor-pre-major` está en `true`, así que mientras la versión fue `0.x` un breaking change subía el minor en vez del major. Por eso el salto a `1.0.0` se forzó con el footer `Release-As: 1.0.0` en un commit de la rama de trabajo, no cambiando la config. Ya en `1.x`, un `feat!` vuelve a subir el major solo; el footer sigue sirviendo para forzar una versión exacta.
 
 `bootstrap-sha` limita la primera release a los commits posteriores a ese SHA, para no volcar toda la historia del repo en el primer changelog. Si quieres que la primera release incluya todo el historial, borra esa clave.
 
